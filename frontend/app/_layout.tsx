@@ -1,33 +1,78 @@
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { LogBox } from "react-native";
+import { LogBox, View, ActivityIndicator, StyleSheet } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { useIconFonts } from "@/src/hooks/use-icon-fonts";
+import { useAppFonts } from "@/src/hooks/use-app-fonts";
+import { AuthProvider, useAuth } from "@/src/context/AuthContext";
+import { colors } from "@/src/theme";
 
+LogBox.ignoreAllLogs(true);
 
-// Disable logbox errors etc so that users can see the app
-// and agent works as expected.
-LogBox.ignoreAllLogs(true)
-
-// Keep the native splash visible from cold start until icon fonts register.
-// Required because @expo/vector-icons' componentDidMount fallback fires
-// Font.loadAsync against a broken vendor path if any <Icon> mounts before
-// the family is registered — which throws on Android Expo Go.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const [loaded, error] = useIconFonts();
+function AuthGate() {
+  const { user, loading } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
 
   useEffect(() => {
-    if (loaded || error) {
+    if (loading) return;
+    const first = segments[0];
+    const publicRoutes = ["onboarding", "login", "privacy", "terms"];
+    const inPublic = publicRoutes.includes(first as string) || first === undefined;
+    if (!user && !inPublic) {
+      router.replace("/onboarding");
+    }
+  }, [user, loading, segments, router]);
+
+  if (loading) {
+    return (
+      <View style={styles.splash} testID="root-loading">
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
+  }
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: "slide_from_right",
+        animationDuration: 250,
+        contentStyle: { backgroundColor: colors.bg },
+      }}
+    />
+  );
+}
+
+export default function RootLayout() {
+  const [iconLoaded, iconError] = useIconFonts();
+  const [fontsLoaded, fontsError] = useAppFonts();
+
+  useEffect(() => {
+    if ((iconLoaded || iconError) && (fontsLoaded || fontsError)) {
       SplashScreen.hideAsync();
     }
-  }, [loaded, error]);
+  }, [iconLoaded, iconError, fontsLoaded, fontsError]);
 
-  // If the CDN is unreachable we fall through on error rather than wedging
-  // the app — icons will tofu, but the app still boots.
-  if (!loaded && !error) return null;
+  if ((!iconLoaded && !iconError) || (!fontsLoaded && !fontsError)) return null;
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <AuthProvider>
+          <StatusBar style="dark" />
+          <AuthGate />
+        </AuthProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
+  );
 }
+
+const styles = StyleSheet.create({
+  splash: { flex: 1, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center" },
+});
