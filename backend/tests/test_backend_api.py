@@ -116,7 +116,7 @@ class TestPublic:
         assert len(r.json()["lessons"]) > 0
         r2 = api.get(f"{BASE_URL}/api/lessons", params={"category_id": "daily"})
         assert r2.status_code == 200
-        assert all(l["category_id"] == "daily" for l in r2.json()["lessons"])
+        assert all(lsn["category_id"] == "daily" for lsn in r2.json()["lessons"])
 
     def test_lesson_detail(self, api):
         r = api.get(f"{BASE_URL}/api/lessons/daily-1")

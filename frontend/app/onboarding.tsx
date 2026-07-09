@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, Image } from "react-native";
+import { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,8 +7,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 
 import { colors, gradients, radii, shadow, typography } from "@/src/theme";
-
-const { width } = Dimensions.get("window");
 
 const SLIDES = [
   {
@@ -37,19 +35,14 @@ const SLIDES = [
 export default function Onboarding() {
   const router = useRouter();
   const [index, setIndex] = useState(0);
-  const listRef = useRef<FlatList>(null);
 
   const next = () => {
-    if (index < SLIDES.length - 1) {
-      const n = index + 1;
-      setIndex(n);
-      listRef.current?.scrollToIndex({ index: n, animated: true });
-    } else {
-      router.replace("/login");
-    }
+    if (index < SLIDES.length - 1) setIndex(index + 1);
+    else router.replace("/login");
   };
 
   const skip = () => router.replace("/login");
+  const item = SLIDES[index];
 
   return (
     <View style={styles.root} testID="onboarding-screen">
@@ -70,30 +63,19 @@ export default function Onboarding() {
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          ref={listRef}
-          data={SLIDES}
-          keyExtractor={(i) => i.id}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onMomentumScrollEnd={(e) => setIndex(Math.round(e.nativeEvent.contentOffset.x / width))}
-          renderItem={({ item, index: i }) => (
-            <View style={{ width, paddingHorizontal: 24 }}>
-              <Animated.View entering={FadeIn.delay(80).duration(400)} style={styles.imageWrap}>
-                <Image source={{ uri: item.image }} style={styles.img} />
-                <LinearGradient colors={["transparent", "rgba(15,23,42,0.55)"]} style={StyleSheet.absoluteFill} />
-                <View style={styles.iconBadge}>
-                  <Ionicons name={item.icon as any} size={22} color="#fff" />
-                </View>
-              </Animated.View>
-              <Animated.View entering={FadeInDown.delay(200).duration(500)} style={styles.card}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.subtitle}>{item.subtitle}</Text>
-              </Animated.View>
+        <View style={{ flex: 1, paddingHorizontal: 24 }}>
+          <Animated.View key={`img-${index}`} entering={FadeIn.duration(400)} style={styles.imageWrap}>
+            <Image source={{ uri: item.image }} style={styles.img} />
+            <LinearGradient colors={["transparent", "rgba(15,23,42,0.55)"]} style={StyleSheet.absoluteFill} />
+            <View style={styles.iconBadge}>
+              <Ionicons name={item.icon as any} size={22} color="#fff" />
             </View>
-          )}
-        />
+          </Animated.View>
+          <Animated.View key={`txt-${index}`} entering={FadeInDown.delay(80).duration(500)} style={styles.card}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.subtitle}>{item.subtitle}</Text>
+          </Animated.View>
+        </View>
 
         <View style={styles.footer}>
           <View style={styles.dots}>
