@@ -1,0 +1,167 @@
+{
+  "app_name": "Lingua Franca",
+  "platform": "React Native Expo (Mobile Web App)",
+  "design_philosophy": "Premium EdTech Minimalism. 'Apple Liquid Glass' aesthetics intersecting with 'Organic & Earthy' structural clarity. Avoid standard corporate SaaS aesthetics. Every screen must feel like a high-end personal growth tool with fluid transitions, generous breathing room, and crystal-clear hierarchy.",
+  "theme": {
+    "mode": "light",
+    "background_strategy": "Off-white base (slate-50) with large, blurred, absolute-positioned decorative orbs (blue-400/20, teal-300/20) behind glassmorphic surfaces to create depth.",
+    "colors": {
+      "primary": "#1E3A8A",
+      "primary_gradient": "bg-gradient-to-br from-blue-900 via-blue-600 to-teal-400",
+      "secondary": "#0D9488",
+      "background": "#F8FAFC",
+      "surface_glass": "bg-white/70",
+      "surface_solid": "#FFFFFF",
+      "text_primary": "#0F172A",
+      "text_secondary": "#64748B",
+      "accent_gold": "#F59E0B",
+      "accent_flame": "#EF4444"
+    }
+  },
+  "typography": {
+    "import_url": "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap",
+    "headings": {
+      "family": "font-['Outfit',_sans-serif]",
+      "weight": "font-bold to font-extrabold",
+      "tracking": "tracking-tight",
+      "rules": "Never use Inter/Roboto. Headings must feel editorial and modern."
+    },
+    "body": {
+      "family": "font-['Manrope',_sans-serif]",
+      "weight": "font-normal to font-medium",
+      "tracking": "tracking-normal",
+      "rules": "Highly legible, slightly geometric. Use text-slate-600 for optimal reading contrast."
+    },
+    "sizes": {
+      "h1": "text-4xl md:text-5xl",
+      "h2": "text-2xl md:text-3xl",
+      "h3": "text-xl",
+      "body": "text-base",
+      "small": "text-sm",
+      "tiny": "text-xs tracking-wider uppercase"
+    }
+  },
+  "surfaces_and_glassmorphism": {
+    "premium_glass_card": "backdrop-blur-2xl bg-white/60 border border-white/40 shadow-[0_8px_32px_rgba(30,58,138,0.05)] rounded-3xl",
+    "heavy_glass_overlay": "backdrop-blur-3xl bg-white/80 border-b border-white/50",
+    "dark_glass_premium": "backdrop-blur-2xl bg-slate-900/80 border border-slate-700 shadow-2xl",
+    "rules": "Never place long body text directly on pure glass without a sufficient opaque tint. Ensure 4.5:1 contrast."
+  },
+  "spacing_and_layout": {
+    "mobile_first": true,
+    "container_padding": "px-6",
+    "card_padding": "p-6",
+    "section_gap": "space-y-8",
+    "border_radius": {
+      "cards": "rounded-3xl",
+      "buttons": "rounded-full",
+      "images": "rounded-2xl"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium px-8 py-4 shadow-lg shadow-blue-500/30 transition-transform active:scale-95 hover:-translate-y-1",
+      "secondary_glass": "rounded-full backdrop-blur-md bg-white/50 border border-blue-100 text-blue-900 font-medium px-8 py-4 transition-transform active:scale-95",
+      "floating_action": "absolute bottom-24 right-6 w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl shadow-blue-600/40 flex items-center justify-center active:scale-90 transition-all"
+    },
+    "bottom_nav": {
+      "style": "fixed bottom-0 w-full pb-safe pt-4 px-6 backdrop-blur-2xl bg-white/80 border-t border-white/50 flex justify-between items-center shadow-[0_-10px_40px_rgba(0,0,0,0.05)] rounded-t-3xl",
+      "active_tab": "text-blue-600 flex flex-col items-center gap-1",
+      "inactive_tab": "text-slate-400 flex flex-col items-center gap-1 transition-colors hover:text-blue-400"
+    },
+    "progress_rings": {
+      "style": "relative w-24 h-24",
+      "track": "stroke-slate-100 stroke-[8px] fill-none",
+      "fill": "stroke-blue-500 stroke-[8px] fill-none stroke-linecap-round transition-all duration-1000"
+    }
+  },
+  "screens": {
+    "splash": {
+      "background": "bg-gradient-to-br from-blue-900 via-blue-800 to-blue-600",
+      "elements": "Animated logo (framer-motion scale & opacity), fade out to onboarding."
+    },
+    "onboarding": {
+      "layout": "Full screen image/abstract art at top, white glassmorphic card sliding up from bottom containing text and 'Next' button.",
+      "elements": "Pagination dots (blue-600 for active, slate-200 for inactive)."
+    },
+    "home_dashboard": {
+      "header": "Welcome text (H2) + User Avatar + Streak Flame icon.",
+      "daily_goal_card": "Premium glass card spanning full width. Circular progress indicator, XP text, 'Continue Learning' primary button.",
+      "challenge_bento": "2-column grid. Left: 'Speak 5 min' (tall card), Right: 'Learn 20 words' (square card)."
+    },
+    "speak_practice_mocked": {
+      "layout": "Radar pulsing animation in center for 'Finding Match'. Mocked match found -> Transition to call UI.",
+      "call_ui": "Dark glass theme for focus. User and Partner avatars with soundwave animations. 'End Call' pill button in red."
+    },
+    "lessons_hub": {
+      "layout": "Horizontal scroll carousels for categories (Business, Travel, IELTS). Cards use image backgrounds with dark gradient overlays to ensure text readability."
+    },
+    "profile_and_premium": {
+      "layout": "Header with avatar and level badge. Grid of achievements.",
+      "premium_card": "Deep navy background (dark mode inside light app), gold accents, 'Tracing Beam' shimmering border effect for the Stripe subscription call-to-action."
+    }
+  },
+  "motion_and_interactions": {
+    "page_transitions": "Animate Presence with fade and slight Y-axis slide (y: 20 -> 0).",
+    "lists": "Staggered entrance animations (staggerChildren: 0.1).",
+    "tap_feedback": "All interactive elements MUST have whileTap={{ scale: 0.95 }} or active:scale-95.",
+    "library": "framer-motion"
+  },
+  "image_urls": [
+    {
+      "category": "Avatars",
+      "urls": [
+        "https://images.pexels.com/photos/8727434/pexels-photo-8727434.jpeg",
+        "https://images.pexels.com/photos/36440699/pexels-photo-36440699.jpeg"
+      ],
+      "usage": "User profiles, Real People matches, Host avatars in Live Groups."
+    },
+    {
+      "category": "Course Backgrounds - Travel & Business",
+      "urls": [
+        "https://images.pexels.com/photos/32021944/pexels-photo-32021944.jpeg",
+        "https://images.pexels.com/photos/8463151/pexels-photo-8463151.jpeg"
+      ],
+      "usage": "Backgrounds for specific English lesson cards. Apply bg-black/40 overlay."
+    },
+    {
+      "category": "Course Backgrounds - Abstract/General",
+      "urls": [
+        "https://images.unsplash.com/photo-1725981934390-d9bc9807ae31",
+        "https://images.unsplash.com/photo-1687197180710-b2b9484a3c5f"
+      ],
+      "usage": "Premium 3D abstract backgrounds for Grammar, Vocab, and IELTS lessons."
+    },
+    {
+      "category": "Public Speaking",
+      "urls": [
+        "https://images.unsplash.com/photo-1544531586-fde5298cdd40"
+      ],
+      "usage": "Background for Public Speaking course or Live Groups header."
+    },
+    {
+      "category": "Achievements",
+      "urls": [
+        "https://images.pexels.com/photos/6532362/pexels-photo-6532362.jpeg"
+      ],
+      "usage": "Certificate/Trophy placeholder in the Profile screen."
+    }
+  ],
+  "assets": {
+    "icons": "Use @phosphor-icons/react (Duotone or Regular weight). They feel more premium than standard free icons.",
+    "toast": "Use sonner for non-intrusive notifications (e.g., 'Word Saved!', 'Friend Request Sent')."
+  },
+  "testing": {
+    "requirements": "All interactive buttons, inputs, and major containers MUST have `data-testid` attributes (e.g., data-testid='start-lesson-button')."
+  },
+  "universal_guidelines_for_main_agent": [
+    "DO NOT use generic centered layouts or simplistic flat designs. Apply layered depth using background orbs and glassmorphism.",
+    "NEVER use generic system fonts (Inter, Roboto, Open Sans). Stick strictly to Outfit and Manrope.",
+    "NO placeholder screens. Build out the actual layout for every requested tab.",
+    "Ensure the bottom navigation doesn't hide content (add appropriate pb to main container).",
+    "Never use fully transparent backgrounds for overlays where content scrolls underneath.",
+    "Ensure contrast ratios are met. Text on glass needs to be dark slate or have a solid container behind it.",
+    "All image backgrounds must use gradient overlays to ensure white text is readable.",
+    "MOCK the 'Speak with Real People' flow with a beautiful finding-match animation and a dummy call screen."
+  ]
+}
