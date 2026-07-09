@@ -13,7 +13,7 @@ const SLIDES = [
     id: "1",
     title: "Speak with real people",
     subtitle: "Match with English learners worldwide and practice one voice-call at a time.",
-    image: "https://images.pexels.com/photos/8727434/pexels-photo-8727434.jpeg",
+    image: "https://images.pexels.com/photos/8199231/pexels-photo-8199231.jpeg",
     icon: "people",
   },
   {

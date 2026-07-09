@@ -60,12 +60,18 @@ class UserOut(BaseModel):
     blocked: List[str] = []
     achievements: List[str] = []
     certificates: List[Dict[str, Any]] = []
+    phone: Optional[str] = None
+    referral_code: Optional[str] = None
+    referred_by: Optional[str] = None
+    referral_count: int = 0
+    referral_discount_active: bool = False
 
 class UpdateProfile(BaseModel):
     name: Optional[str] = None
     english_level: Optional[str] = None
     daily_goal_minutes: Optional[int] = None
     picture: Optional[str] = None
+    phone: Optional[str] = None
 
 class XPEvent(BaseModel):
     amount: int
@@ -113,6 +119,22 @@ class CheckoutRequest(BaseModel):
     plan: str  # monthly | yearly
     origin_url: str
 
+class PhoneSendOtp(BaseModel):
+    phone: str
+
+class PhoneVerifyOtp(BaseModel):
+    phone: str
+    code: str
+    name: Optional[str] = None
+    referral_code: Optional[str] = None
+
+class LinkPhone(BaseModel):
+    phone: str
+    code: str
+
+class ApplyReferral(BaseModel):
+    referral_code: str
+
 # ---------- Auth helpers ----------
 async def get_current_user(authorization: Optional[str] = Header(None)) -> Dict[str, Any]:
     if not authorization or not authorization.startswith("Bearer "):
@@ -152,7 +174,27 @@ def _user_to_out(u: Dict[str, Any]) -> UserOut:
         blocked=u.get("blocked", []),
         achievements=u.get("achievements", []),
         certificates=u.get("certificates", []),
+        phone=u.get("phone"),
+        referral_code=u.get("referral_code"),
+        referred_by=u.get("referred_by"),
+        referral_count=u.get("referral_count", 0),
+        referral_discount_active=u.get("referral_discount_active", False),
     )
+
+def _gen_referral_code(name: str) -> str:
+    import random
+    import string
+    prefix = "".join(c for c in (name or "USER").upper() if c.isalpha())[:4] or "USER"
+    suffix = "".join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    return f"{prefix}-{suffix}"
+
+async def _unique_referral_code(name: str) -> str:
+    for _ in range(6):
+        code = _gen_referral_code(name)
+        exists = await db.users.find_one({"referral_code": code}, {"_id": 1})
+        if not exists:
+            return code
+    return f"USER-{uuid.uuid4().hex[:6].upper()}"
 
 # ---------- Static content seed ----------
 LESSON_CATEGORIES = [
@@ -288,9 +330,13 @@ STRIPE_PLANS = {
 async def startup():
     await db.users.create_index("email", unique=True)
     await db.users.create_index("user_id", unique=True)
+    await db.users.create_index("phone", unique=True, sparse=True)
+    await db.users.create_index("referral_code", unique=True, sparse=True)
     await db.user_sessions.create_index("session_token", unique=True)
     await db.user_sessions.create_index("expires_at", expireAfterSeconds=0)
     await db.payments.create_index("session_id", unique=True)
+    await db.phone_otps.create_index("phone", unique=True)
+    await db.phone_otps.create_index("expires_at", expireAfterSeconds=0)
     # Seed rooms
     for r in SEED_ROOMS:
         await db.rooms.update_one({"room_id": r["room_id"]}, {"$setOnInsert": r}, upsert=True)
@@ -313,6 +359,7 @@ async def create_session(payload: SessionCreate):
     user = await db.users.find_one({"email": email}, {"_id": 0})
     if not user:
         user_id = f"user_{uuid.uuid4().hex[:12]}"
+        referral_code = await _unique_referral_code(name)
         user = {
             "user_id": user_id,
             "email": email,
@@ -333,6 +380,11 @@ async def create_session(payload: SessionCreate):
             "blocked": [],
             "achievements": [],
             "certificates": [],
+            "phone": None,
+            "referral_code": referral_code,
+            "referred_by": None,
+            "referral_count": 0,
+            "referral_discount_active": False,
             "created_at": datetime.now(timezone.utc),
         }
         await db.users.insert_one(user)
@@ -340,6 +392,11 @@ async def create_session(payload: SessionCreate):
     else:
         # Update picture if changed
         await db.users.update_one({"email": email}, {"$set": {"picture": picture, "name": name}})
+        # Backfill referral_code for existing users
+        if not user.get("referral_code"):
+            code = await _unique_referral_code(name)
+            await db.users.update_one({"email": email}, {"$set": {"referral_code": code}})
+            user["referral_code"] = code
 
     expires_at = datetime.now(timezone.utc) + timedelta(days=7)
     await db.user_sessions.update_one(
@@ -364,6 +421,196 @@ async def logout(authorization: Optional[str] = Header(None)):
         token = authorization.split(" ", 1)[1].strip()
         await db.user_sessions.delete_one({"session_token": token})
     return {"ok": True}
+
+# ---------- Phone OTP (MOCK mode; swap to Twilio later) ----------
+# ⚠️ MOCK MODE: this path accepts ANY 6-digit code and returns the stored OTP in the response
+#     for demo/testing. To switch to real OTP delivery:
+#       1) Set OTP_MODE=twilio in env
+#       2) Implement send via Twilio in _send_otp() below (or another provider)
+#       3) Remove `debug_code` from the send-otp response
+OTP_MODE = os.environ.get("OTP_MODE", "mock")
+
+def _normalize_phone(p: str) -> str:
+    return "+" + "".join(c for c in p if c.isdigit())
+
+async def _send_otp(phone: str, code: str) -> None:
+    if OTP_MODE == "mock":
+        logger.info(f"[MOCK OTP] phone={phone} code={code}")
+        return
+    # TODO: Real provider dispatch (Twilio, MSG91, etc.)
+    logger.warning(f"OTP_MODE={OTP_MODE} not implemented; falling back to mock log")
+
+@api.post("/auth/phone/send-otp")
+async def send_otp(payload: PhoneSendOtp):
+    import random
+    phone = _normalize_phone(payload.phone)
+    if len(phone) < 8:
+        raise HTTPException(400, "Invalid phone number")
+    code = f"{random.randint(0, 999999):06d}"
+    await db.phone_otps.update_one(
+        {"phone": phone},
+        {"$set": {
+            "phone": phone,
+            "code": code,
+            "created_at": datetime.now(timezone.utc),
+            "expires_at": datetime.now(timezone.utc) + timedelta(minutes=10),
+            "attempts": 0,
+        }},
+        upsert=True,
+    )
+    await _send_otp(phone, code)
+    body: Dict[str, Any] = {"ok": True, "phone": phone}
+    if OTP_MODE == "mock":
+        # In mock mode, we don't actually deliver — surface the code so the tester can see it.
+        # Frontend also accepts any 6-digit code (see verify-otp).
+        body["debug_code"] = code
+        body["hint"] = "MOCK OTP: any 6-digit code works, or use debug_code."
+    return body
+
+@api.post("/auth/phone/verify-otp")
+async def verify_otp(payload: PhoneVerifyOtp):
+    phone = _normalize_phone(payload.phone)
+    code = (payload.code or "").strip()
+    if not (len(code) == 6 and code.isdigit()):
+        raise HTTPException(400, "Code must be 6 digits")
+
+    otp = await db.phone_otps.find_one({"phone": phone}, {"_id": 0})
+    if OTP_MODE == "mock":
+        # Accept ANY 6-digit code, but still require /send-otp was called (has record)
+        if not otp:
+            raise HTTPException(400, "Request an OTP first")
+    else:
+        if not otp or otp.get("code") != code:
+            raise HTTPException(400, "Invalid or expired code")
+        exp = otp.get("expires_at")
+        if exp and exp.tzinfo is None:
+            exp = exp.replace(tzinfo=timezone.utc)
+        if exp and exp < datetime.now(timezone.utc):
+            raise HTTPException(400, "Code expired. Request a new one.")
+
+    # find or create user
+    user = await db.users.find_one({"phone": phone}, {"_id": 0})
+    if not user:
+        display_name = (payload.name or "").strip() or f"User {phone[-4:]}"
+        # Synthesize a placeholder email so we keep email unique-index invariants
+        placeholder_email = f"phone_{phone.lstrip('+')}@lingua-franca.phone"
+        existing_email = await db.users.find_one({"email": placeholder_email}, {"_id": 0})
+        if existing_email:
+            user = existing_email
+            await db.users.update_one({"email": placeholder_email}, {"$set": {"phone": phone}})
+        else:
+            user_id = f"user_{uuid.uuid4().hex[:12]}"
+            referral_code = await _unique_referral_code(display_name)
+            new_user = {
+                "user_id": user_id,
+                "email": placeholder_email,
+                "name": display_name,
+                "picture": None,
+                "english_level": "Beginner",
+                "xp": 0,
+                "coins": 50,
+                "streak": 0,
+                "last_active_date": None,
+                "daily_goal_minutes": 15,
+                "daily_goal_completed_minutes": 0,
+                "is_premium": False,
+                "premium_plan": None,
+                "premium_until": None,
+                "saved_words": [],
+                "friends": [],
+                "blocked": [],
+                "achievements": [],
+                "certificates": [],
+                "phone": phone,
+                "referral_code": referral_code,
+                "referred_by": None,
+                "referral_count": 0,
+                "referral_discount_active": False,
+                "created_at": datetime.now(timezone.utc),
+            }
+            # Apply referral if provided
+            if payload.referral_code:
+                inviter = await db.users.find_one({"referral_code": payload.referral_code.strip().upper()}, {"_id": 0})
+                if inviter and inviter["user_id"] != user_id:
+                    new_user["referred_by"] = inviter["user_id"]
+                    new_user["referral_discount_active"] = True
+                    await db.users.update_one(
+                        {"user_id": inviter["user_id"]},
+                        {"$inc": {"referral_count": 1}, "$set": {"referral_discount_active": True}},
+                    )
+            await db.users.insert_one(new_user)
+            user = new_user
+            user.pop("_id", None)
+
+    # issue a token
+    session_token = f"phone_{uuid.uuid4().hex}"
+    await db.user_sessions.update_one(
+        {"session_token": session_token},
+        {"$set": {
+            "session_token": session_token,
+            "user_id": user["user_id"],
+            "expires_at": datetime.now(timezone.utc) + timedelta(days=7),
+            "created_at": datetime.now(timezone.utc),
+        }},
+        upsert=True,
+    )
+    # invalidate OTP record after successful verify
+    await db.phone_otps.delete_one({"phone": phone})
+
+    return {"session_token": session_token, "user": _user_to_out(user).model_dump()}
+
+@api.post("/auth/phone/link", response_model=UserOut)
+async def link_phone(payload: LinkPhone, user=Depends(get_current_user)):
+    """Link a phone number to the currently-signed-in user (e.g., after Google login)."""
+    phone = _normalize_phone(payload.phone)
+    code = (payload.code or "").strip()
+    if not (len(code) == 6 and code.isdigit()):
+        raise HTTPException(400, "Code must be 6 digits")
+    otp = await db.phone_otps.find_one({"phone": phone}, {"_id": 0})
+    if OTP_MODE != "mock":
+        if not otp or otp.get("code") != code:
+            raise HTTPException(400, "Invalid code")
+    else:
+        if not otp:
+            raise HTTPException(400, "Request an OTP first")
+    # Ensure phone isn't already in use by another user
+    existing = await db.users.find_one({"phone": phone, "user_id": {"$ne": user["user_id"]}}, {"_id": 0})
+    if existing:
+        raise HTTPException(409, "This phone number is already linked to another account")
+    await db.users.update_one({"user_id": user["user_id"]}, {"$set": {"phone": phone}})
+    await db.phone_otps.delete_one({"phone": phone})
+    fresh = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    return _user_to_out(fresh)
+
+# ---------- Referral ----------
+@api.get("/referral")
+async def get_referral(user=Depends(get_current_user)):
+    code = user.get("referral_code")
+    if not code:
+        code = await _unique_referral_code(user.get("name", "USER"))
+        await db.users.update_one({"user_id": user["user_id"]}, {"$set": {"referral_code": code}})
+    return {
+        "referral_code": code,
+        "referral_count": user.get("referral_count", 0),
+        "referral_discount_active": user.get("referral_discount_active", False),
+        "share_message": f"Learn English with me on Lingua Franca! Use my code {code} to get 20% off Premium. Download: https://lingua-franca-6.preview.emergentagent.com",
+    }
+
+@api.post("/referral/apply", response_model=UserOut)
+async def apply_referral(payload: ApplyReferral, user=Depends(get_current_user)):
+    if user.get("referred_by"):
+        raise HTTPException(400, "You've already used a referral code")
+    code = payload.referral_code.strip().upper()
+    inviter = await db.users.find_one({"referral_code": code}, {"_id": 0})
+    if not inviter:
+        raise HTTPException(404, "Invalid referral code")
+    if inviter["user_id"] == user["user_id"]:
+        raise HTTPException(400, "You can't use your own code")
+    await db.users.update_one({"user_id": user["user_id"]}, {"$set": {"referred_by": inviter["user_id"], "referral_discount_active": True}})
+    await db.users.update_one({"user_id": inviter["user_id"]}, {"$inc": {"referral_count": 1}, "$set": {"referral_discount_active": True}})
+    fresh = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    return _user_to_out(fresh)
+
 
 # ---------- Profile & progression ----------
 @api.put("/profile", response_model=UserOut)
@@ -732,11 +979,20 @@ async def create_checkout(payload: CheckoutRequest, request: Request, user=Depen
     success_url = f"{origin}/premium/success?session_id={{CHECKOUT_SESSION_ID}}"
     cancel_url = f"{origin}/premium/cancel"
 
+    # Apply referral discount (20% off) — server-authoritative
+    base_amount = float(plan["amount"])
+    discount_applied = False
+    if user.get("referral_discount_active"):
+        amount = round(base_amount * 0.8, 2)
+        discount_applied = True
+    else:
+        amount = base_amount
+
     webhook_url = f"{origin}/api/webhook/stripe"
     stripe = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
 
     checkout_request = CheckoutSessionRequest(
-        amount=plan["amount"],
+        amount=amount,
         currency=plan["currency"],
         success_url=success_url,
         cancel_url=cancel_url,
@@ -744,6 +1000,7 @@ async def create_checkout(payload: CheckoutRequest, request: Request, user=Depen
             "user_id": user["user_id"],
             "plan": payload.plan,
             "email": user["email"],
+            "referral_discount": "1" if discount_applied else "0",
         },
     )
     session = await stripe.create_checkout_session(checkout_request)
@@ -752,13 +1009,16 @@ async def create_checkout(payload: CheckoutRequest, request: Request, user=Depen
         "session_id": session.session_id,
         "user_id": user["user_id"],
         "plan": payload.plan,
-        "amount": plan["amount"],
+        "amount": amount,
+        "base_amount": base_amount,
         "currency": plan["currency"],
         "status": "initiated",
         "payment_status": "pending",
+        "referral_discount": discount_applied,
+        "referred_by": user.get("referred_by"),
         "created_at": datetime.now(timezone.utc),
     })
-    return {"url": session.url, "session_id": session.session_id}
+    return {"url": session.url, "session_id": session.session_id, "amount": amount, "referral_discount": discount_applied}
 
 @api.get("/subscription/status/{session_id}")
 async def poll_checkout(session_id: str, user=Depends(get_current_user)):

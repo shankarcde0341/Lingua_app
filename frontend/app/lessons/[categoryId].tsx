@@ -11,7 +11,7 @@ import { colors, gradients, radii, shadow, typography } from "@/src/theme";
 import { ScreenHeader } from "@/src/components/ui";
 
 const CAT_HERO: Record<string, string> = {
-  daily: "https://images.pexels.com/photos/8727434/pexels-photo-8727434.jpeg",
+  daily: "https://images.pexels.com/photos/8199231/pexels-photo-8199231.jpeg",
   business: "https://images.pexels.com/photos/8463151/pexels-photo-8463151.jpeg",
   interview: "https://images.pexels.com/photos/8674781/pexels-photo-8674781.jpeg",
   travel: "https://images.pexels.com/photos/32021944/pexels-photo-32021944.jpeg",
