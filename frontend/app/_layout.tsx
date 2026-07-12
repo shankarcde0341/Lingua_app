@@ -22,10 +22,18 @@ function AuthGate() {
 
   useEffect(() => {
     if (loading) return;
-    const first = segments[0];
+    const first = segments[0] as string | undefined;
     const publicRoutes = ["onboarding", "login", "privacy", "terms", "auth"];
     const inPublic = publicRoutes.includes(first as string) || first === undefined;
+
+    if (user && (first === "login" || first === "onboarding" || first === "auth" || first === undefined)) {
+      // Authenticated users landing on an auth/entry route: send them home.
+      console.log("[AuthGate] authenticated → /(tabs)", { first });
+      router.replace("/(tabs)");
+      return;
+    }
     if (!user && !inPublic) {
+      console.log("[AuthGate] unauthenticated → /onboarding", { first });
       router.replace("/onboarding");
     }
   }, [user, loading, segments, router]);

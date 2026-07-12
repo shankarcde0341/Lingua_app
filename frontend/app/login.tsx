@@ -77,22 +77,16 @@ export default function LoginScreen() {
     }
   }, [signInWithSessionId, router]);
 
+  // Historical fallback: if user lands on /login with a session_id in URL
+  // (e.g., legacy redirect), forward to /auth to complete the exchange there.
   useEffect(() => {
     if (Platform.OS !== "web" || typeof window === "undefined") return;
     const s = parseSessionId(window.location.href);
     if (s) {
-      (async () => {
-        setBusy(true);
-        try {
-          await signInWithSessionId(s);
-          window.history.replaceState(null, "", window.location.pathname);
-          router.replace("/(tabs)");
-        } catch (e: any) {
-          setError(e.message || "Login failed");
-        } finally { setBusy(false); }
-      })();
+      console.log("[/login] session_id detected in URL — forwarding to /auth");
+      router.replace("/auth");
     }
-  }, [signInWithSessionId, router]);
+  }, [router]);
 
   const sendOtp = async () => {
     setError(null);

@@ -46,10 +46,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const bootstrap = useCallback(async () => {
     try {
       const token = await getToken();
+      console.log("[Auth] bootstrap — token present?", !!token);
       if (!token) { setUser(null); return; }
       const me = await api.me();
+      console.log("[Auth] bootstrap — /me returned user:", me?.user_id);
       setUser(me);
-    } catch {
+    } catch (e: any) {
+      console.warn("[Auth] bootstrap failed, clearing token:", e?.message || e);
       await clearToken();
       setUser(null);
     } finally {
@@ -60,12 +63,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => { bootstrap(); }, [bootstrap]);
 
   const signInWithSessionId = useCallback(async (session_id: string) => {
+    console.log("[Auth] signInWithSessionId — exchanging session_id");
     const res = await api.createSession(session_id);
+    if (!res?.session_token || !res?.user) {
+      throw new Error("Malformed auth response from server");
+    }
     await setToken(res.session_token);
+    console.log("[Auth] token saved; setting user", res.user.user_id);
     setUser(res.user);
   }, []);
 
   const signInWithPhoneToken = useCallback(async (session_token: string, freshUser: User) => {
+    console.log("[Auth] signInWithPhoneToken — token saved");
     await setToken(session_token);
     setUser(freshUser);
   }, []);
