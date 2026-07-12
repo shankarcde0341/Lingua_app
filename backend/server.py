@@ -1042,15 +1042,23 @@ async def poll_checkout(session_id: str, user=Depends(get_current_user)):
         ach = list(user.get("achievements", []))
         if "premium" not in ach:
             ach.append("premium")
-        await db.users.update_one(
-            {"user_id": user["user_id"]},
-            {"$set": {
-                "is_premium": True,
-                "premium_plan": plan,
-                "premium_until": until.isoformat(),
-                "achievements": ach,
-            }},
-        )
+        set_fields = {
+            "is_premium": True,
+            "premium_plan": plan,
+            "premium_until": until.isoformat(),
+            "achievements": ach,
+        }
+        # Consume the referral discount once redeemed
+        if payment.get("referral_discount"):
+            set_fields["referral_discount_active"] = False
+        await db.users.update_one({"user_id": user["user_id"]}, {"$set": set_fields})
+        # Reward the referrer with the "referral" achievement bump (already active discount)
+        referred_by = payment.get("referred_by")
+        if referred_by:
+            await db.users.update_one(
+                {"user_id": referred_by},
+                {"$set": {"referral_discount_active": True}},
+            )
 
     return {
         "status": status.status,

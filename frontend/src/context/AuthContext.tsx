@@ -20,12 +20,18 @@ type User = {
   blocked: string[];
   achievements: string[];
   certificates: any[];
+  phone?: string | null;
+  referral_code?: string | null;
+  referred_by?: string | null;
+  referral_count: number;
+  referral_discount_active: boolean;
 };
 
 type AuthState = {
   user: User | null;
   loading: boolean;
   signInWithSessionId: (session_id: string) => Promise<void>;
+  signInWithPhoneToken: (session_token: string, user: User) => Promise<void>;
   refresh: () => Promise<void>;
   updateUser: (u: User) => void;
   signOut: () => Promise<void>;
@@ -59,6 +65,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(res.user);
   }, []);
 
+  const signInWithPhoneToken = useCallback(async (session_token: string, freshUser: User) => {
+    await setToken(session_token);
+    setUser(freshUser);
+  }, []);
+
   const refresh = useCallback(async () => {
     try {
       const me = await api.me();
@@ -75,7 +86,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthCtx.Provider value={{ user, loading, signInWithSessionId, refresh, updateUser, signOut }}>
+    <AuthCtx.Provider value={{ user, loading, signInWithSessionId, signInWithPhoneToken, refresh, updateUser, signOut }}>
       {children}
     </AuthCtx.Provider>
   );

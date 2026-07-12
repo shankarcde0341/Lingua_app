@@ -35,8 +35,13 @@ async function request<T>(path: string, init: RequestInit = {}, auth = true): Pr
 
 export const api = {
   createSession: (session_id: string) => request<any>("/auth/session", { method: "POST", body: JSON.stringify({ session_id }) }, false),
+  sendPhoneOtp: (phone: string) => request<any>("/auth/phone/send-otp", { method: "POST", body: JSON.stringify({ phone }) }, false),
+  verifyPhoneOtp: (phone: string, code: string, name?: string, referral_code?: string) => request<any>("/auth/phone/verify-otp", { method: "POST", body: JSON.stringify({ phone, code, name, referral_code }) }, false),
+  linkPhone: (phone: string, code: string) => request<any>("/auth/phone/link", { method: "POST", body: JSON.stringify({ phone, code }) }),
   me: () => request<any>("/auth/me"),
   logout: () => request<any>("/auth/logout", { method: "POST" }),
+  getReferral: () => request<any>("/referral"),
+  applyReferral: (referral_code: string) => request<any>("/referral/apply", { method: "POST", body: JSON.stringify({ referral_code }) }),
   updateProfile: (payload: any) => request<any>("/profile", { method: "PUT", body: JSON.stringify(payload) }),
   addXp: (amount: number, reason: string, minutes = 0) => request<any>("/xp", { method: "POST", body: JSON.stringify({ amount, reason, minutes }) }),
   home: () => request<any>("/home"),

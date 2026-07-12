@@ -155,10 +155,10 @@ export default function SpeakingTest() {
                 <Ionicons name="ribbon" size={22} color={colors.gold} />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.certTitle}>Certificate unlocked</Text>
-                  <Text style={styles.certSub}>Saved to your profile.</Text>
+                  <Text style={styles.certSub}>Share it and earn 20% off Premium.</Text>
                 </View>
                 <TouchableOpacity onPress={() => router.push("/certificates")} testID="test-view-cert">
-                  <Text style={styles.certLink}>View</Text>
+                  <Text style={styles.certLink}>Share</Text>
                 </TouchableOpacity>
               </View>
             ) : null}

@@ -137,13 +137,21 @@ export default function Premium() {
   );
 }
 
-function PlanCard({ title, price, per, tag, selected, onSelect, testID }: { title: string; price: number; per: string; tag: string | null; selected: boolean; onSelect: () => void; testID: string }) {
+function PlanCard({ title, price, per, tag, selected, onSelect, testID, discounted }: { title: string; price: number; per: string; tag: string | null; selected: boolean; onSelect: () => void; testID: string; discounted?: boolean }) {
+  const finalPrice = discounted ? Number((price * 0.8).toFixed(2)) : price;
   return (
     <TouchableOpacity onPress={onSelect} activeOpacity={0.9} style={{ flex: 1 }} testID={testID}>
       <View style={[styles.planCard, selected && styles.planCardSelected]}>
         {tag ? <View style={styles.tagRibbon}><Text style={styles.tagRibbonText}>{tag}</Text></View> : null}
         <Text style={styles.planTitle}>{title}</Text>
-        <Text style={styles.planPrice}>${price}<Text style={styles.planPer}>{per}</Text></Text>
+        {discounted ? (
+          <>
+            <Text style={styles.planStrike}>${price}</Text>
+            <Text style={styles.planPrice}>${finalPrice}<Text style={styles.planPer}>{per}</Text></Text>
+          </>
+        ) : (
+          <Text style={styles.planPrice}>${price}<Text style={styles.planPer}>{per}</Text></Text>
+        )}
         <View style={styles.planRadio}>
           {selected ? <View style={styles.planRadioInner} /> : null}
         </View>
@@ -169,6 +177,11 @@ const styles = StyleSheet.create({
   planTitle: { ...typography.h3, fontSize: 15 },
   planPrice: { fontFamily: "Outfit_700Bold", fontSize: 26, color: colors.primary, marginTop: 6 },
   planPer: { fontFamily: "Manrope_500Medium", fontSize: 13, color: colors.textSecondary },
+  planStrike: { fontFamily: "Manrope_500Medium", fontSize: 14, color: colors.textMuted, textDecorationLine: "line-through", marginTop: 4 },
+  refBanner: { flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: "#DCFCE7", padding: 12, borderRadius: radii.lg, marginTop: 14, borderWidth: 1, borderColor: "#86EFAC" },
+  refBannerText: { color: "#166534", fontFamily: "Manrope_700Bold", fontSize: 13 },
+  refPromo: { flexDirection: "row", alignItems: "center", gap: 8, padding: 12, borderRadius: radii.lg, marginTop: 14, backgroundColor: "#fff", borderWidth: 1, borderColor: colors.divider },
+  refPromoText: { flex: 1, ...typography.small, color: colors.textPrimary, fontFamily: "Manrope_500Medium" },
   planRadio: { width: 22, height: 22, borderRadius: 999, borderWidth: 2, borderColor: colors.primary, position: "absolute", top: 12, right: 12, alignItems: "center", justifyContent: "center" },
   planRadioInner: { width: 10, height: 10, borderRadius: 999, backgroundColor: colors.primary },
   featRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.divider },
@@ -179,3 +192,4 @@ const styles = StyleSheet.create({
   note: { ...typography.small, color: colors.textSecondary, textAlign: "center", marginTop: 18 },
   legal: { ...typography.small, color: colors.primary, textAlign: "center", marginTop: 6, textDecorationLine: "underline" },
 });
+

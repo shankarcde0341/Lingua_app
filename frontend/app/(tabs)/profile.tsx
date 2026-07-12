@@ -118,6 +118,7 @@ export default function Profile() {
               <SectionTitle title="More" />
               <View style={{ gap: 10 }}>
                 <MenuRow icon="ribbon" label="Certificates" onPress={() => router.push("/certificates")} testID="menu-certificates" />
+                <MenuRow icon="gift" label="Invite & Earn 20% Off" onPress={() => router.push("/referral")} testID="menu-referral" />
                 <MenuRow icon="podium" label="Leaderboard" onPress={() => router.push("/leaderboard")} testID="menu-leaderboard" />
                 <MenuRow icon="albums" label="Saved Vocabulary" onPress={() => router.push("/vocabulary")} testID="menu-saved-vocab" />
                 <MenuRow icon="time" label="Call History" onPress={() => router.push("/call-history")} testID="menu-call-history" />
