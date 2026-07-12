@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
@@ -28,6 +28,19 @@ export default function Index() {
   const wordmarkY = useSharedValue(20);
   const wordmarkOpacity = useSharedValue(0);
 
+  // If we land on `/` with `session_id` in the URL (web Google OAuth redirect),
+  // forward to `/auth` so it gets processed exactly once.
+  useEffect(() => {
+    if (Platform.OS !== "web" || typeof window === "undefined") return;
+    const href = window.location.href;
+    const hasSession = href.includes("session_id=");
+    if (hasSession) {
+      const hash = window.location.hash || "";
+      const search = window.location.search || "";
+      router.replace(`/auth${search || (hash ? "?" + hash.slice(1) : "")}`);
+    }
+  }, [router]);
+
   useEffect(() => {
     scale.value = withSequence(
       withTiming(1.15, { duration: 700, easing: Easing.out(Easing.exp) }),
@@ -40,6 +53,8 @@ export default function Index() {
 
     const t = setTimeout(() => {
       if (loading) return;
+      // If a session_id is in the URL, defer to the /auth route handler
+      if (Platform.OS === "web" && typeof window !== "undefined" && window.location.href.includes("session_id=")) return;
       if (user) router.replace("/(tabs)");
       else router.replace("/onboarding");
     }, 1800);

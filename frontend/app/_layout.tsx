@@ -23,7 +23,7 @@ function AuthGate() {
   useEffect(() => {
     if (loading) return;
     const first = segments[0];
-    const publicRoutes = ["onboarding", "login", "privacy", "terms"];
+    const publicRoutes = ["onboarding", "login", "privacy", "terms", "auth"];
     const inPublic = publicRoutes.includes(first as string) || first === undefined;
     if (!user && !inPublic) {
       router.replace("/onboarding");

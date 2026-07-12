@@ -50,8 +50,11 @@ export default function LoginScreen() {
   const handleGoogleLogin = useCallback(async () => {
     setBusy(true); setError(null);
     try {
+      // On web, redirect back to /auth (which parses session_id and completes sign-in).
+      // On mobile, use the app's `/auth` deep link — required by Expo Router; without
+      // this an /auth route the redirect returns "Unmatched Route".
       const redirectUrl = Platform.OS === "web"
-        ? (typeof window !== "undefined" ? window.location.origin + "/" : "")
+        ? (typeof window !== "undefined" ? window.location.origin + "/auth" : "")
         : Linking.createURL("auth");
       const authUrl = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
 
