@@ -62,11 +62,11 @@ export default function Premium() {
 
   return (
     <View style={styles.root} testID="premium-screen">
-      <LinearGradient colors={gradients.premium} style={styles.headerBg} />
+      <LinearGradient colors={["#EFF6FF", colors.bg] as const} style={StyleSheet.absoluteFill} />
       <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
         <ScreenHeader title="Premium" showBack onBack={() => router.back()} />
         <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-          <View style={{ alignItems: "center", marginTop: 10 }}>
+          <View style={styles.heroCard}>
             <View style={styles.diamondBox}><Ionicons name="diamond" size={44} color="#F59E0B" /></View>
             <Text style={styles.hero}>Unlock Lingua Franca Premium</Text>
             <Text style={styles.subhero}>Everything you need to sound fluent, confident, and unstoppable.</Text>
@@ -162,10 +162,10 @@ function PlanCard({ title, price, per, tag, selected, onSelect, testID, discount
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
-  headerBg: { position: "absolute", top: 0, left: 0, right: 0, height: 220, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 },
-  diamondBox: { width: 80, height: 80, borderRadius: 24, backgroundColor: "rgba(245,158,11,0.15)", borderColor: colors.gold, borderWidth: 1, alignItems: "center", justifyContent: "center" },
-  hero: { color: "#fff", fontFamily: "Outfit_700Bold", fontSize: 24, marginTop: 16, textAlign: "center" },
-  subhero: { color: "rgba(255,255,255,0.75)", fontFamily: "Manrope_500Medium", textAlign: "center", marginTop: 6, paddingHorizontal: 20 },
+  heroCard: { alignItems: "center", marginTop: 4, backgroundColor: "#fff", paddingVertical: 24, paddingHorizontal: 20, borderRadius: radii.xl, ...shadow.card, borderWidth: 1, borderColor: "#DBEAFE" },
+  diamondBox: { width: 76, height: 76, borderRadius: 24, backgroundColor: "#1E3A8A", alignItems: "center", justifyContent: "center", ...shadow.strong },
+  hero: { color: "#1E3A8A", fontFamily: "Outfit_800ExtraBold", fontSize: 24, marginTop: 18, textAlign: "center", letterSpacing: -0.3 },
+  subhero: { color: colors.textSecondary, fontFamily: "Manrope_500Medium", textAlign: "center", marginTop: 8, paddingHorizontal: 10 },
   activeCard: { flexDirection: "row", alignItems: "center", gap: 12, backgroundColor: "#DCFCE7", padding: 14, borderRadius: radii.lg, marginTop: 20, borderWidth: 1, borderColor: "#86EFAC" },
   activeTitle: { ...typography.h3, color: "#166534" },
   activeSub: { ...typography.small, color: "#166534" },

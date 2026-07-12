@@ -202,11 +202,6 @@ LESSON_CATEGORIES = [
     {"id": "business", "name": "Business English", "color": "#0EA5E9", "icon": "briefcase"},
     {"id": "interview", "name": "Interview English", "color": "#6366F1", "icon": "person"},
     {"id": "travel", "name": "Travel English", "color": "#14B8A6", "icon": "airplane"},
-    {"id": "ielts", "name": "IELTS Speaking", "color": "#F59E0B", "icon": "school"},
-    {"id": "public", "name": "Public Speaking", "color": "#EF4444", "icon": "mic"},
-    {"id": "grammar", "name": "Grammar", "color": "#8B5CF6", "icon": "book"},
-    {"id": "vocab", "name": "Vocabulary", "color": "#EC4899", "icon": "library"},
-    {"id": "pronunciation", "name": "Pronunciation", "color": "#10B981", "icon": "musical-notes"},
 ]
 
 def _lesson(cat, i, title, desc, level, minutes):
@@ -230,6 +225,13 @@ LESSONS = [
     _lesson("daily", 1, "Introducing Yourself", "Learn to greet and share basic info.", "Beginner", 8),
     _lesson("daily", 2, "Ordering at a Cafe", "Common phrases at a coffee shop.", "Beginner", 10),
     _lesson("daily", 3, "Making Small Talk", "Casual conversations with strangers.", "Intermediate", 12),
+    _lesson("daily", 4, "Shopping & Asking Prices", "Bargain, compare and pay confidently.", "Beginner", 9),
+    _lesson("daily", 5, "Giving & Following Directions", "Navigate a city like a local.", "Beginner", 10),
+    _lesson("daily", 6, "At the Restaurant", "Order, request and pay in style.", "Beginner", 11),
+    _lesson("daily", 7, "Talking About Weekends", "Share plans and past events smoothly.", "Intermediate", 12),
+    _lesson("daily", 8, "Doctor & Pharmacy Visit", "Explain symptoms and understand advice.", "Intermediate", 13),
+    _lesson("daily", 9, "Phone Conversations", "Sound natural and clear on calls.", "Intermediate", 12),
+    _lesson("daily", 10, "Expressing Opinions", "Agree, disagree and add nuance.", "Advanced", 14),
     _lesson("business", 1, "Business Meetings", "Language for productive meetings.", "Intermediate", 15),
     _lesson("business", 2, "Writing Professional Emails", "Structure and tone for emails.", "Intermediate", 10),
     _lesson("business", 3, "Negotiating Deals", "Persuasive language for negotiations.", "Advanced", 18),
@@ -237,16 +239,6 @@ LESSONS = [
     _lesson("interview", 2, "Behavioral Questions", "STAR method for tough questions.", "Advanced", 15),
     _lesson("travel", 1, "At the Airport", "Navigating airports confidently.", "Beginner", 8),
     _lesson("travel", 2, "Booking a Hotel", "Reservations and check-in phrases.", "Beginner", 10),
-    _lesson("ielts", 1, "IELTS Part 1: Familiar Topics", "Handle everyday interview questions.", "Intermediate", 12),
-    _lesson("ielts", 2, "IELTS Part 2: Long Turn", "Speak fluently for 2 minutes.", "Advanced", 15),
-    _lesson("public", 1, "Overcoming Stage Fear", "Techniques to speak confidently.", "Intermediate", 12),
-    _lesson("public", 2, "Storytelling on Stage", "Engage audiences with stories.", "Advanced", 18),
-    _lesson("grammar", 1, "Present vs Past Tense", "Master everyday tense usage.", "Beginner", 10),
-    _lesson("grammar", 2, "Conditionals", "If clauses made simple.", "Intermediate", 12),
-    _lesson("vocab", 1, "Everyday Verbs", "Top 50 verbs you must know.", "Beginner", 8),
-    _lesson("vocab", 2, "Advanced Adjectives", "Sound more expressive.", "Advanced", 12),
-    _lesson("pronunciation", 1, "Vowel Sounds", "Common vowel mistakes and fixes.", "Beginner", 10),
-    _lesson("pronunciation", 2, "Word Stress", "Stress patterns for clarity.", "Intermediate", 12),
 ]
 
 VOCAB_WORDS = [

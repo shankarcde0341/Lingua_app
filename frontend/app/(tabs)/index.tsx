@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import * as Speech from "expo-speech";
 
 import { useAuth } from "@/src/context/AuthContext";
 import { api } from "@/src/api/client";
@@ -115,7 +116,17 @@ export default function Home() {
             <GlassCard testID="home-word-of-day">
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.wodWord}>{data.word_of_the_day.word}</Text>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                    <Text style={styles.wodWord}>{data.word_of_the_day.word}</Text>
+                    <TouchableOpacity
+                      onPress={() => Speech.speak(data.word_of_the_day.word, { language: "en-US", rate: 0.85 })}
+                      style={styles.wodSpeaker}
+                      testID="home-word-speaker-btn"
+                      activeOpacity={0.85}
+                    >
+                      <Ionicons name="volume-high" size={16} color={colors.primary} />
+                    </TouchableOpacity>
+                  </View>
                   <Text style={styles.wodPhonetic}>{data.word_of_the_day.phonetic}</Text>
                   <Text style={styles.wodMeaning}>{data.word_of_the_day.meaning}</Text>
                   <Text style={styles.wodExample}>&quot;{data.word_of_the_day.example}&quot;</Text>
@@ -127,25 +138,21 @@ export default function Home() {
             </GlassCard>
           </Animated.View>
 
-          {/* Quick actions */}
+          {/* Speak with Real People */}
           <Animated.View entering={FadeInDown.delay(200).duration(400)} style={{ marginTop: 18 }}>
-            <SectionTitle title="Speak now" />
-            <View style={styles.quickRow}>
-              <TouchableOpacity style={styles.quickCard} onPress={() => router.push("/match")} activeOpacity={0.85} testID="home-quick-match">
-                <LinearGradient colors={["#3B82F6", "#0EA5E9"]} style={styles.quickInner}>
-                  <Ionicons name="people" size={26} color="#fff" />
-                  <Text style={styles.quickTitle}>Random Match</Text>
-                  <Text style={styles.quickSub}>Voice call a real learner</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.quickCard} onPress={() => router.push("/speaking-test")} activeOpacity={0.85} testID="home-quick-test">
-                <LinearGradient colors={["#0F172A", "#1E3A8A"]} style={styles.quickInner}>
-                  <Ionicons name="ribbon" size={26} color="#F59E0B" />
-                  <Text style={styles.quickTitle}>Speaking Test</Text>
-                  <Text style={styles.quickSub}>Get certified</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
+            <SectionTitle title="Don't just Learn Start Speaking" />
+            <TouchableOpacity onPress={() => router.push("/match")} activeOpacity={0.85} testID="home-quick-match">
+              <LinearGradient colors={["#3B82F6", "#0EA5E9"] as const} style={styles.quickWide}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.quickTag}>REAL PEOPLE</Text>
+                  <Text style={styles.quickTitle}>Speak with Real People</Text>
+                  <Text style={styles.quickSub}>Voice-call a real learner right now</Text>
+                </View>
+                <View style={styles.quickIconWrap}>
+                  <Ionicons name="people" size={30} color="#fff" />
+                </View>
+              </LinearGradient>
+            </TouchableOpacity>
           </Animated.View>
 
           {/* Categories */}
@@ -236,16 +243,17 @@ const styles = StyleSheet.create({
   ringText: { color: "#fff", fontFamily: "Outfit_700Bold", fontSize: 20 },
 
   wodWord: { ...typography.h2, fontSize: 22 },
+  wodSpeaker: { width: 32, height: 32, borderRadius: 999, backgroundColor: "#DBEAFE", alignItems: "center", justifyContent: "center" },
   wodPhonetic: { ...typography.small, color: colors.primary, marginTop: 2 },
   wodMeaning: { ...typography.body, marginTop: 8 },
   wodExample: { ...typography.small, color: colors.textSecondary, marginTop: 6, fontStyle: "italic" },
   wodBtn: { width: 46, height: 46, borderRadius: 999, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", ...shadow.soft },
 
-  quickRow: { flexDirection: "row", gap: 12 },
-  quickCard: { flex: 1, borderRadius: radii.xl, overflow: "hidden", ...shadow.card },
-  quickInner: { padding: 16, height: 140, justifyContent: "space-between" },
-  quickTitle: { color: "#fff", fontFamily: "Outfit_700Bold", fontSize: 17 },
-  quickSub: { color: "rgba(255,255,255,0.75)", fontFamily: "Manrope_500Medium", fontSize: 12 },
+  quickWide: { flexDirection: "row", alignItems: "center", gap: 14, padding: 20, borderRadius: radii.xl, ...shadow.strong },
+  quickTag: { color: "rgba(255,255,255,0.8)", fontFamily: "Manrope_700Bold", fontSize: 10, letterSpacing: 1.4 },
+  quickTitle: { color: "#fff", fontFamily: "Outfit_700Bold", fontSize: 20, marginTop: 4 },
+  quickSub: { color: "rgba(255,255,255,0.8)", fontFamily: "Manrope_500Medium", fontSize: 13, marginTop: 4 },
+  quickIconWrap: { width: 62, height: 62, borderRadius: 22, backgroundColor: "rgba(255,255,255,0.18)", alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "rgba(255,255,255,0.3)" },
 
   catCard: { width: 160, height: 190, borderRadius: radii.lg, overflow: "hidden", justifyContent: "flex-end" },
   catIcon: { width: 32, height: 32, borderRadius: 999, alignItems: "center", justifyContent: "center", marginBottom: 8 },
