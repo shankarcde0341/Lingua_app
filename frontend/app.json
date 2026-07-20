@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.emergent.linguafranca.vvplia"
+      "bundleIdentifier": "com.emergent.linguafranca.vvplia",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Talk with real people during voice practice."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -18,7 +21,11 @@
         "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.emergent.linguafranca.vvplia"
+      "package": "com.emergent.linguafranca.vvplia",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "bundler": "metro",
