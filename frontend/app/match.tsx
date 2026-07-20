@@ -17,6 +17,7 @@ export default function Match() {
   const [gender, setGender] = useState<Gender>("any");
   const [status, setStatus] = useState<"idle" | "searching" | "found">("idle");
   const [partner, setPartner] = useState<any>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
 
   const pulse1 = useSharedValue(0);
   const pulse2 = useSharedValue(0);
@@ -43,6 +44,7 @@ export default function Match() {
       try {
         const d = await api.match(gender);
         setPartner(d.partner);
+        setRoomId(d.room_id);
         setStatus("found");
       } catch {
         setStatus("idle");
@@ -51,8 +53,17 @@ export default function Match() {
   };
 
   const startCall = () => {
-    if (!partner) return;
-    router.replace({ pathname: "/call", params: { name: partner.name, avatar: partner.avatar, gender: partner.gender, country: partner.country } });
+    if (!partner || !roomId) return;
+    router.replace({
+      pathname: "/call",
+      params: {
+        name: partner.name,
+        avatar: partner.avatar,
+        gender: partner.gender,
+        country: partner.country,
+        room_id: roomId,
+      },
+    });
   };
 
   return (

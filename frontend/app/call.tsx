@@ -59,8 +59,13 @@ export default function Call() {
           return;
         }
 
-        // 3) Get token, room_id and user_id from backend
-        const rid = String(roomIdParam || `lf_${Math.random().toString(16).slice(2, 18)}`);
+        // 3) Room ID must come from /api/match — never generated on the client
+        //    so both matched users always end up in the same ZEGOCLOUD room.
+        const rid = roomIdParam ? String(roomIdParam) : "";
+        if (!rid) {
+          console.warn("[Zego] no room_id passed by /api/match — aborting voice init.");
+          return;
+        }
         const tokenRes = await api.getZegoToken(rid);
         if (cancelled) return;
 
