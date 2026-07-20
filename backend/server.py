@@ -139,6 +139,9 @@ class LinkPhone(BaseModel):
 class ApplyReferral(BaseModel):
     referral_code: str
 
+class ZegoTokenRequest(BaseModel):
+    room_id: str
+
 # ---------- Auth helpers ----------
 async def get_current_user(authorization: Optional[str] = Header(None)) -> Dict[str, Any]:
     if not authorization or not authorization.startswith("Bearer "):
@@ -918,6 +921,89 @@ async def block_user(payload: ReportCreate, user=Depends(get_current_user)):
         blocked.append(payload.target_name)
     await db.users.update_one({"user_id": user["user_id"]}, {"$set": {"blocked": blocked}})
     return {"ok": True}
+
+# ---------- ZEGOCLOUD Voice Token (Token04) ----------
+# Official ZEGO Token04 algorithm implemented in-process (no SDK install).
+# Payload:  expire_time_i64_be | iv_len_i16_be | iv | ct_len_i16_be | ct
+# Cipher:   AES/CBC/PKCS7  (key = ZEGO_SERVER_SECRET utf-8, must be exactly 32 chars)
+def _generate_zego_token04(app_id: int, user_id: str, secret: str, effective_time_seconds: int, payload: str = "") -> str:
+    import base64
+    import json as _json
+    import os as _os
+    import random as _random
+    import struct
+    import time as _time
+    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+    from cryptography.hazmat.primitives import padding as _padding
+
+    if not isinstance(app_id, int) or app_id <= 0:
+        raise ValueError("app_id must be a positive integer")
+    if not user_id:
+        raise ValueError("user_id required")
+    if not secret or len(secret) != 32:
+        raise ValueError("ZEGO_SERVER_SECRET must be exactly 32 characters")
+    if effective_time_seconds <= 0:
+        raise ValueError("effective_time_seconds must be > 0")
+
+    create_time = int(_time.time())
+    token_info = {
+        "app_id": app_id,
+        "user_id": user_id,
+        "nonce": _random.randint(-2147483648, 2147483647),
+        "ctime": create_time,
+        "expire": create_time + effective_time_seconds,
+        "payload": payload or "",
+    }
+    plain_text = _json.dumps(token_info, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
+    iv = _os.urandom(16)
+    key = secret.encode("utf-8")
+
+    padder = _padding.PKCS7(algorithms.AES.block_size).padder()
+    padded = padder.update(plain_text) + padder.finalize()
+
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
+    encryptor = cipher.encryptor()
+    ciphertext = encryptor.update(padded) + encryptor.finalize()
+
+    buf = struct.pack(">q", token_info["expire"])
+    buf += struct.pack(">h", len(iv)) + iv
+    buf += struct.pack(">h", len(ciphertext)) + ciphertext
+
+    return "04" + base64.b64encode(buf).decode("utf-8")
+
+@api.post("/zego/token")
+async def zego_token(payload: ZegoTokenRequest, user=Depends(get_current_user)):
+    if not ZEGO_APP_ID or not ZEGO_SERVER_SECRET:
+        raise HTTPException(status_code=503, detail="ZEGOCLOUD is not configured on the server")
+    try:
+        app_id_int = int(ZEGO_APP_ID)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=500, detail="ZEGO_APP_ID must be a numeric value")
+
+    room_id = (payload.room_id or "").strip()
+    if not room_id:
+        raise HTTPException(status_code=400, detail="room_id required")
+
+    effective_time = 3600  # 1 hour
+    try:
+        token = _generate_zego_token04(
+            app_id=app_id_int,
+            user_id=user["user_id"],
+            secret=ZEGO_SERVER_SECRET,
+            effective_time_seconds=effective_time,
+            payload="",
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return {
+        "app_id": app_id_int,
+        "room_id": room_id,
+        "user_id": user["user_id"],
+        "token": token,
+        "effective_time": effective_time,
+    }
 
 # ---------- Live Rooms ----------
 @api.get("/rooms")
