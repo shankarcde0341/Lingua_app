@@ -858,7 +858,8 @@ async def find_match(gender: str = "any", user=Depends(get_current_user)):
     if not pool:
         pool = PARTNER_POOL
     partner = random.choice(pool)
-    return {"partner": partner}
+    room_id = f"lf_{uuid.uuid4().hex[:16]}"
+    return {"partner": partner, "room_id": room_id}
 
 @api.post("/calls")
 async def log_call(payload: CallLogCreate, user=Depends(get_current_user)):
