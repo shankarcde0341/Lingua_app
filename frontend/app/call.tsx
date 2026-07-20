@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -11,7 +11,7 @@ import { useAuth } from "@/src/context/AuthContext";
 import { colors, gradients, radii, shadow, typography } from "@/src/theme";
 
 export default function Call() {
-  const { name, avatar, gender, country } = useLocalSearchParams<{ name: string; avatar: string; gender: string; country: string }>();
+  const { name, avatar, gender, country, room_id: roomIdParam } = useLocalSearchParams<{ name: string; avatar: string; gender: string; country: string; room_id?: string }>();
   const router = useRouter();
   const { refresh } = useAuth();
   const [seconds, setSeconds] = useState(0);
@@ -21,6 +21,13 @@ export default function Call() {
   const [blocked, setBlocked] = useState(false);
   const timer = useRef<any>(null);
 
+  // ZEGOCLOUD refs — kept out of React state to avoid re-renders while a call is live.
+  const zegoRef = useRef<any>(null);              // ZegoExpressEngine.instance()
+  const zegoRoomId = useRef<string | null>(null);
+  const zegoStreamId = useRef<string | null>(null);
+  const zegoRemoteStreams = useRef<Set<string>>(new Set());
+  const zegoTornDown = useRef(false);
+
   const wave = useSharedValue(0);
 
   useEffect(() => {
@@ -28,6 +35,131 @@ export default function Call() {
     wave.value = withRepeat(withTiming(1, { duration: 1200, easing: Easing.inOut(Easing.quad) }), -1, true);
     return () => clearInterval(timer.current);
   }, [wave]);
+
+  // ---------- ZEGOCLOUD lifecycle ----------
+  // Native-only. Web / Expo Go bundling stays safe because we require() dynamically.
+  useEffect(() => {
+    if (Platform.OS === "web") return;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        // 1) Dynamic import so Metro doesn't try to resolve the native module on web
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const ZegoModule = require("zego-express-engine-reactnative");
+        const ZegoExpressEngine = ZegoModule.default || ZegoModule.ZegoExpressEngine || ZegoModule;
+        const ZegoScenario = ZegoModule.ZegoScenario || { Default: 0 };
+        const ZegoUpdateType = ZegoModule.ZegoUpdateType || { Add: 0, Delete: 1 };
+
+        // 2) Read public App ID (safe to expose). Bail early if not configured.
+        const appIdRaw = process.env.EXPO_PUBLIC_ZEGO_APP_ID;
+        const appId = appIdRaw ? Number(appIdRaw) : 0;
+        if (!appId) {
+          console.warn("[Zego] EXPO_PUBLIC_ZEGO_APP_ID missing — voice engine not started.");
+          return;
+        }
+
+        // 3) Get token, room_id and user_id from backend
+        const rid = String(roomIdParam || `lf_${Math.random().toString(16).slice(2, 18)}`);
+        const tokenRes = await api.getZegoToken(rid);
+        if (cancelled) return;
+
+        // 4) Init engine (audio-only scenario, no video track ever created)
+        await ZegoExpressEngine.createEngineWithProfile({
+          appID: appId,
+          scenario: ZegoScenario.Default,
+        });
+        const engine = ZegoExpressEngine.instance();
+        zegoRef.current = engine;
+        zegoRoomId.current = tokenRes.room_id;
+
+        // 5) Event listeners
+        engine.on("roomStateUpdate", (_rid: string, state: number, errorCode: number) => {
+          console.log("[Zego] roomStateUpdate", { state, errorCode });
+        });
+        engine.on("roomStreamUpdate", (_rid: string, updateType: number, streamList: any[]) => {
+          streamList.forEach((s) => {
+            if (updateType === ZegoUpdateType.Add) {
+              zegoRemoteStreams.current.add(s.streamID);
+              engine.startPlayingStream(s.streamID);   // remote AUDIO only (no view)
+            } else {
+              zegoRemoteStreams.current.delete(s.streamID);
+              engine.stopPlayingStream(s.streamID);
+            }
+          });
+        });
+        engine.on("publisherStateUpdate", (_sid: string, state: number, errorCode: number) => {
+          console.log("[Zego] publisherStateUpdate", { state, errorCode });
+        });
+
+        // 6) Login to the room using the server-issued token
+        await engine.loginRoom(
+          tokenRes.room_id,
+          { userID: tokenRes.user_id, userName: tokenRes.user_id },
+          { token: tokenRes.token, userUpdate: true },
+        );
+
+        // 7) Publish local AUDIO only (no camera / no video track)
+        const streamId = `${tokenRes.user_id}_audio`;
+        zegoStreamId.current = streamId;
+        await engine.startPublishingStream(streamId);
+
+        // 8) Apply current UI state to the engine
+        engine.muteMicrophone(muted);
+        engine.setAudioRouteToSpeaker(speaker);
+      } catch (e: any) {
+        console.warn("[Zego] init failed:", e?.message || e);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      teardownZego().catch(() => {});
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const teardownZego = async () => {
+    if (zegoTornDown.current) return;
+    zegoTornDown.current = true;
+    const engine = zegoRef.current;
+    if (!engine) return;
+    try {
+      if (zegoStreamId.current) {
+        await engine.stopPublishingStream();
+      }
+      zegoRemoteStreams.current.forEach((sid) => {
+        try { engine.stopPlayingStream(sid); } catch { /* ignore */ }
+      });
+      zegoRemoteStreams.current.clear();
+      if (zegoRoomId.current) {
+        await engine.logoutRoom(zegoRoomId.current);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const ZegoModule = require("zego-express-engine-reactnative");
+      const ZegoExpressEngine = ZegoModule.default || ZegoModule.ZegoExpressEngine || ZegoModule;
+      await ZegoExpressEngine.destroyEngine();
+    } catch (e: any) {
+      console.warn("[Zego] teardown warning:", e?.message || e);
+    } finally {
+      zegoRef.current = null;
+      zegoStreamId.current = null;
+      zegoRoomId.current = null;
+    }
+  };
+
+  // ---------- Wire the existing controls to Zego ----------
+  const toggleMute = () => {
+    const next = !muted;
+    setMuted(next);
+    try { zegoRef.current?.muteMicrophone(next); } catch { /* ignore */ }
+  };
+
+  const toggleSpeaker = () => {
+    const next = !speaker;
+    setSpeaker(next);
+    try { zegoRef.current?.setAudioRouteToSpeaker(next); } catch { /* ignore */ }
+  };
 
   const bar1 = useAnimatedStyle(() => ({ transform: [{ scaleY: 0.5 + Math.abs(Math.sin((wave.value + 0.0) * Math.PI * 2)) }] }));
   const bar2 = useAnimatedStyle(() => ({ transform: [{ scaleY: 0.5 + Math.abs(Math.sin((wave.value + 0.15) * Math.PI * 2)) }] }));
@@ -46,6 +178,7 @@ export default function Call() {
 
   const endCall = async () => {
     if (timer.current) clearInterval(timer.current);
+    await teardownZego();
     try {
       await api.logCall({ partner_name: String(name || ""), partner_avatar: String(avatar || ""), duration_seconds: seconds, partner_gender: String(gender || "any") });
       await refresh();
@@ -96,13 +229,13 @@ export default function Call() {
         </View>
 
         <View style={styles.controls}>
-          <TouchableOpacity onPress={() => setMuted(!muted)} style={[styles.ctrl, muted && styles.ctrlActive]} testID="call-mute">
+          <TouchableOpacity onPress={toggleMute} style={[styles.ctrl, muted && styles.ctrlActive]} testID="call-mute">
             <Ionicons name={muted ? "mic-off" : "mic"} size={22} color={muted ? colors.primary : "#fff"} />
           </TouchableOpacity>
           <TouchableOpacity onPress={endCall} style={styles.endBtn} testID="call-end">
             <Ionicons name="call" size={28} color="#fff" style={{ transform: [{ rotate: "135deg" }] }} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setSpeaker(!speaker)} style={[styles.ctrl, !speaker && styles.ctrlActive]} testID="call-speaker">
+          <TouchableOpacity onPress={toggleSpeaker} style={[styles.ctrl, !speaker && styles.ctrlActive]} testID="call-speaker">
             <Ionicons name={speaker ? "volume-high" : "volume-mute"} size={22} color={!speaker ? colors.primary : "#fff"} />
           </TouchableOpacity>
         </View>

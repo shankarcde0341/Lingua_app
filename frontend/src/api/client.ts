@@ -74,4 +74,5 @@ export const api = {
   subscriptionPlans: () => request<any>("/subscription/plans"),
   createCheckout: (plan: string, origin_url: string) => request<any>("/subscription/checkout", { method: "POST", body: JSON.stringify({ plan, origin_url }) }),
   pollCheckout: (session_id: string) => request<any>(`/subscription/status/${session_id}`),
+  getZegoToken: (room_id: string) => request<any>("/zego/token", { method: "POST", body: JSON.stringify({ room_id }) }),
 };
