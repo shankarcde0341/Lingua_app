@@ -24,6 +24,10 @@ load_dotenv(ROOT_DIR / ".env")
 MONGO_URL = os.environ["MONGO_URL"]
 DB_NAME = os.environ.get("DB_NAME", "lingua_franca")
 STRIPE_API_KEY = os.environ.get("STRIPE_API_KEY", "sk_test_emergent")
+# ZEGOCLOUD Voice SDK credentials (read-only wiring; consumed by future
+# token-generation endpoint, no runtime effect until then).
+ZEGO_APP_ID = os.environ.get("ZEGO_APP_ID", "")
+ZEGO_SERVER_SECRET = os.environ.get("ZEGO_SERVER_SECRET", "")
 
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
