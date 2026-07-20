@@ -322,8 +322,22 @@ STRIPE_PLANS = {
 async def startup():
     await db.users.create_index("email", unique=True)
     await db.users.create_index("user_id", unique=True)
-    await db.users.create_index("phone", unique=True, sparse=True)
-    await db.users.create_index("referral_code", unique=True, sparse=True)
+    # Drop legacy sparse indexes if present — they treated `null` as a value and
+    # caused duplicate-key errors on every new user with phone/referral_code = None.
+    for legacy_name in ("phone_1", "referral_code_1"):
+        try:
+            await db.users.drop_index(legacy_name)
+        except Exception:
+            pass
+    # Partial unique indexes: only enforce uniqueness when the field is a real string.
+    await db.users.create_index(
+        "phone", unique=True,
+        partialFilterExpression={"phone": {"$type": "string"}},
+    )
+    await db.users.create_index(
+        "referral_code", unique=True,
+        partialFilterExpression={"referral_code": {"$type": "string"}},
+    )
     await db.user_sessions.create_index("session_token", unique=True)
     await db.user_sessions.create_index("expires_at", expireAfterSeconds=0)
     await db.payments.create_index("session_id", unique=True)
