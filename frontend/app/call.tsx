@@ -27,6 +27,8 @@ export default function Call() {
   const zegoStreamId = useRef<string | null>(null);
   const zegoRemoteStreams = useRef<Set<string>>(new Set());
   const zegoTornDown = useRef(false);
+  const zegoInitStarted = useRef(false);          // StrictMode / remount double-init guard
+  const endingRef = useRef(false);                // double-tap guard on End Call
 
   const wave = useSharedValue(0);
 
@@ -40,6 +42,8 @@ export default function Call() {
   // Native-only. Web / Expo Go bundling stays safe because we require() dynamically.
   useEffect(() => {
     if (Platform.OS === "web") return;
+    if (zegoInitStarted.current) return;    // StrictMode / remount guard
+    zegoInitStarted.current = true;
     let cancelled = false;
 
     (async () => {
@@ -74,13 +78,22 @@ export default function Call() {
           appID: appId,
           scenario: ZegoScenario.Default,
         });
+        if (cancelled) { await teardownZego(); return; }
         const engine = ZegoExpressEngine.instance();
         zegoRef.current = engine;
         zegoRoomId.current = tokenRes.room_id;
 
-        // 5) Event listeners
+        // 5) Event listeners — clear any stale ones first (Zego .on() APPENDS, not replaces)
+        try { engine.off("roomStateUpdate"); engine.off("roomStreamUpdate"); engine.off("publisherStateUpdate"); } catch { /* ignore */ }
+
         engine.on("roomStateUpdate", (_rid: string, state: number, errorCode: number) => {
           console.log("[Zego] roomStateUpdate", { state, errorCode });
+          // Hard disconnect (state === 0 DISCONNECTED with non-zero error after SDK retries):
+          // fall back to the same End Call path so the user isn't stuck on a dead room.
+          if (state === 0 && errorCode !== 0) {
+            console.warn("[Zego] room disconnected with error — ending call");
+            endCall().catch(() => {});
+          }
         });
         engine.on("roomStreamUpdate", (_rid: string, updateType: number, streamList: any[]) => {
           streamList.forEach((s) => {
@@ -103,11 +116,13 @@ export default function Call() {
           { userID: tokenRes.user_id, userName: tokenRes.user_id },
           { token: tokenRes.token, userUpdate: true },
         );
+        if (cancelled) { await teardownZego(); return; }
 
         // 7) Publish local AUDIO only (no camera / no video track)
         const streamId = `${tokenRes.user_id}_audio`;
         zegoStreamId.current = streamId;
         await engine.startPublishingStream(streamId);
+        if (cancelled) { await teardownZego(); return; }
 
         // 8) Apply current UI state to the engine
         engine.muteMicrophone(muted);
@@ -130,6 +145,8 @@ export default function Call() {
     const engine = zegoRef.current;
     if (!engine) return;
     try {
+      // Deregister listeners FIRST so late callbacks after logout can't fire into a torn-down UI.
+      try { engine.off("roomStateUpdate"); engine.off("roomStreamUpdate"); engine.off("publisherStateUpdate"); } catch { /* ignore */ }
       if (zegoStreamId.current) {
         await engine.stopPublishingStream();
       }
@@ -182,6 +199,8 @@ export default function Call() {
   };
 
   const endCall = async () => {
+    if (endingRef.current) return;   // double-tap / auto-hangup guard
+    endingRef.current = true;
     if (timer.current) clearInterval(timer.current);
     await teardownZego();
     try {
