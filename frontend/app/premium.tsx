@@ -11,9 +11,15 @@ import { useAuth } from "@/src/context/AuthContext";
 import { colors, gradients, radii, shadow, typography } from "@/src/theme";
 import { ScreenHeader } from "@/src/components/ui";
 
-// UI-only plan tiers. Backend still exposes "monthly" and "yearly" SKUs — each tier
-// is mapped to the closest existing SKU so Stripe checkout keeps working without
-// backend changes.
+// UI-only plan tiers mapped to backend subscription SKUs.
+// Frontend displays rupee prices (marketing labels for UX); backend charges USD equivalents.
+// Tier mapping:
+//   - Free (₹0) → no checkout, displays "You're on the Free plan" chip
+//   - ₹49 Pack (/ week) → backend weekly SKU (0.59 USD)
+//   - ₹199 Pack (/ monthly, MOST POPULAR) → backend monthly SKU (9.99 USD)
+//   - ₹499 Pack (/ quarterly, BEST VALUE) → backend quarterly SKU (14.99 USD)
+// Transitioning to real INR pricing later requires only backend SKU addition — frontend already
+// sends whichever backendPlan string the tier config specifies.
 type TierId = "free" | "pack49" | "pack199" | "pack499";
 const TIERS: Array<{
   id: TierId;
@@ -21,14 +27,14 @@ const TIERS: Array<{
   price: string;
   per: string;
   tagline: string;
-  backendPlan: "monthly" | "yearly" | null;   // null = no checkout (Free)
+  backendPlan: "weekly" | "monthly" | "quarterly" | "yearly" | null;   // null = no checkout (Free)
   highlight?: boolean;
   ribbon?: string;
 }> = [
   { id: "free",    label: "Free",       price: "₹0",   per: "forever",     tagline: "Start learning today",     backendPlan: null },
-  { id: "pack49",  label: "₹49 Pack",   price: "₹49",  per: "/ month",     tagline: "Ad-free + daily practice", backendPlan: "monthly", highlight: true },
-  { id: "pack199", label: "₹199 Pack",  price: "₹199", per: "/ quarter",   tagline: "Unlimited social + certs", backendPlan: "monthly", highlight: true, ribbon: "MOST POPULAR" },
-  { id: "pack499", label: "₹499 Pack",  price: "₹499", per: "/ year",      tagline: "Everything unlocked",       backendPlan: "yearly",  highlight: true, ribbon: "BEST VALUE" },
+  { id: "pack49",  label: "₹49 Pack",   price: "₹49",  per: "/ week",     tagline: "Trail pack + Ad-free + daily practice", backendPlan: "weekly", highlight: true },
+  { id: "pack199", label: "₹199 Pack",  price: "₹199", per: "/ monthly",   tagline: "Unlimited social + certs", backendPlan: "monthly", highlight: true, ribbon: "MOST POPULAR" },
+  { id: "pack499", label: "₹499 Pack",  price: "₹499", per: "/ quarterly",      tagline: "Everything unlocked",       backendPlan: "quarterly",  highlight: true, ribbon: "BEST VALUE" },
 ];
 
 type Cell = { kind: "yes" } | { kind: "no" } | { kind: "text"; text: string };
@@ -42,7 +48,7 @@ const COMPARISON: Array<{ feature: string; cells: [Cell, Cell, Cell, Cell] }> = 
   { feature: "Gender Filter",       cells: [NO, NO, NO, YES] },
   { feature: "Social Feature",      cells: [NO, T("Limited"), T("Unlimited"), T("Unlimited")] },
   { feature: "Daily Quiz",          cells: [T("5/day"), T("10/day"), T("20/day"), T("20/day")] },
-  { feature: "Smart Revision",      cells: [NO, YES, YES, YES] },
+  { feature: "Daily Lesson",      cells: [NO, YES, YES, YES] },
   { feature: "Streak Reward",       cells: [YES, YES, YES, YES] },
   { feature: "Courses",             cells: [NO, YES, YES, YES] },
   { feature: "Live Room",           cells: [NO, T("Limited"), T("Limited"), YES] },
@@ -220,7 +226,7 @@ export default function Premium() {
             )
           ) : null}
 
-          <Text style={styles.note}>Secure checkout by Stripe. Cancel anytime. Prices in INR (displayed) — charged in USD equivalent.</Text>
+          <Text style={styles.note}>Secure checkout by Stripe. Cancel anytime. Displayed prices (₹49/₹199/₹499) are marketing labels. Stripe charges weekly/monthly/quarterly in USD equivalent.</Text>
           <TouchableOpacity onPress={() => router.push("/privacy")}>
             <Text style={styles.legal}>Terms and Privacy Policy apply</Text>
           </TouchableOpacity>

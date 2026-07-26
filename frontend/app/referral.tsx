@@ -67,11 +67,28 @@ export default function Referral() {
       <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
         <ScreenHeader title="Invite & Earn" showBack onBack={() => router.back()} />
         <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 60 }} showsVerticalScrollIndicator={false}>
-          <View style={styles.hero}>
-            <View style={styles.giftBox}><Ionicons name="gift" size={40} color="#F59E0B" /></View>
-            <Text style={styles.heroTitle}>Give 20% · Get 20%</Text>
-            <Text style={styles.heroSub}>Share your code. Friends save 20% on Premium — and so do you on your next renewal.</Text>
-          </View>
+          <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingTop: 30,      // Upar se gap
+                paddingBottom: 20,
+                marginTop: 20,       // Agar upar wale section se overlap ho raha ho
+              }}
+            >
+              <View style={{ marginBottom: 15 }}>
+                <Ionicons name="gift" size={40} color="#F59E0B" />
+              </View>
+
+              <Text style={{color: '#000080', fontSize: 26, fontWeight: '700', textAlign: 'center', marginBottom: 10,}}>
+                Get Upto Rs. 50 Cashback
+              </Text>
+
+              <Text style={{color: '#35489c', fontSize: 14, textAlign: 'center', lineHeight: 24, paddingHorizontal: 25,}}>
+                Share your code. With your friends and get up to 50Rs Cashback on any Premium plan , and so do you on your friends. Which you can withdraw also.
+              </Text>
+              
+            </View>
 
           <View style={styles.codeCard} testID="referral-code-card">
             <View>
@@ -91,9 +108,9 @@ export default function Referral() {
               <Text style={styles.statLabel}>Friends invited</Text>
             </View>
             <View style={styles.statCard} testID="referral-discount-card">
-              <Ionicons name="pricetag" size={22} color={colors.gold} />
+              <Ionicons name="wallet-outline" size={22} color={colors.gold} />
               <Text style={styles.statValue}>{data.referral_discount_active ? "20%" : "—"}</Text>
-              <Text style={styles.statLabel}>Discount ready</Text>
+              <Text style={styles.statLabel}>Cashback Earned</Text>
             </View>
           </View>
 

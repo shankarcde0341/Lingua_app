@@ -51,7 +51,6 @@ class UserOut(BaseModel):
     picture: Optional[str] = None
     english_level: str = "Beginner"
     xp: int = 0
-    coins: int = 0
     streak: int = 0
     last_active_date: Optional[str] = None
     daily_goal_minutes: int = 15
@@ -120,7 +119,7 @@ class RoomJoin(BaseModel):
     room_id: str
 
 class CheckoutRequest(BaseModel):
-    plan: str  # monthly | yearly
+    plan: str  # weekly | monthly | quarterly | yearly
     origin_url: str
 
 class PhoneSendOtp(BaseModel):
@@ -168,7 +167,6 @@ def _user_to_out(u: Dict[str, Any]) -> UserOut:
         picture=u.get("picture"),
         english_level=u.get("english_level", "Beginner"),
         xp=u.get("xp", 0),
-        coins=u.get("coins", 0),
         streak=u.get("streak", 0),
         last_active_date=u.get("last_active_date"),
         daily_goal_minutes=u.get("daily_goal_minutes", 15),
@@ -239,13 +237,76 @@ LESSONS = [
     _lesson("daily", 8, "Doctor & Pharmacy Visit", "Explain symptoms and understand advice.", "Intermediate", 13),
     _lesson("daily", 9, "Phone Conversations", "Sound natural and clear on calls.", "Intermediate", 12),
     _lesson("daily", 10, "Expressing Opinions", "Agree, disagree and add nuance.", "Advanced", 14),
+    _lesson("daily", 11, "Making Complaints", "Express dissatisfaction politely and constructively.", "Intermediate", 11),
+    _lesson("daily", 12, "Asking for Help & Favors", "Request assistance naturally and courteously.", "Beginner", 10),
+    _lesson("daily", 13, "Congratulating & Celebrating", "Respond genuinely to good news and achievements.", "Intermediate", 10),
+    _lesson("daily", 14, "Dealing with Misunderstandings", "Clarify, rephrase and resolve communication gaps.", "Intermediate", 13),
+    _lesson("daily", 15, "Apologizing & Making Amends", "Express genuine apologies and repair relationships.", "Beginner", 11),
+    _lesson("daily", 16, "Job & Career Conversations", "Discuss work, ambitions and professional growth.", "Intermediate", 12),
+    _lesson("daily", 17, "Hobbies & Interests", "Talk passionately about what you love doing.", "Intermediate", 11),
+    _lesson("daily", 18, "Travel & Vacation Stories", "Share travel experiences and ask about trips.", "Beginner", 10),
+    _lesson("daily", 19, "Family & Relationships", "Discuss family, friends and personal connections.", "Intermediate", 12),
+    _lesson("daily", 20, "Weather & Casual Chitchat", "Master small talk and everyday conversation starters.", "Beginner", 9),
     _lesson("business", 1, "Business Meetings", "Language for productive meetings.", "Intermediate", 15),
     _lesson("business", 2, "Writing Professional Emails", "Structure and tone for emails.", "Intermediate", 10),
     _lesson("business", 3, "Negotiating Deals", "Persuasive language for negotiations.", "Advanced", 18),
+    _lesson("business", 4, "Presenting with Confidence", "Deliver impactful presentations and pitches.", "Advanced", 16),
+    _lesson("business", 5, "Networking & Building Relationships", "Make meaningful professional connections.", "Intermediate", 14),
+    _lesson("business", 6, "Handling Difficult Conversations", "Address conflicts and feedback diplomatically.", "Advanced", 15),
+    _lesson("business", 7, "Corporate Culture & Etiquette", "Navigate workplace norms and professional behavior.", "Intermediate", 12),
+    _lesson("business", 8, "Remote Work Communication", "Excel in video calls and virtual collaboration.", "Intermediate", 13),
+    _lesson("business", 9, "Sales & Persuasion Techniques", "Influence and close deals with confidence.", "Advanced", 17),
+    _lesson("business", 10, "Leadership & Team Motivation", "Inspire and manage teams effectively.", "Advanced", 16),
+    _lesson("business", 11, "Project Management Communication", "Coordinate teams and manage timelines effectively.", "Intermediate", 14),
+    _lesson("business", 12, "Client Relations & Account Management", "Build and maintain strong client relationships.", "Intermediate", 13),
+    _lesson("business", 13, "Budget & Financial Discussions", "Discuss finances and ROI confidently.", "Advanced", 15),
+    _lesson("business", 14, "Cross-Cultural Business Communication", "Navigate differences in international business.", "Advanced", 16),
+    _lesson("business", 15, "Change Management & Organizational Updates", "Communicate changes and transitions smoothly.", "Intermediate", 14),
+    _lesson("business", 16, "Conflict Resolution in Workplace", "Mediate disputes and find win-win solutions.", "Advanced", 15),
+    _lesson("business", 17, "Innovation & Strategic Planning Discussions", "Present ideas and align teams on strategy.", "Advanced", 17),
+    _lesson("business", 18, "Employee Performance Reviews", "Conduct and receive feedback professionally.", "Intermediate", 13),
+    _lesson("business", 19, "Mentoring & Coaching Conversations", "Guide and develop team members effectively.", "Intermediate", 14),
+    _lesson("business", 20, "Crisis Communication & Problem-Solving", "Handle urgent situations with poise and clarity.", "Advanced", 16),
     _lesson("interview", 1, "Tell Me About Yourself", "Craft a compelling elevator pitch.", "Intermediate", 10),
     _lesson("interview", 2, "Behavioral Questions", "STAR method for tough questions.", "Advanced", 15),
+    _lesson("interview", 3, "Why Do You Want This Job?", "Articulate your motivation and fit.", "Intermediate", 12),
+    _lesson("interview", 4, "Discussing Your Strengths", "Highlight skills without sounding arrogant.", "Intermediate", 11),
+    _lesson("interview", 5, "Addressing Your Weaknesses", "Turn weaknesses into growth opportunities.", "Advanced", 14),
+    _lesson("interview", 6, "Technical Questions & Problem-Solving", "Explain technical concepts clearly.", "Advanced", 16),
+    _lesson("interview", 7, "Salary Negotiation Conversations", "Discuss compensation confidently.", "Advanced", 13),
+    _lesson("interview", 8, "Questions to Ask the Interviewer", "Show genuine interest and strategic thinking.", "Intermediate", 12),
+    _lesson("interview", 9, "Handling Difficult Interview Scenarios", "Respond tactfully to tricky situations.", "Advanced", 15),
+    _lesson("interview", 10, "Follow-Up & Closing Strong", "Leave a lasting positive impression.", "Intermediate", 10),
+    _lesson("interview", 11, "Video Interview Etiquette", "Master camera presence and virtual professionalism.", "Intermediate", 12),
+    _lesson("interview", 12, "Panel Interview Strategies", "Engage multiple interviewers effectively.", "Advanced", 14),
+    _lesson("interview", 13, "Case Study & Problem-Solving Interviews", "Approach case studies with structured thinking.", "Advanced", 16),
+    _lesson("interview", 14, "Group Interview Dynamics", "Stand out while collaborating with other candidates.", "Intermediate", 13),
+    _lesson("interview", 15, "Phone & Screening Call Tips", "Excel at initial phone screening rounds.", "Intermediate", 10),
+    _lesson("interview", 16, "Industry-Specific Interview Prep", "Prepare for specialized role conversations.", "Advanced", 15),
+    _lesson("interview", 17, "Startup vs. Corporate Interview Differences", "Adapt approach based on company culture.", "Intermediate", 13),
+    _lesson("interview", 18, "Talking About Your Achievements", "Quantify success and highlight impact.", "Intermediate", 12),
+    _lesson("interview", 19, "Cultural Fit & Team Chemistry Questions", "Show alignment with company values.", "Intermediate", 11),
+    _lesson("interview", 20, "Negotiating Offer & Next Steps", "Navigate final conversations confidently.", "Advanced", 14),
     _lesson("travel", 1, "At the Airport", "Navigating airports confidently.", "Beginner", 8),
     _lesson("travel", 2, "Booking a Hotel", "Reservations and check-in phrases.", "Beginner", 10),
+    _lesson("travel", 3, "Ordering at Restaurants", "Navigate menus and place orders smoothly.", "Beginner", 11),
+    _lesson("travel", 4, "Using Public Transportation", "Navigate buses, trains and taxis like a local.", "Beginner", 10),
+    _lesson("travel", 5, "Asking for Directions & Maps", "Find your way confidently in unfamiliar places.", "Beginner", 9),
+    _lesson("travel", 6, "Shopping & Markets Haggling", "Negotiate prices and shop at local markets.", "Intermediate", 12),
+    _lesson("travel", 7, "Emergency Situations & Seeking Help", "Handle medical, police and urgent situations.", "Intermediate", 13),
+    _lesson("travel", 8, "Cultural Etiquette & Customs", "Navigate cultural differences respectfully.", "Intermediate", 11),
+    _lesson("travel", 9, "Travel Planning & Itineraries", "Discuss plans and make travel reservations.", "Intermediate", 12),
+    _lesson("travel", 10, "Dealing with Travel Problems", "Handle delays, lost luggage and complaints.", "Intermediate", 14),
+    _lesson("travel", 11, "Accommodation Negotiations", "Discuss amenities, rates, and special requests.", "Intermediate", 11),
+    _lesson("travel", 12, "Food & Dietary Preferences", "Navigate dining options and dietary restrictions.", "Beginner", 10),
+    _lesson("travel", 13, "Money Exchange & Payment Methods", "Discuss currency and payment options confidently.", "Intermediate", 10),
+    _lesson("travel", 14, "Sightseeing & Tourist Attractions", "Ask for recommendations and discuss attractions.", "Beginner", 9),
+    _lesson("travel", 15, "Guided Tours & Experiences", "Communicate with tour guides and activity organizers.", "Intermediate", 12),
+    _lesson("travel", 16, "Travel Insurance & Documentation", "Discuss policies, visas, and travel documents.", "Intermediate", 11),
+    _lesson("travel", 17, "Meeting Locals & Making Friends", "Build genuine connections with local people.", "Intermediate", 13),
+    _lesson("travel", 18, "Adventure Sports & Activities", "Discuss thrilling experiences and safety concerns.", "Intermediate", 12),
+    _lesson("travel", 19, "Travel Scams & Safety Tips", "Recognize risks and protect yourself confidently.", "Intermediate", 13),
+    _lesson("travel", 20, "Travel Stories & Cultural Exchange", "Share experiences and learn about different cultures.", "Intermediate", 14),
 ]
 
 VOCAB_WORDS = [
@@ -261,6 +322,44 @@ VOCAB_WORDS = [
     {"id": "w10", "word": "Nuance", "phonetic": "/ˈnuː.ɑːns/", "meaning": "A subtle difference in meaning.", "example": "Her writing captures every nuance.", "level": "Advanced"},
     {"id": "w11", "word": "Ubiquitous", "phonetic": "/juːˈbɪk.wə.təs/", "meaning": "Present everywhere.", "example": "Smartphones are ubiquitous today.", "level": "Advanced"},
     {"id": "w12", "word": "Gregarious", "phonetic": "/ɡrɪˈɡer.i.əs/", "meaning": "Enjoying the company of others.", "example": "He's a gregarious host.", "level": "Advanced"},
+    {"id": "w13", "word": "Pragmatic", "phonetic": "/præɡˈmæt.ɪk/", "meaning": "Dealing with things in a practical, realistic way.", "example": "We need a pragmatic approach to this problem.", "level": "Intermediate"},
+    {"id": "w14", "word": "Benevolent", "phonetic": "/bəˈnev.ə.lənt/", "meaning": "Showing kindness and generosity.", "example": "She has a benevolent attitude towards the poor.", "level": "Advanced"},
+    {"id": "w15", "word": "Melancholy", "phonetic": "/ˈmel.ən.kol.i/", "meaning": "A feeling of pensive sadness.", "example": "The rainy weather put me in a melancholy mood.", "level": "Intermediate"},
+    {"id": "w16", "word": "Audacious", "phonetic": "/ɔːˈdeɪ.ʃəs/", "meaning": "Brave and daring; willing to take risks.", "example": "His audacious plan surprised everyone.", "level": "Advanced"},
+    {"id": "w17", "word": "Placid", "phonetic": "/ˈplæs.ɪd/", "meaning": "Calm and peaceful.", "example": "The placid lake reflected the mountains.", "level": "Intermediate"},
+    {"id": "w18", "word": "Eloquence", "phonetic": "/ˈel.ə.kwəns/", "meaning": "Fluent, powerful, and persuasive speaking.", "example": "Her eloquence convinced the audience.", "level": "Intermediate"},
+    {"id": "w19", "word": "Catalyst", "phonetic": "/ˈkæt.ə.lɪst/", "meaning": "A person or thing that precipitates change.", "example": "Her speech was a catalyst for reform.", "level": "Intermediate"},
+    {"id": "w20", "word": "Frivolous", "phonetic": "/ˈfrɪv.ə.ləs/", "meaning": "Not serious; silly or trivial.", "example": "Don't waste time on frivolous matters.", "level": "Intermediate"},
+    {"id": "w21", "word": "Adept", "phonetic": "/əˈdept/", "meaning": "Very skilled or proficient.", "example": "She's adept at solving complex problems.", "level": "Beginner"},
+    {"id": "w22", "word": "Perspicacious", "phonetic": "/ˌpɜː.spɪˈkeɪ.ʃəs/", "meaning": "Having keen insight and discernment.", "example": "His perspicacious observations were invaluable.", "level": "Advanced"},
+    {"id": "w23", "word": "Tangible", "phonetic": "/ˈtæn.dʒə.bəl/", "meaning": "Able to be perceived by touch; real.", "example": "We need tangible evidence before proceeding.", "level": "Intermediate"},
+    {"id": "w24", "word": "Obfuscate", "phonetic": "/ˈɒb.fəs.keɪt/", "meaning": "To deliberately make something unclear.", "example": "Don't obfuscate the facts.", "level": "Advanced"},
+    {"id": "w25", "word": "Nascent", "phonetic": "/ˈneɪ.sənt/", "meaning": "Just beginning to exist or develop.", "example": "The nascent technology shows great promise.", "level": "Advanced"},
+    {"id": "w26", "word": "Perennial", "phonetic": "/pəˈren.i.əl/", "meaning": "Lasting through the year or for many years.", "example": "That's a perennial favorite among students.", "level": "Intermediate"},
+    {"id": "w27", "word": "Oblivious", "phonetic": "/əˈblɪv.i.əs/", "meaning": "Not aware or mindful of.", "example": "He seemed oblivious to her feelings.", "level": "Intermediate"},
+    {"id": "w28", "word": "Magnanimous", "phonetic": "/mæɡˈnæn.ɪ.məs/", "meaning": "Generous and forgiving; noble.", "example": "A magnanimous leader inspires loyalty.", "level": "Advanced"},
+    {"id": "w29", "word": "Ambiguous", "phonetic": "/æmˈbɪɡ.ju.əs/", "meaning": "Open to more than one interpretation.", "example": "His answer was ambiguous and unhelpful.", "level": "Intermediate"},
+    {"id": "w30", "word": "Pragmatism", "phonetic": "/ˈpræɡ.mə.tɪz.əm/", "meaning": "An approach focused on practical results.", "example": "Her pragmatism helped solve the crisis.", "level": "Intermediate"},
+    {"id": "w31", "word": "Petulant", "phonetic": "/ˈpet.jə.lənt/", "meaning": "Childishly sulky or easily annoyed.", "example": "He gave a petulant response to the criticism.", "level": "Intermediate"},
+    {"id": "w32", "word": "Altruism", "phonetic": "/ˈæl.tru.ɪz.əm/", "meaning": "Concern for others; selflessness.", "example": "Her altruism inspired many people.", "level": "Intermediate"},
+    {"id": "w33", "word": "Anomaly", "phonetic": "/əˈnɒm.ə.li/", "meaning": "Something that differs from the norm.", "example": "The test results showed an anomaly.", "level": "Intermediate"},
+    {"id": "w34", "word": "Colloquial", "phonetic": "/kəˈloʊ.kwi.əl/", "meaning": "Used in ordinary conversation.", "example": "That's too colloquial for a formal essay.", "level": "Intermediate"},
+    {"id": "w35", "word": "Incisive", "phonetic": "/ɪnˈsaɪ.sɪv/", "meaning": "Sharp, clear, and penetrating.", "example": "Her incisive analysis revealed the problem.", "level": "Advanced"},
+    {"id": "w36", "word": "Jocular", "phonetic": "/ˈdʒɒk.jə.lər/", "meaning": "Joking or humorous in tone.", "example": "His jocular remarks lightened the mood.", "level": "Intermediate"},
+    {"id": "w37", "word": "Languish", "phonetic": "/ˈlæŋ.ɡwɪʃ/", "meaning": "To lose strength or vitality; to long for.", "example": "The plants will languish without water.", "level": "Intermediate"},
+    {"id": "w38", "word": "Nonchalant", "phonetic": "/ˌnɒnʃəˈlɑːnt/", "meaning": "Casually indifferent; unconcerned.", "example": "He gave a nonchalant shrug.", "level": "Intermediate"},
+    {"id": "w39", "word": "Palpable", "phonetic": "/ˈpæl.pə.bəl/", "meaning": "Able to be touched or felt; obvious.", "example": "The tension in the room was palpable.", "level": "Intermediate"},
+    {"id": "w40", "word": "Quixotic", "phonetic": "/kwɪkˈsɒt.ɪk/", "meaning": "Exceedingly idealistic; unrealistic.", "example": "His quixotic dreams seemed impossible.", "level": "Advanced"},
+    {"id": "w41", "word": "Resonant", "phonetic": "/ˈrez.ə.nənt/", "meaning": "Producing a loud, deep sound; having profound meaning.", "example": "Her words were resonant with truth.", "level": "Advanced"},
+    {"id": "w42", "word": "Sagacious", "phonetic": "/səˈɡeɪ.ʃəs/", "meaning": "Wise and discerning; showing good judgment.", "example": "His sagacious advice proved invaluable.", "level": "Advanced"},
+    {"id": "w43", "word": "Tacit", "phonetic": "/ˈtæs.ɪt/", "meaning": "Understood or implied without being stated.", "example": "There was a tacit agreement between them.", "level": "Intermediate"},
+    {"id": "w44", "word": "Unequivocal", "phonetic": "/ˌʌn.ɪˈkwɪv.ə.kəl/", "meaning": "Clear and unambiguous; absolute.", "example": "She gave an unequivocal no.", "level": "Advanced"},
+    {"id": "w45", "word": "Vacillate", "phonetic": "/ˈvæs.ɪ.leɪt/", "meaning": "To waver between decisions.", "example": "He tends to vacillate on important choices.", "level": "Advanced"},
+    {"id": "w46", "word": "Whimsical", "phonetic": "/ˈwɪm.zɪ.kəl/", "meaning": "Playfully quaint or fanciful.", "example": "The painting had a whimsical charm.", "level": "Intermediate"},
+    {"id": "w47", "word": "Xenial", "phonetic": "/ˈzen.i.əl/", "meaning": "Hospitable and generous to guests.", "example": "They gave us a xenial welcome.", "level": "Advanced"},
+    {"id": "w48", "word": "Zealous", "phonetic": "/ˈzel.əs/", "meaning": "Filled with passionate energy and eagerness.", "example": "She's zealous about environmental causes.", "level": "Intermediate"},
+    {"id": "w49", "word": "Zephyr", "phonetic": "/ˈzef.ər/", "meaning": "A gentle breeze.", "example": "A warm zephyr swept across the garden.", "level": "Intermediate"},
+    {"id": "w50", "word": "Euphoria", "phonetic": "/juːˈfɔː.ri.ə/", "meaning": "A state of intense happiness and confidence.", "example": "The victory brought euphoria to the team.", "level": "Intermediate"},
 ]
 
 DAILY_CHALLENGES = [
@@ -276,6 +375,21 @@ QUIZ_QUESTIONS = [
     {"id": "q3", "question": "'I ___ studying English for two years.'", "options": ["am", "have been", "was", "will"], "answer": 1},
     {"id": "q4", "question": "Which is a synonym for 'happy'?", "options": ["Sorrow", "Elated", "Weary", "Fierce"], "answer": 1},
     {"id": "q5", "question": "Pick the correct article: 'She is ___ honest person.'", "options": ["a", "an", "the", "no article"], "answer": 1},
+    {"id": "q6", "question": "Choose the correct spelling:", "options": ["Occured", "Occured", "Occurred", "Ocurred"], "answer": 2},
+    {"id": "q7", "question": "What is the opposite of 'generous'?", "options": ["Kind", "Selfish", "Caring", "Thoughtful"], "answer": 1},
+    {"id": "q8", "question": "'If I were you, I ___ accept the offer.'", "options": ["will", "would", "am", "should"], "answer": 1},
+    {"id": "q9", "question": "Which word means 'extremely tired'?", "options": ["Energetic", "Exhausted", "Alert", "Awake"], "answer": 1},
+    {"id": "q10", "question": "'She has always ___ her dreams despite challenges.'", "options": ["pursue", "pursues", "pursued", "pursuing"], "answer": 2},
+    {"id": "q11", "question": "What does 'break the ice' mean?", "options": ["To damage ice physically", "To start a conversation or make people comfortable", "To freeze something", "To go ice skating"], "answer": 1},
+    {"id": "q12", "question": "What idiom means 'to stop worrying about something'?", "options": ["Let the cat out", "Let it go", "Keep your cool", "Let it be"], "answer": 1},
+    {"id": "q13", "question": "Which phrase means 'to fail or not succeed'?", "options": ["Hit the mark", "Miss the boat", "Hit the road", "Miss the point"], "answer": 1},
+    {"id": "q14", "question": "What does 'cost an arm and a leg' mean?", "options": ["Requires physical exercise", "Is very expensive", "Is difficult to transport", "Requires surgery"], "answer": 1},
+    {"id": "q15", "question": "What idiom means 'to work hard'?", "options": ["Burn the bridge", "Burn the midnight oil", "Burn the candle", "Burn out"], "answer": 1},
+    {"id": "q16", "question": "Which phrase means 'to leave quickly'?", "options": ["Take a break", "Take the plunge", "Take off", "Take time"], "answer": 2},
+    {"id": "q17", "question": "What does 'under the weather' mean?", "options": ["Standing below an umbrella", "Feeling sick or unwell", "During rainy season", "Hiding from weather"], "answer": 1},
+    {"id": "q18", "question": "What idiom means 'to speak your mind'?", "options": ["Bite your tongue", "Speak volumes", "Speak your piece", "Speak softly"], "answer": 2},
+    {"id": "q19", "question": "Which phrase means 'something that will definitely happen'?", "options": ["A piece of cake", "A ball in the court", "A sure thing", "A long shot"], "answer": 2},
+    {"id": "q20", "question": "What does 'hit the nail on the head' mean?", "options": ["To use a hammer", "To state the exact truth", "To hurt yourself", "To build something"], "answer": 1},
 ]
 
 MOTIVATIONAL_QUOTES = [
@@ -319,8 +433,16 @@ PARTNER_POOL = [
 ]
 
 # Stripe subscription plan config (server-authoritative pricing)
+# Backend-friendly tiers mapped from frontend display (marketing prices in INR):
+#   - ₹49 Pack (weekly)   → 0.59 USD, 7 day recurring
+#   - ₹199 Pack (monthly) → 9.99 USD, 30 day recurring  
+#   - ₹499 Pack (quarterly) → 14.99 USD, 90 day recurring
+# Note: Frontend displays rupee prices for UX; Stripe charges USD amounts.
+# Transitioning to real INR pricing later only requires adding new SKUs here.
 STRIPE_PLANS = {
+    "weekly": {"amount": 0.59, "currency": "usd", "label": "Weekly", "duration_days": 7},
     "monthly": {"amount": 9.99, "currency": "usd", "label": "Monthly", "duration_days": 30},
+    "quarterly": {"amount": 14.99, "currency": "usd", "label": "Quarterly", "duration_days": 90},
     "yearly": {"amount": 79.99, "currency": "usd", "label": "Yearly", "duration_days": 365},
 }
 
@@ -380,7 +502,6 @@ async def create_session(payload: SessionCreate):
             "picture": picture,
             "english_level": "Beginner",
             "xp": 0,
-            "coins": 50,
             "streak": 0,
             "last_active_date": None,
             "daily_goal_minutes": 15,
@@ -521,7 +642,6 @@ async def verify_otp(payload: PhoneVerifyOtp):
                 "picture": None,
                 "english_level": "Beginner",
                 "xp": 0,
-                "coins": 50,
                 "streak": 0,
                 "last_active_date": None,
                 "daily_goal_minutes": 15,
@@ -653,7 +773,6 @@ async def _apply_xp(user: Dict[str, Any], amount: int, minutes: int = 0) -> Dict
             new_streak = 1
 
     new_xp = user.get("xp", 0) + amount
-    new_coins = user.get("coins", 0) + max(1, amount // 10)
     new_minutes = user.get("daily_goal_completed_minutes", 0) + (minutes or 0)
     if last != today:
         new_minutes = minutes or 0
@@ -676,7 +795,6 @@ async def _apply_xp(user: Dict[str, Any], amount: int, minutes: int = 0) -> Dict
         {"user_id": user["user_id"]},
         {"$set": {
             "xp": new_xp,
-            "coins": new_coins,
             "streak": new_streak,
             "last_active_date": today,
             "daily_goal_completed_minutes": new_minutes,
@@ -710,7 +828,6 @@ async def home(user=Depends(get_current_user)):
         "daily_goal_completed_minutes": user.get("daily_goal_completed_minutes", 0) if user.get("last_active_date") == today else 0,
         "streak": user.get("streak", 0),
         "xp": user.get("xp", 0),
-        "coins": user.get("coins", 0),
         "continue_lesson": continue_lesson,
         "word_of_the_day": daily_word,
         "categories": LESSON_CATEGORIES,

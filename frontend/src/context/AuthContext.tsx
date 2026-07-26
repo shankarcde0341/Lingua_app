@@ -8,7 +8,6 @@ type User = {
   picture?: string | null;
   english_level: string;
   xp: number;
-  coins: number;
   streak: number;
   daily_goal_minutes: number;
   daily_goal_completed_minutes: number;

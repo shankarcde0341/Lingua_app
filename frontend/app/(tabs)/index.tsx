@@ -15,7 +15,7 @@ import { GlassCard, GradientButton, ProgressRing, SectionTitle } from "@/src/com
 const CAT_IMAGES: Record<string, string> = {
   daily: "https://images.pexels.com/photos/8199231/pexels-photo-8199231.jpeg",
   business: "https://images.pexels.com/photos/8463151/pexels-photo-8463151.jpeg",
-  interview: "https://images.pexels.com/photos/8674781/pexels-photo-8674781.jpeg",
+  interview: "https://images.pexels.com/photos/9870148/pexels-photo-9870148.jpeg",
   travel: "https://images.pexels.com/photos/32021944/pexels-photo-32021944.jpeg",
   ielts: "https://images.unsplash.com/photo-1687197180710-b2b9484a3c5f",
   public: "https://images.unsplash.com/photo-1544531586-fde5298cdd40",
@@ -74,7 +74,7 @@ export default function Home() {
             </TouchableOpacity>
           </View>
 
-          {/* Streak / XP / Coins strip */}
+          {/* Streak / XP / Daily Minutes Left strip */}
           <Animated.View entering={FadeInDown.duration(400)} style={styles.stripRow}>
             <View style={[styles.chip, { backgroundColor: "#FEF3C7" }]}>
               <Ionicons name="flame" size={16} color="#F59E0B" />
@@ -84,9 +84,9 @@ export default function Home() {
               <Ionicons name="flash" size={16} color="#2563EB" />
               <Text style={[styles.chipText, { color: "#1E3A8A" }]}>{data.xp} XP</Text>
             </View>
-            <View style={[styles.chip, { backgroundColor: "#FCE7F3" }]}>
-              <Ionicons name="logo-usd" size={14} color="#DB2777" />
-              <Text style={[styles.chipText, { color: "#9D174D" }]}>{data.coins}</Text>
+            <View style={[styles.chip, { backgroundColor: "#D1FAE5" }]}>
+              <Ionicons name="hourglass" size={14} color="#059669" />
+              <Text style={[styles.chipText, { color: "#065F46" }]}>{Math.max(0, data.daily_goal_minutes - data.daily_goal_completed_minutes)} min left</Text>
             </View>
           </Animated.View>
 

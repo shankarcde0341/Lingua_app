@@ -78,11 +78,11 @@ export default function Profile() {
                   <Text style={styles.statLabel}>Day streak</Text>
                 </View>
               </GlassCard>
-              <GlassCard style={styles.statCard} testID="stat-coins">
+              <GlassCard style={styles.statCard} testID="stat-daily-minutes">
                 <View style={styles.statInner}>
-                  <View style={[styles.statIcon, { backgroundColor: "#FCE7F3" }]}><Ionicons name="logo-usd" size={22} color="#DB2777" /></View>
-                  <Text style={styles.statValue}>{user.coins}</Text>
-                  <Text style={styles.statLabel}>Coins</Text>
+                  <View style={[styles.statIcon, { backgroundColor: "#D1FAE5" }]}><Ionicons name="hourglass" size={22} color="#059669" /></View>
+                  <Text style={styles.statValue}>{Math.max(0, user.daily_goal_minutes - user.daily_goal_completed_minutes)}</Text>
+                  <Text style={styles.statLabel}>Min left</Text>
                 </View>
               </GlassCard>
             </View>
