@@ -137,18 +137,7 @@
   - `ZEGO_SERVER_SECRET` (must be 32 chars for Token04)
   - `OTP_MODE` (e.g., `mock` or `twilio`)
 - **Frontend environment variables**:
-  - `EXPO_PUBLIC_BACKEND_URL` — base URL for API calls used by [frontend/src/api/client.ts](frontend/src/api/client.ts).
-
-- **Setup & run (development)**
-  - Backend:
-    - Create a Python venv and install: `pip install -r backend/requirements.txt` (see [backend/requirements.txt](backend/requirements.txt)).
-    - Provide a `.env` with `MONGO_URL` and any optional keys.
-    - Run: `uvicorn backend.server:app --reload --port 8000` (or your preferred ASGI runner).
-    - Tests: run `pytest` inside [backend/](backend/) (tests live in [backend/tests/](backend/tests/)).
-  - Frontend:
-    - Install dependencies in [frontend/](frontend/): `npm install` (or `yarn`).
-    - Start Expo: `npx expo start` (see [frontend/README.md](frontend/README.md)).
-    - Ensure `EXPO_PUBLIC_BACKEND_URL` points at running backend (e.g., `http://localhost:8000`).
+  - Ensure `EXPO_PUBLIC_BACKEND_URL` points at running backend (e.g., `http://localhost:8000`).
 
 **Change Log**
 - 2026-07-26: Create `memory.md` — initial comprehensive project memory covering architecture, features, env, setup, known issues and run instructions.
@@ -163,7 +152,10 @@
     - Interview English: Added 18 new lessons (3-20) covering job motivation, strengths/weaknesses, technical questions, salary negotiation, interview Q&A, difficult scenarios, follow-up, video interviews, panel interviews, case studies, group dynamics, phone screening, industry prep, startup vs corporate, achievements, cultural fit, offer negotiation.
     - Travel English: Added 18 new lessons (3-20) including restaurants, public transport, directions, shopping, emergencies, cultural etiquette, planning, travel issues, accommodations, food/dietary, currency, sightseeing, tours, insurance, meeting locals, adventure activities, scams/safety, travel stories.
   - **Vocabulary Expansion:** Added 38 new words to VOCAB_WORDS (w13-w50, total 50 words). Includes pragmatic, benevolent, melancholy, audacious, placid, eloquence, catalyst, frivolous, adept, perspicacious, tangible, obfuscate, nascent, perennial, oblivious, magnanimous, ambiguous, pragmatism, petulant, altruism, anomaly, colloquial, incisive, jocular, languish, nonchalant, palpable, quixotic, resonant, sagacious, tacit, unequivocal, vacillate, whimsical, xenial, zealous, zephyr, euphoria.
-  - **Quiz Expansion:** Added 10 new questions (q11-q20) focused on idioms & phrases: break the ice, let it go, miss the boat, cost an arm and a leg, burn the midnight oil, take off, under the weather, speak your piece, a sure thing, hit the nail on the head. Total quiz now 20 questions covering grammar, vocabulary, and practical expressions.
+  - **Quiz Expansion:** Added 10 new questions (q11-q20) focused on idioms & phrases: break the ice, let it go, miss the boat, cost an arm an leg, burn the midnight oil, take off, under the weather, speak your piece, a sure thing, hit the nail on the head. Total quiz now 20 questions covering grammar, vocabulary, and practical expressions.
+- 2026-07-27: Added weekly leaderboard UI support in `frontend/app/leaderboard.tsx` and `frontend/src/api/client.ts` to make future weekly score integration easy. The screen now normalizes `weekly_xp` if available and gracefully falls back to current XP-based ranking.
+- 2026-08-02: Added lesson-level local audio practice support with optional pilot scripts for `daily-1`, `business-1`, `interview-1`, and `travel-1`. Updated backend lesson seed to include `script` arrays and added `ScriptPracticePlayer` to `frontend/app/lesson/[id].tsx` with local-only recording saved under `lesson_recordings/`.
+- Confirmed feature is review-only on the frontend and does not upload recordings or add backend storage for them.
 
 ---
 

@@ -121,7 +121,16 @@ class TestPublic:
     def test_lesson_detail(self, api):
         r = api.get(f"{BASE_URL}/api/lessons/daily-1")
         assert r.status_code == 200
-        assert r.json()["id"] == "daily-1"
+        data = r.json()
+        assert data["id"] == "daily-1"
+        assert isinstance(data.get("script"), list)
+        assert len(data["script"]) > 0
+
+        r2 = api.get(f"{BASE_URL}/api/lessons/daily-2")
+        assert r2.status_code == 200
+        data2 = r2.json()
+        assert data2["id"] == "daily-2"
+        assert data2.get("script") == []
 
     def test_lesson_not_found(self, api):
         r = api.get(f"{BASE_URL}/api/lessons/does-not-exist")

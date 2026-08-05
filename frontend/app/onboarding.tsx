@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 
+import { GlassCard } from "@/src/components/ui";
 import { colors, gradients, radii, shadow, typography } from "@/src/theme";
 
 const SLIDES = [
@@ -71,9 +72,11 @@ export default function Onboarding() {
               <Ionicons name={item.icon as any} size={22} color="#fff" />
             </View>
           </Animated.View>
-          <Animated.View key={`txt-${index}`} entering={FadeInDown.delay(80).duration(500)} style={styles.card}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.subtitle}>{item.subtitle}</Text>
+          <Animated.View key={`txt-${index}`} entering={FadeInDown.delay(80).duration(500)} style={styles.cardWrap}>
+            <GlassCard style={styles.card} testID="onboarding-message-card">
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.subtitle}>{item.subtitle}</Text>
+            </GlassCard>
           </Animated.View>
         </View>
 
@@ -116,9 +119,10 @@ const styles = StyleSheet.create({
   imageWrap: { width: "100%", height: 340, borderRadius: radii.xl, overflow: "hidden", marginTop: 12, ...shadow.card },
   img: { width: "100%", height: "100%" },
   iconBadge: { position: "absolute", top: 16, right: 16, backgroundColor: "rgba(255,255,255,0.25)", padding: 10, borderRadius: 999, borderWidth: 1, borderColor: "rgba(255,255,255,0.5)" },
-  card: { marginTop: 22, backgroundColor: colors.glass, borderRadius: radii.xl, padding: 22, borderWidth: 1, borderColor: colors.glassBorder, ...shadow.soft },
+  cardWrap: { marginTop: -40, zIndex: 1, paddingBottom: 10 },
+  card: { backgroundColor: "rgba(255,255,255,0.92)", borderRadius: radii.xl, padding: 24, borderWidth: 1, borderColor: "rgba(255,255,255,0.72)", ...shadow.strong },
   title: { ...typography.h1, fontSize: 26 },
-  subtitle: { ...typography.body, color: colors.textSecondary, marginTop: 10, lineHeight: 22 },
+  subtitle: { ...typography.body, color: colors.textSecondary, marginTop: 14, lineHeight: 24 },
   footer: { paddingHorizontal: 24, paddingBottom: 20 },
   dots: { flexDirection: "row", justifyContent: "center", gap: 6, marginVertical: 16 },
   dot: { width: 8, height: 8, borderRadius: 999, backgroundColor: "#CBD5E1" },

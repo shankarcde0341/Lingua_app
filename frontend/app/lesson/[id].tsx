@@ -10,6 +10,7 @@ import { api } from "@/src/api/client";
 import { useAuth } from "@/src/context/AuthContext";
 import { colors, gradients, radii, shadow, typography } from "@/src/theme";
 import { ScreenHeader, GradientButton } from "@/src/components/ui";
+import { ScriptRolePlayer } from "@/src/components/ScriptRolePlayer";
 
 export default function LessonDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -55,21 +56,25 @@ export default function LessonDetail() {
           <Text style={styles.title}>{lesson.title}</Text>
           <Text style={styles.desc}>{lesson.description}</Text>
 
-          <View style={{ marginTop: 24, gap: 12 }}>
-            {lesson.content.map((c: any, i: number) => (
-              <Animated.View key={i} entering={FadeInDown.delay(80 + i * 60).duration(400)}>
-                <View style={styles.step}>
-                  <View style={[styles.stepBadge, c.type === "tip" ? styles.tipBadge : c.type === "intro" ? styles.introBadge : styles.phraseBadge]}>
-                    <Ionicons name={c.type === "tip" ? "bulb" : c.type === "intro" ? "book" : "chatbubble-ellipses"} size={16} color="#fff" />
+          {lesson.script?.length > 0 ? (
+            <ScriptRolePlayer script={lesson.script} lessonId={lesson.id} />
+          ) : (
+            <View style={{ marginTop: 24, gap: 12 }}>
+              {lesson.content.map((c: any, i: number) => (
+                <Animated.View key={i} entering={FadeInDown.delay(80 + i * 60).duration(400)}>
+                  <View style={styles.step}>
+                    <View style={[styles.stepBadge, c.type === "tip" ? styles.tipBadge : c.type === "intro" ? styles.introBadge : styles.phraseBadge]}>
+                      <Ionicons name={c.type === "tip" ? "bulb" : c.type === "intro" ? "book" : "chatbubble-ellipses"} size={16} color="#fff" />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.stepLabel}>{c.type === "tip" ? "TIP" : c.type === "intro" ? "INTRO" : "PRACTICE"}</Text>
+                      <Text style={styles.stepText}>{c.text}</Text>
+                    </View>
                   </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.stepLabel}>{c.type === "tip" ? "TIP" : c.type === "intro" ? "INTRO" : "PRACTICE"}</Text>
-                    <Text style={styles.stepText}>{c.text}</Text>
-                  </View>
-                </View>
-              </Animated.View>
-            ))}
-          </View>
+                </Animated.View>
+              ))}
+            </View>
+          )}
 
           {xpEarned ? (
             <View style={styles.successCard} testID="lesson-complete-toast">

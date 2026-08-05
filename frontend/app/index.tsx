@@ -37,7 +37,10 @@ export default function Index() {
     if (hasSession) {
       const hash = window.location.hash || "";
       const search = window.location.search || "";
-      router.replace(`/auth${search || (hash ? "?" + hash.slice(1) : "")}`);
+      const authPath = `/auth${search || (hash ? "?" + hash.slice(1) : "")}`;
+      if (typeof window !== "undefined") {
+        window.location.href = authPath;
+      }
     }
   }, [router]);
 

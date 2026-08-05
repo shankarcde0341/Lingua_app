@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -37,6 +37,8 @@ export default function SpeakingTest() {
   const [seconds, setSeconds] = useState(0);
   const [result, setResult] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
+  const recordingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const hasFinishedRecording = useRef(false);
 
   const start = (id: string) => {
     setLevel(id);
@@ -45,17 +47,35 @@ export default function SpeakingTest() {
   };
 
   const beginRecording = () => {
+    if (submitting || recording) return;
     setRecording(true);
     setSeconds(0);
-    const int = setInterval(() => {
+    hasFinishedRecording.current = false;
+    if (recordingInterval.current) {
+      clearInterval(recordingInterval.current);
+    }
+    recordingInterval.current = setInterval(() => {
       setSeconds((s) => {
-        if (s >= 30) { clearInterval(int); finishRecording(); return s; }
+        if (s >= 30) {
+          if (recordingInterval.current) {
+            clearInterval(recordingInterval.current);
+            recordingInterval.current = null;
+          }
+          finishRecording();
+          return s;
+        }
         return s + 1;
       });
     }, 1000);
   };
 
   const finishRecording = async () => {
+    if (hasFinishedRecording.current) return;
+    hasFinishedRecording.current = true;
+    if (recordingInterval.current) {
+      clearInterval(recordingInterval.current);
+      recordingInterval.current = null;
+    }
     setRecording(false);
     setSubmitting(true);
     // Simulate evaluation (no AI). Score based on level & recording time.
@@ -75,6 +95,15 @@ export default function SpeakingTest() {
     setStage("result");
     setSubmitting(false);
   };
+
+  useEffect(() => {
+    return () => {
+      if (recordingInterval.current) {
+        clearInterval(recordingInterval.current);
+        recordingInterval.current = null;
+      }
+    };
+  }, []);
 
   return (
     <View style={styles.root} testID="speaking-test-screen">

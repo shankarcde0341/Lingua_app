@@ -46,7 +46,7 @@ export default function Practice() {
               <LinearGradient colors={gradients.primary} style={styles.modeCard}>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.modeTag}>REAL PEOPLE</Text>
-                  <Text style={styles.modeTitle}>Random Voice Match</Text>
+                  <Text style={styles.modeTitle}>Speak with real people</Text>
                   <Text style={styles.modeSub}>Match with a learner instantly and talk.</Text>
                 </View>
                 <View style={styles.modeIconWrap}>

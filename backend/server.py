@@ -209,7 +209,7 @@ LESSON_CATEGORIES = [
     {"id": "travel", "name": "Travel English", "color": "#14B8A6", "icon": "airplane"},
 ]
 
-def _lesson(cat, i, title, desc, level, minutes):
+def _lesson(cat, i, title, desc, level, minutes, script=None):
     return {
         "id": f"{cat}-{i}",
         "category_id": cat,
@@ -224,10 +224,67 @@ def _lesson(cat, i, title, desc, level, minutes):
             {"type": "phrase", "text": f"Practice sentence {i}.2 for {title}."},
             {"type": "tip", "text": f"Tip: focus on stress and intonation while practicing {title}."},
         ],
+        "script": script or [],
+    }
+    
+    return {
+        "id": f"{cat}-{i}",
+        "category_id": cat,
+        "title": title,
+        "description": desc,
+        "level": level,
+        "duration_minutes": minutes,
+        "xp_reward": 25 + (i * 5),
+        "content": [
+            {"type": "intro", "text": desc},
+            {"type": "phrase", "text": f"Practice sentence {i}.1 for {title}."},
+            {"type": "phrase", "text": f"Practice sentence {i}.2 for {title}."},
+            {"type": "tip", "text": f"Tip: focus on stress and intonation while practicing {title}."},
+        ],
+        "script": script or [],
     }
 
+PILOT_LESSON_SCRIPTS = {
+    "daily-1": [
+        {"line_id": "daily-1-l1", "speaker": "A", "text": "Hi, I'm Alex. What's your name?", "audio_url": "app/frontend/assets/audio/daily_1/alex-lesson-1-intro_L1.mp3"},
+        {"line_id": "daily-1-l2", "speaker": "B", "text": "Hi Alex, I'm Jordan. Nice to meet you.", "audio_url": "/static/audio/daily-1/daily-1-l2.mp3"},
+        {"line_id": "daily-1-l3", "speaker": "A", "text": "Where are you from?", "audio_url": "/static/audio/daily-1/daily-1-l3.mp3"},
+        {"line_id": "daily-1-l4", "speaker": "B", "text": "I'm from Mexico, and I love learning English.", "audio_url": "/static/audio/daily-1/daily-1-l4.mp3"},
+    ],
+    "business-1": [
+        {"line_id": "business-1-l1", "speaker": "A", "text": "Good morning, everyone. Let's start the meeting.", "audio_url": "/static/audio/business-1/business-1-l1.mp3"},
+        {"line_id": "business-1-l2", "speaker": "B", "text": "Good morning. The quarterly report is ready.", "audio_url": "/static/audio/business-1/business-1-l2.mp3"},
+        {"line_id": "business-1-l3", "speaker": "A", "text": "Please share your insights on the sales figures.", "audio_url": "/static/audio/business-1/business-1-l3.mp3"},
+        {"line_id": "business-1-l4", "speaker": "B", "text": "We saw strong growth in our new product line.", "audio_url": "/static/audio/business-1/business-1-l4.mp3"},
+    ],
+    "interview-1": [
+        {"line_id": "interview-1-l1", "speaker": "A", "text": "Tell me about yourself in a few sentences.", "audio_url": "/static/audio/interview-1/interview-1-l1.mp3"},
+        {"line_id": "interview-1-l2", "speaker": "B", "text": "I'm a product manager with five years of experience.", "audio_url": "/static/audio/interview-1/interview-1-l2.mp3"},
+        {"line_id": "interview-1-l3", "speaker": "A", "text": "What motivates you to join our team?", "audio_url": "/static/audio/interview-1/interview-1-l3.mp3"},
+        {"line_id": "interview-1-l4", "speaker": "B", "text": "I enjoy building user-focused products and solving problems.", "audio_url": "/static/audio/interview-1/interview-1-l4.mp3"},
+    ],
+    "travel-1": [
+        {"line_id": "travel-1-l1", "speaker": "A", "text": "Welcome to the airport. Do you have your passport?", "audio_url": "/static/audio/travel-1/travel-1-l1.mp3"},
+        {"line_id": "travel-1-l2", "speaker": "B", "text": "Yes, here it is. I'm flying to Madrid.", "audio_url": "/static/audio/travel-1/travel-1-l2.mp3"},
+        {"line_id": "travel-1-l3", "speaker": "A", "text": "Are you checking in any luggage today?", "audio_url": "/static/audio/travel-1/travel-1-l3.mp3"},
+        {"line_id": "travel-1-l4", "speaker": "B", "text": "Just one suitcase and my carry-on bag.", "audio_url": "/static/audio/travel-1/travel-1-l4.mp3"},
+    ],
+}
+
+DAILY_1_SCRIPT = [
+    {"line_id": "d1-l1", "speaker": "Alex", "text": "Hello Good morning!", "app/frontend/assets/audio/intro/alex_L1.mp3": "alex_L1.mp3"},
+    {"line_id": "d1-l2", "speaker": "Priya", "text": "Good morning, My name is Priya. What is your name?", "app/frontend/assets/audio/intro/priya_L1.mp3": "priya_L1.mp3"},
+    {"line_id": "d1-l3", "speaker": "Alex", "text": "I am Alex. Nice to meet you, Priya.", "app/frontend/assets/audio/intro/alex_L2.mp3": "alex_L2.mp3"},
+    {"line_id": "d1-l4", "speaker": "Priya", "text": "Nice to meet you too, Alex. Where are you from?.", "app/frontend/assets/audio/intro/priya_L2.mp3": "priya_L2.mp3"},
+    {"line_id": "d1-l5", "speaker": "Alex", "text": "I am from Delhi. And you?", "app/frontend/assets/audio/intro/alex_L3.mp3": "alex_L3.mp3"},
+    {"line_id": "d1-l6", "speaker": "Priya", "text": "I am from Mumbai. What do you do?", "app/frontend/assets/audio/intro/priya_L3.mp3": "priya_L3.mp3"},
+    {"line_id": "d1-l7", "speaker": "Alex", "text": "I am a student. What about you?", "app/frontend/assets/audio/intro/alex_L4.mp3": "alex_L4.mp3"},
+    {"line_id": "d1-l8", "speaker": "Priya", "text": "I work in an office. What are your hobbies?", "app/frontend/assets/audio/intro/priya_L4.mp3": "priya_L4.mp3"},
+    {"line_id": "d1-l9", "speaker": "Alex", "text": "I like playing cricket and reading books.", "app/frontend/assets/audio/intro/alex_L5.mp3": "alex_L5.mp3"},
+]
+
 LESSONS = [
-    _lesson("daily", 1, "Introducing Yourself", "Learn to greet and share basic info.", "Beginner", 8),
+    _lesson("daily", 1, "Introducing Yourself", "Learn to greet and share basic info.", "Beginner", 8, script=DAILY_1_SCRIPT),
     _lesson("daily", 2, "Ordering at a Cafe", "Common phrases at a coffee shop.", "Beginner", 10),
     _lesson("daily", 3, "Making Small Talk", "Casual conversations with strangers.", "Intermediate", 12),
     _lesson("daily", 4, "Shopping & Asking Prices", "Bargain, compare and pay confidently.", "Beginner", 9),

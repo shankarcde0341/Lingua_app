@@ -70,6 +70,7 @@ export const api = {
   createRoom: (payload: any) => request<any>("/rooms", { method: "POST", body: JSON.stringify(payload) }),
   joinRoom: (room_id: string) => request<any>("/rooms/join", { method: "POST", body: JSON.stringify({ room_id }) }),
   leaderboard: () => request<any>("/leaderboard"),
+  weeklyLeaderboard: () => request<any>("/leaderboard"),
   achievements: () => request<any>("/achievements"),
   subscriptionPlans: () => request<any>("/subscription/plans"),
   createCheckout: (plan: string, origin_url: string) => request<any>("/subscription/checkout", { method: "POST", body: JSON.stringify({ plan, origin_url }) }),
