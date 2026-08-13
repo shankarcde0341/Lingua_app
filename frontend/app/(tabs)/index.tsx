@@ -17,7 +17,6 @@ const CAT_IMAGES: Record<string, string> = {
   business: "https://images.pexels.com/photos/8463151/pexels-photo-8463151.jpeg",
   interview: "https://images.pexels.com/photos/9870148/pexels-photo-9870148.jpeg",
   travel: "https://images.pexels.com/photos/32021944/pexels-photo-32021944.jpeg",
-  ielts: "https://images.unsplash.com/photo-1687197180710-b2b9484a3c5f",
   public: "https://images.unsplash.com/photo-1544531586-fde5298cdd40",
   grammar: "https://images.unsplash.com/photo-1725981934390-d9bc9807ae31",
   vocab: "https://images.pexels.com/photos/36440699/pexels-photo-36440699.jpeg",

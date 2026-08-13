@@ -12,13 +12,36 @@ import { colors, gradients, radii, shadow, typography } from "@/src/theme";
 import { ScreenHeader, GradientButton } from "@/src/components/ui";
 import { ScriptRolePlayer } from "@/src/components/ScriptRolePlayer";
 
+interface ScriptLine {
+  line_id: string;
+  speaker: string;
+  text: string;
+}
+
+interface ContentItem {
+  type: "intro" | "phrase" | "tip";
+  text: string;
+}
+
+interface Lesson {
+  id: string;
+  title: string;
+  description: string;
+  level: string;
+  duration_minutes: number;
+  xp_reward: number;
+  script: ScriptLine[];
+  content: ContentItem[];
+}
+
 export default function LessonDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { refresh } = useAuth();
-  const [lesson, setLesson] = useState<any | null>(null);
+  const [lesson, setLesson] = useState<Lesson | null>(null);
   const [completing, setCompleting] = useState(false);
   const [xpEarned, setXpEarned] = useState<number | null>(null);
+
 
   useEffect(() => {
     (async () => {
@@ -60,7 +83,7 @@ export default function LessonDetail() {
             <ScriptRolePlayer script={lesson.script} lessonId={lesson.id} />
           ) : (
             <View style={{ marginTop: 24, gap: 12 }}>
-              {lesson.content.map((c: any, i: number) => (
+              {lesson.content.map((c: ContentItem, i: number) => (
                 <Animated.View key={i} entering={FadeInDown.delay(80 + i * 60).duration(400)}>
                   <View style={styles.step}>
                     <View style={[styles.stepBadge, c.type === "tip" ? styles.tipBadge : c.type === "intro" ? styles.introBadge : styles.phraseBadge]}>

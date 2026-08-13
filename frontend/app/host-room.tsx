@@ -9,7 +9,7 @@ import { api } from "@/src/api/client";
 import { colors, radii, shadow, typography } from "@/src/theme";
 import { ScreenHeader, GradientButton } from "@/src/components/ui";
 
-const TOPICS = ["Daily English", "Business", "Interview", "Travel", "IELTS", "Public Speaking", "Grammar"];
+const TOPICS = ["Daily English", "Business", "Interview", "Travel", "Public Speaking", "Grammar"];
 
 export default function HostRoom() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function HostRoom() {
           <TextInput
             value={title}
             onChangeText={setTitle}
-            placeholder="e.g. Improve your IELTS Part 2"
+            placeholder="e.g. Practice Business Presentations"
             placeholderTextColor={colors.textMuted}
             style={styles.input}
             testID="host-room-title"

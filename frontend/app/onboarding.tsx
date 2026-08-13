@@ -20,7 +20,7 @@ const SLIDES = [
   {
     id: "2",
     title: "Master every skill",
-    subtitle: "Business, IELTS, travel, interviews — bite-sized lessons that stick.",
+    subtitle: "Business, travel, interviews — bite-sized lessons that stick.",
     image: "https://images.pexels.com/photos/8463151/pexels-photo-8463151.jpeg",
     icon: "school",
   },

@@ -272,99 +272,570 @@ PILOT_LESSON_SCRIPTS = {
 }
 
 DAILY_1_SCRIPT = [
-    {"line_id": "d1-l1", "speaker": "Alex", "text": "Hello Good morning!", "app/frontend/assets/audio/intro/alex_L1.mp3": "alex_L1.mp3"},
-    {"line_id": "d1-l2", "speaker": "Priya", "text": "Good morning, My name is Priya. What is your name?", "app/frontend/assets/audio/intro/priya_L1.mp3": "priya_L1.mp3"},
-    {"line_id": "d1-l3", "speaker": "Alex", "text": "I am Alex. Nice to meet you, Priya.", "app/frontend/assets/audio/intro/alex_L2.mp3": "alex_L2.mp3"},
-    {"line_id": "d1-l4", "speaker": "Priya", "text": "Nice to meet you too, Alex. Where are you from?.", "app/frontend/assets/audio/intro/priya_L2.mp3": "priya_L2.mp3"},
-    {"line_id": "d1-l5", "speaker": "Alex", "text": "I am from Delhi. And you?", "app/frontend/assets/audio/intro/alex_L3.mp3": "alex_L3.mp3"},
-    {"line_id": "d1-l6", "speaker": "Priya", "text": "I am from Mumbai. What do you do?", "app/frontend/assets/audio/intro/priya_L3.mp3": "priya_L3.mp3"},
-    {"line_id": "d1-l7", "speaker": "Alex", "text": "I am a student. What about you?", "app/frontend/assets/audio/intro/alex_L4.mp3": "alex_L4.mp3"},
-    {"line_id": "d1-l8", "speaker": "Priya", "text": "I work in an office. What are your hobbies?", "app/frontend/assets/audio/intro/priya_L4.mp3": "priya_L4.mp3"},
-    {"line_id": "d1-l9", "speaker": "Alex", "text": "I like playing cricket and reading books.", "app/frontend/assets/audio/intro/alex_L5.mp3": "alex_L5.mp3"},
+    {"line_id": "d1-l1", "speaker": "Alex", "text": "Hello Good morning!" },
+    {"line_id": "d1-l2", "speaker": "Priya", "text": "Good morning, My name is Priya. What is your name?"},
+    {"line_id": "d1-l3", "speaker": "Alex", "text": "I am Alex. Nice to meet you, Priya."},
+    {"line_id": "d1-l4", "speaker": "Priya", "text": "Nice to meet you too, Alex. Where are you from?"},
+    {"line_id": "d1-l5", "speaker": "Alex", "text": "I am from Delhi. And you?"},
+    {"line_id": "d1-l6", "speaker": "Priya", "text": "I am from Mumbai. What do you do?"},
+    {"line_id": "d1-l7", "speaker": "Alex", "text": "I am a student. What about you?"},
+    {"line_id": "d1-l8", "speaker": "Priya", "text": "I work in an office. What are your hobbies?"},
+    {"line_id": "d1-l9", "speaker": "Alex", "text": "I like playing cricket and reading books."},
+]
+
+ORDERING_AT_CAFE_SCRIPT = [
+    {"line_id": "d2-l1", "speaker": "Waitress", "text": "Hello! Welcome to Cafe Coffee. How can I help you today?"},
+    {"line_id": "d2-l2", "speaker": "Customer", "text": "Hi! Can I see the menu, please?"},
+    {"line_id": "d2-l3", "speaker": "Waitress", "text": "Sure! Here is the menu. What would you like to have?"},
+    {"line_id": "d2-l4", "speaker": "Customer", "text": "I would like to order one Hot Coffee and a Sandwich."},
+    {"line_id": "d2-l5", "speaker": "Waitress", "text": "Small, medium, or large coffee?"},
+    {"line_id": "d2-l6", "speaker": "Customer", "text": "A medium coffee, please."},
+    {"line_id": "d2-l7", "speaker": "Waitress", "text": "Would you like anything else with your order?"},
+    {"line_id": "d2-l8", "speaker": "Customer", "text": "No, that’s all. How much is the total?"},
+    {"line_id": "d2-l9", "speaker": "Waitress", "text": "That will be 200 rupees, please."},
+    {"line_id": "d2-l10", "speaker": "Customer", "text": "Here is the money. Thank you!"},
+]
+
+CASUAL_CONVERSATION_SCRIPT = [
+    {"line_id": "d3-l1", "speaker": "Aman", "text": "Excuse me, is this the bus stop for Route 10?"},
+    {"line_id": "d3-l2", "speaker": "Stranger", "text": "Yes, that's right. It comes here."},
+    {"line_id": "d3-l3", "speaker": "Aman", "text": "Great, thank you! Has the bus arrived yet?"},
+    {"line_id": "d3-l4", "speaker": "Stranger", "text": "No, not yet. I am waiting for the same bus."},
+    {"line_id": "d3-l5", "speaker": "Aman", "text": "Oh, good! The weather is very nice today, isn't it?"},
+    {"line_id": "d3-l6", "speaker": "Stranger", "text": "Yes, it is! A bit windy and pleasant."},
+    {"line_id": "d3-l7", "speaker": "Aman", "text": "Are you going to work?"},
+    {"line_id": "d3-l8", "speaker": "Stranger", "text": "Yes, I work near the City Mall. What about you?"},
+    {"line_id": "d3-l9", "speaker": "Aman", "text": "I am going to meet a friend there. Look, the bus is coming!"},
+    {"line_id": "d3-l10", "speaker": "Stranger", "text": "Ah, finally! Let's go."},
+]
+
+SHOPPING_CONVERSATION_SCRIPT = [
+    {"line_id": "d4-l1", "speaker": "Assistant", "text": "Hello! Welcome to our store. How can I help you today?"},
+    {"line_id": "d4-l2", "speaker": "Customer", "text": "Hi! I am looking for a blue t-shirt."},
+    {"line_id": "d4-l3", "speaker": "Assistant", "text": "Sure! We have many options. What size do you need?"},
+    {"line_id": "d4-l4", "speaker": "Customer", "text": "Medium size, please. How much is this blue one?"},
+    {"line_id": "d4-l5", "speaker": "Assistant", "text": "This one is 500 rupees."},
+    {"line_id": "d4-l6", "speaker": "Customer", "text": "Okay. Do you have any discount on this?"},
+    {"line_id": "d4-l7", "speaker": "Assistant", "text": "Yes, we have a 10% discount on this item today."},
+    {"line_id": "d4-l8", "speaker": "Customer", "text": "That sounds good! Can I try it on?"},
+    {"line_id": "d4-l9", "speaker": "Assistant", "text": "Yes, of course! The trial room is right over there."},
+    {"line_id": "d4-l10", "speaker": "Customer", "text": "Great, I will take it. Here is my card."},
+]
+
+DIRECTIONS_SCRIPT = [
+    {"line_id": "d5-l1", "speaker": "Traveller", "text": "Excuse me! Could you please help me with directions?"},
+    {"line_id": "d5-l2", "speaker": "Resident", "text": "Sure! Where are you trying to go?"},
+    {"line_id": "d5-l3", "speaker": "Traveller", "text": "I am looking for the Central Railway Station. Is it far from here?"},
+    {"line_id": "d5-l4", "speaker": "Resident", "text": "No, it's not too far. You can walk there in about ten minutes."},
+    {"line_id": "d5-l5", "speaker": "Traveller", "text": "That's great! How do I get there?"},
+    {"line_id": "d5-l6", "speaker": "Resident", "text": "Go straight down this street, then take a left at the main intersection."},
+    {"line_id": "d5-l7", "speaker": "Traveller", "text": "Okay, straight and then left at the main intersection. Anything after that?"},
+    {"line_id": "d5-l8", "speaker": "Resident", "text": "Walk for two blocks, and you will see the station on your right."},
+    {"line_id": "d5-l9", "speaker": "Traveller", "text": "Thank you so much for your help!"},
+]
+
+RESTAURANT_SCRIPT = [
+    {"line_id": "d6-l1", "speaker": "Waiter", "text": "Good evening! Welcome to our restaurant. Table for one?"},
+    {"line_id": "d6-l2", "speaker": "Customer", "text": "Yes, please. Can I get a table by the window?"},
+    {"line_id": "d6-l3", "speaker": "Waiter", "text": "Right this way. Here is your menu. Can I get you started with something to drink?"},
+    {"line_id": "d6-l4", "speaker": "Customer", "text": "Just a glass of water, please."},
+    {"line_id": "d6-l5", "speaker": "Waiter", "text": "Here is your water. Are you ready to order your main meal?"},
+    {"line_id": "d6-l6", "speaker": "Customer", "text": "Yes, I will have the pasta with garlic bread, please."},
+    {"line_id": "d6-l7", "speaker": "Waiter", "text": "Excellent choice! Would you like any dessert after your meal?"},
+    {"line_id": "d6-l8", "speaker": "Customer", "text": "No dessert today, thank you. Just the bill when you're ready."},
+    {"line_id": "d6-l9", "speaker": "Waiter", "text": "Coming right up! Enjoy your meal."},
+]
+
+WEEKENDS_SCRIPT = [
+    {"line_id": "d7-l1", "speaker": "Priya", "text": "Hi Pritam! How was your weekend?"},
+    {"line_id": "d7-l2", "speaker": "Pritam", "text": "Hey Priya! It was great. I went hiking with my friends."},
+    {"line_id": "d7-l3", "speaker": "Priya", "text": "That sounds exciting! Where did you go hiking?"},
+    {"line_id": "d7-l4", "speaker": "Pritam", "text": "We went to the nearby hills. The weather was clear and beautiful."},
+    {"line_id": "d7-l5", "speaker": "Priya", "text": "Awesome! Did you stay there overnight?"},
+    {"line_id": "d7-l6", "speaker": "Pritam", "text": "No, we just had a day trip and returned in the evening. How about your weekend?"},
+    {"line_id": "d7-l7", "speaker": "Priya", "text": "I had a relaxing weekend at home. I watched a couple of movies and baked a cake."},
+    {"line_id": "d7-l8", "speaker": "Pritam", "text": "Nice! What cake did you bake?"},
+    {"line_id": "d7-l9", "speaker": "Priya", "text": "Chocolate fudge cake! Next time I will bring some for you."},
+    {"line_id": "d7-l10", "speaker": "Pritam", "text": "I will definitely hold you to that! Thanks Priya."},
+]
+
+DOCTOR_SCRIPT = [
+    {"line_id": "d8-l1", "speaker": "Doctor", "text": "Good morning! Come in and have a seat. What brings you in today?"},
+    {"line_id": "d8-l2", "speaker": "Patient", "text": "Good morning, Doctor. I haven't been feeling well for the past two days."},
+    {"line_id": "d8-l3", "speaker": "Doctor", "text": "What symptoms are you experiencing?"},
+    {"line_id": "d8-l4", "speaker": "Patient", "text": "I have a severe headache, sore throat, and a mild fever."},
+    {"line_id": "d8-l5", "speaker": "Doctor", "text": "Let me check your temperature and listen to your throat."},
+    {"line_id": "d8-l6", "speaker": "Patient", "text": "Sure, Doctor."},
+    {"line_id": "d8-l7", "speaker": "Doctor", "text": "It looks like a mild viral infection. Rest well and drink plenty of fluids."},
+    {"line_id": "d8-l8", "speaker": "Patient", "text": "Should I take any medication?"},
+    {"line_id": "d8-l9", "speaker": "Doctor", "text": "I will prescribe some pain relievers and medicine to take twice a day after meals."},
+    {"line_id": "d8-l10", "speaker": "Patient", "text": "Thank you, Doctor. How long should I take them?"},
+    {"line_id": "d8-l11", "speaker": "Doctor", "text": "Take them for five days. If you don't feel better by then, please come back."},
+    {"line_id": "d8-l12", "speaker": "Patient", "text": "Understood. Thank you very much!"},
+]
+
+PHONE_SCRIPT = [
+    {"line_id": "d9-l1", "speaker": "Amit", "text": "Hello Rohan! Is this a good time to talk?"},
+    {"line_id": "d9-l2", "speaker": "Rohan", "text": "Hey Amit! Yes, I am free right now. How are you?"},
+    {"line_id": "d9-l3", "speaker": "Amit", "text": "I am doing well. I was calling to check if we are still meeting this afternoon?"},
+    {"line_id": "d9-l4", "speaker": "Rohan", "text": "Yes, absolutely! Are we meeting at the coffee shop at three o'clock?"},
+    {"line_id": "d9-l5", "speaker": "Amit", "text": "Three o'clock works perfectly for me. Can you bring the book I lent you?"},
+    {"line_id": "d9-l6", "speaker": "Rohan", "text": "Sure thing, I have already kept it in my bag."},
+    {"line_id": "d9-l7", "speaker": "Amit", "text": "Awesome, thanks Rohan! See you there."},
+    {"line_id": "d9-l8", "speaker": "Rohan", "text": "See you soon, Amit! Take care."},
+    {"line_id": "d9-l9", "speaker": "Amit", "text": "Bye!"},
+    {"line_id": "d9-l10", "speaker": "Rohan", "text": "Bye!"},
+]
+
+OPINIONS_SCRIPT = [
+    {"line_id": "d10-l1", "speaker": "Rohit", "text": "Hey Priya! Did you watch the new action movie yesterday?"},
+    {"line_id": "d10-l2", "speaker": "Priya", "text": "Yes, I did! In my opinion, it was absolutely amazing."},
+    {"line_id": "d10-l3", "speaker": "Rohit", "text": "Really? I thought the story was a bit predictable."},
+    {"line_id": "d10-l4", "speaker": "Priya", "text": "The storyline was simple, but the visual effects and sound design were mind-blowing."},
+    {"line_id": "d10-l5", "speaker": "Rohit", "text": "That's true! The background score was impressive."},
+    {"line_id": "d10-l6", "speaker": "Priya", "text": "And the lead actor's performance was top-notch."},
+    {"line_id": "d10-l7", "speaker": "Rohit", "text": "I agree with you on that. He acted really well."},
+    {"line_id": "d10-l8", "speaker": "Priya", "text": "Would you recommend it to others?"},
+    {"line_id": "d10-l9", "speaker": "Rohit", "text": "Definitely, at least for the experience!"},
+    {"line_id": "d10-l10", "speaker": "Priya", "text": "Glad we agree on that!"},
+]
+
+BUSINESS_MEETING_SCRIPT = [
+    {"line_id": "b1-l1", "speaker": "Manager", "text": "Good morning, everyone. Thank you for joining today's meeting."},
+    {"line_id": "b1-l2", "speaker": "Ravi", "text": "Good morning! Are we discussing the quarterly targets today?"},
+    {"line_id": "b1-l3", "speaker": "Manager", "text": "Yes, that's right. Let me share the agenda on the screen."},
+    {"line_id": "b1-l4", "speaker": "Sneha", "text": "I have the sales report ready. Shall I present it first?"},
+    {"line_id": "b1-l5", "speaker": "Manager", "text": "Please go ahead, Sneha. The floor is yours."},
+    {"line_id": "b1-l6", "speaker": "Sneha", "text": "Our revenue grew by 15% compared to the last quarter."},
+    {"line_id": "b1-l7", "speaker": "Ravi", "text": "That's impressive! Which product line contributed the most?"},
+    {"line_id": "b1-l8", "speaker": "Sneha", "text": "The premium subscription plan drove most of the growth."},
+    {"line_id": "b1-l9", "speaker": "Manager", "text": "Excellent work, team. Let's set our goals for the next quarter."},
+    {"line_id": "b1-l10", "speaker": "Ravi", "text": "I suggest we target a 20% increase. I will draft a plan by Friday."},
+]
+
+PROFESSIONAL_EMAIL_SCRIPT = [
+    {"line_id": "b2-l1", "speaker": "Anita", "text": "Vikram, I need to send an email to our client about the project delay. Can you help me?"},
+    {"line_id": "b2-l2", "speaker": "Vikram", "text": "Sure! First, start with a professional greeting like 'Dear Mr. Sharma'."},
+    {"line_id": "b2-l3", "speaker": "Anita", "text": "Okay. And how should I explain the delay without sounding unprofessional?"},
+    {"line_id": "b2-l4", "speaker": "Vikram", "text": "Say something like 'We regret to inform you that the delivery timeline has been revised.'"},
+    {"line_id": "b2-l5", "speaker": "Anita", "text": "That sounds good. Should I mention the new deadline?"},
+    {"line_id": "b2-l6", "speaker": "Vikram", "text": "Absolutely. Be specific. Write 'The revised delivery date is March 15th.'"},
+    {"line_id": "b2-l7", "speaker": "Anita", "text": "Should I apologize in the email?"},
+    {"line_id": "b2-l8", "speaker": "Vikram", "text": "Yes, add 'We sincerely apologize for any inconvenience caused.'"},
+    {"line_id": "b2-l9", "speaker": "Anita", "text": "How should I close the email?"},
+    {"line_id": "b2-l10", "speaker": "Vikram", "text": "End with 'Please do not hesitate to reach out if you have any questions. Best regards, Anita.'"},
+]
+
+NEGOTIATION_SCRIPT = [
+    {"line_id": "b3-l1", "speaker": "Buyer", "text": "Thank you for meeting with us today. We are interested in your software package."},
+    {"line_id": "b3-l2", "speaker": "Seller", "text": "We appreciate your interest. Our standard package is priced at 5 lakh rupees per year."},
+    {"line_id": "b3-l3", "speaker": "Buyer", "text": "That is a bit above our budget. Is there any room for negotiation?"},
+    {"line_id": "b3-l4", "speaker": "Seller", "text": "We can discuss flexible options. What budget range are you working with?"},
+    {"line_id": "b3-l5", "speaker": "Buyer", "text": "We were hoping to keep it around 3.5 lakh rupees."},
+    {"line_id": "b3-l6", "speaker": "Seller", "text": "For that price, we could offer the basic tier with fewer features. Would that work?"},
+    {"line_id": "b3-l7", "speaker": "Buyer", "text": "We really need the analytics module included. Can you meet us at 4 lakh?"},
+    {"line_id": "b3-l8", "speaker": "Seller", "text": "If you commit to a two-year contract, we can offer the full package at 4 lakh per year."},
+    {"line_id": "b3-l9", "speaker": "Buyer", "text": "That sounds like a fair deal. Let me discuss this with my team and get back to you."},
+    {"line_id": "b3-l10", "speaker": "Seller", "text": "Absolutely. Take your time. We look forward to a great partnership."},
+]
+
+PRESENTATION_SCRIPT = [
+    {"line_id": "b4-l1", "speaker": "Presenter", "text": "Good afternoon, everyone. Today I will be presenting our marketing strategy for Q3."},
+    {"line_id": "b4-l2", "speaker": "Presenter", "text": "Let me start by sharing the key highlights from last quarter's performance."},
+    {"line_id": "b4-l3", "speaker": "Presenter", "text": "As you can see on this slide, our social media engagement increased by 40%."},
+    {"line_id": "b4-l4", "speaker": "Audience", "text": "That is quite impressive. What do you attribute the growth to?"},
+    {"line_id": "b4-l5", "speaker": "Presenter", "text": "We focused on video content and influencer collaborations, which really resonated with our audience."},
+    {"line_id": "b4-l6", "speaker": "Presenter", "text": "Moving forward, our strategy includes three main pillars. Let me walk you through each one."},
+    {"line_id": "b4-l7", "speaker": "Audience", "text": "Could you elaborate on the budget allocation for digital advertising?"},
+    {"line_id": "b4-l8", "speaker": "Presenter", "text": "Of course. We plan to allocate 60% of the budget to digital channels and 40% to offline events."},
+    {"line_id": "b4-l9", "speaker": "Audience", "text": "Thank you. This looks like a solid plan."},
+    {"line_id": "b4-l10", "speaker": "Presenter", "text": "Thank you for your feedback. I am happy to answer any more questions after the session."},
+]
+
+NETWORKING_SCRIPT = [
+    {"line_id": "b5-l1", "speaker": "Meera", "text": "Hi! I don't think we have met before. I am Meera from the marketing team."},
+    {"line_id": "b5-l2", "speaker": "Arjun", "text": "Hello Meera! I am Arjun. I work in the product development department."},
+    {"line_id": "b5-l3", "speaker": "Meera", "text": "Nice to meet you, Arjun! How long have you been with the company?"},
+    {"line_id": "b5-l4", "speaker": "Arjun", "text": "About three years now. I joined right after the company expanded to Bangalore."},
+    {"line_id": "b5-l5", "speaker": "Meera", "text": "That's wonderful! I just joined two months ago. I am still getting to know everyone."},
+    {"line_id": "b5-l6", "speaker": "Arjun", "text": "Welcome aboard! If you ever need help navigating things, feel free to reach out."},
+    {"line_id": "b5-l7", "speaker": "Meera", "text": "That is very kind of you. Actually, I would love to learn more about how your team works."},
+    {"line_id": "b5-l8", "speaker": "Arjun", "text": "Sure, let's grab coffee sometime this week and I will tell you all about it."},
+    {"line_id": "b5-l9", "speaker": "Meera", "text": "That sounds great! How about Wednesday afternoon?"},
+    {"line_id": "b5-l10", "speaker": "Arjun", "text": "Wednesday works perfectly. See you then, Meera!"},
+]
+
+DIFFICULT_CONVERSATION_SCRIPT = [
+    {"line_id": "b6-l1", "speaker": "Manager", "text": "Rahul, do you have a moment? I would like to discuss your recent project deliverables."},
+    {"line_id": "b6-l2", "speaker": "Rahul", "text": "Of course. Is there something specific you would like to talk about?"},
+    {"line_id": "b6-l3", "speaker": "Manager", "text": "I noticed the last two reports were submitted after the deadline. Can you help me understand what happened?"},
+    {"line_id": "b6-l4", "speaker": "Rahul", "text": "I apologize for that. I have been managing multiple tasks and it has been difficult to prioritize."},
+    {"line_id": "b6-l5", "speaker": "Manager", "text": "I understand. Workload management can be challenging. Have you considered delegating some tasks?"},
+    {"line_id": "b6-l6", "speaker": "Rahul", "text": "I have thought about it, but I was not sure who to assign them to."},
+    {"line_id": "b6-l7", "speaker": "Manager", "text": "Let's work together on a plan. I can help you identify team members who can support you."},
+    {"line_id": "b6-l8", "speaker": "Rahul", "text": "That would be really helpful. I want to make sure I meet all deadlines going forward."},
+    {"line_id": "b6-l9", "speaker": "Manager", "text": "I appreciate your honesty, Rahul. Let's schedule a follow-up meeting next week to review progress."},
+    {"line_id": "b6-l10", "speaker": "Rahul", "text": "Thank you for understanding. I will prepare a revised timeline by then."},
+]
+
+CORPORATE_ETIQUETTE_SCRIPT = [
+    {"line_id": "b7-l1", "speaker": "Nisha", "text": "Karan, I have a question. What is the dress code for the client visit tomorrow?"},
+    {"line_id": "b7-l2", "speaker": "Karan", "text": "It is business formal. A suit or formal shirt with trousers would be appropriate."},
+    {"line_id": "b7-l3", "speaker": "Nisha", "text": "Got it. Should I prepare anything specific for the meeting?"},
+    {"line_id": "b7-l4", "speaker": "Karan", "text": "Yes, bring printed copies of the proposal and your business cards."},
+    {"line_id": "b7-l5", "speaker": "Nisha", "text": "What about greeting the clients? Is there a specific protocol?"},
+    {"line_id": "b7-l6", "speaker": "Karan", "text": "A firm handshake and a warm smile work best. Address them by their last name unless they say otherwise."},
+    {"line_id": "b7-l7", "speaker": "Nisha", "text": "Should I start with small talk or get straight to business?"},
+    {"line_id": "b7-l8", "speaker": "Karan", "text": "Start with a few minutes of small talk. Ask about their journey or comment on something positive."},
+    {"line_id": "b7-l9", "speaker": "Nisha", "text": "That makes sense. Any other tips?"},
+    {"line_id": "b7-l10", "speaker": "Karan", "text": "Always let the senior person speak first, and avoid checking your phone during the meeting."},
+]
+
+REMOTE_WORK_SCRIPT = [
+    {"line_id": "b8-l1", "speaker": "Team Lead", "text": "Good morning, team! Can everyone hear me clearly on the video call?"},
+    {"line_id": "b8-l2", "speaker": "Divya", "text": "Yes, loud and clear! Good morning."},
+    {"line_id": "b8-l3", "speaker": "Sameer", "text": "I can hear you, but my camera seems to be having issues. Let me fix it."},
+    {"line_id": "b8-l4", "speaker": "Team Lead", "text": "No problem, Sameer. Let's start with a quick status update from everyone."},
+    {"line_id": "b8-l5", "speaker": "Divya", "text": "I completed the design mockups yesterday. I will share the link in the chat."},
+    {"line_id": "b8-l6", "speaker": "Team Lead", "text": "Great work, Divya! Sameer, how is the backend development progressing?"},
+    {"line_id": "b8-l7", "speaker": "Sameer", "text": "The API is almost done. I need one more day to finish testing."},
+    {"line_id": "b8-l8", "speaker": "Team Lead", "text": "Perfect. Let's aim to integrate everything by Thursday. Any blockers from anyone?"},
+    {"line_id": "b8-l9", "speaker": "Divya", "text": "I need access to the staging server. Could you grant me permissions?"},
+    {"line_id": "b8-l10", "speaker": "Team Lead", "text": "I will set that up right after this call. Anything else? Great, let's wrap up then."},
+]
+
+SALES_SCRIPT = [
+    {"line_id": "b9-l1", "speaker": "Sales Rep", "text": "Good afternoon! Thank you for taking the time to speak with me today."},
+    {"line_id": "b9-l2", "speaker": "Client", "text": "Of course. I am curious to hear about your company's services."},
+    {"line_id": "b9-l3", "speaker": "Sales Rep", "text": "Before I begin, may I ask what challenges your team is currently facing?"},
+    {"line_id": "b9-l4", "speaker": "Client", "text": "Our biggest challenge is managing customer data efficiently. We need a better CRM solution."},
+    {"line_id": "b9-l5", "speaker": "Sales Rep", "text": "That is exactly what we specialize in. Our CRM platform automates data management and boosts productivity."},
+    {"line_id": "b9-l6", "speaker": "Client", "text": "How is your solution different from others in the market?"},
+    {"line_id": "b9-l7", "speaker": "Sales Rep", "text": "We offer AI-powered analytics and 24/7 customer support, which most competitors do not include."},
+    {"line_id": "b9-l8", "speaker": "Client", "text": "That sounds promising. Do you offer a free trial period?"},
+    {"line_id": "b9-l9", "speaker": "Sales Rep", "text": "Yes, we offer a 30-day free trial with full access to all features. No commitment required."},
+    {"line_id": "b9-l10", "speaker": "Client", "text": "Excellent! Let's set up a demo for my team next week."},
+]
+
+LEADERSHIP_SCRIPT = [
+    {"line_id": "b10-l1", "speaker": "Leader", "text": "Team, I want to take a moment to acknowledge the hard work everyone has put in this month."},
+    {"line_id": "b10-l2", "speaker": "Pooja", "text": "Thank you! It has been a challenging month, but very rewarding."},
+    {"line_id": "b10-l3", "speaker": "Leader", "text": "I know the deadline pressure was tough. How is everyone feeling about the workload?"},
+    {"line_id": "b10-l4", "speaker": "Suresh", "text": "Honestly, it was intense, but having clear goals really helped us stay focused."},
+    {"line_id": "b10-l5", "speaker": "Leader", "text": "That is great to hear. I believe in setting clear expectations so everyone knows their role."},
+    {"line_id": "b10-l6", "speaker": "Pooja", "text": "I also appreciate that you were available whenever we needed guidance."},
+    {"line_id": "b10-l7", "speaker": "Leader", "text": "Open communication is key. My door is always open for ideas, feedback, or concerns."},
+    {"line_id": "b10-l8", "speaker": "Suresh", "text": "What are our priorities for the next month?"},
+    {"line_id": "b10-l9", "speaker": "Leader", "text": "We will focus on improving customer satisfaction scores and launching the new feature update."},
+    {"line_id": "b10-l10", "speaker": "Pooja", "text": "Sounds exciting! We are ready for the challenge."},
+]
+
+INTERVIEW_INTRO_SCRIPT = [
+    {"line_id": "i1-l1", "speaker": "Interviewer", "text": "Good morning! Please have a seat. Can you start by telling me a little about yourself?"},
+    {"line_id": "i1-l2", "speaker": "Candidate", "text": "Good morning! Of course. My name is Aarav Sharma. I am a software engineer with five years of experience."},
+    {"line_id": "i1-l3", "speaker": "Candidate", "text": "I started my career at a startup, where I built full-stack web applications from scratch."},
+    {"line_id": "i1-l4", "speaker": "Interviewer", "text": "That sounds great. What kind of projects did you work on there?"},
+    {"line_id": "i1-l5", "speaker": "Candidate", "text": "I developed an e-commerce platform that scaled to over 100,000 users within its first year."},
+    {"line_id": "i1-l6", "speaker": "Interviewer", "text": "Impressive! What brought you to apply for this position?"},
+    {"line_id": "i1-l7", "speaker": "Candidate", "text": "I am looking for a role where I can work on complex challenges and grow as an engineer."},
+    {"line_id": "i1-l8", "speaker": "Candidate", "text": "Your company's focus on innovative products really aligns with my career goals."},
+    {"line_id": "i1-l9", "speaker": "Interviewer", "text": "That is great to hear. What would you say is your greatest professional achievement so far?"},
+    {"line_id": "i1-l10", "speaker": "Candidate", "text": "Leading a team that delivered a critical feature two weeks ahead of schedule, saving the company significant costs."},
+]
+
+INTERVIEW_BEHAVIORAL_SCRIPT = [
+    {"line_id": "i2-l1", "speaker": "Interviewer", "text": "Can you tell me about a time you faced a major challenge at work?"},
+    {"line_id": "i2-l2", "speaker": "Candidate", "text": "Certainly. In my previous role, our main server went down two hours before a product launch."},
+    {"line_id": "i2-l3", "speaker": "Interviewer", "text": "What did you do to handle the situation?"},
+    {"line_id": "i2-l4", "speaker": "Candidate", "text": "I immediately assembled the team, identified the root cause as a database misconfiguration, and rolled back the changes."},
+    {"line_id": "i2-l5", "speaker": "Candidate", "text": "We restored the service within 45 minutes and the launch proceeded successfully."},
+    {"line_id": "i2-l6", "speaker": "Interviewer", "text": "Excellent! What did you learn from that experience?"},
+    {"line_id": "i2-l7", "speaker": "Candidate", "text": "I learned the importance of having a rollback plan before any major deployment."},
+    {"line_id": "i2-l8", "speaker": "Candidate", "text": "I also improved our team's incident response checklist to prevent similar issues."},
+    {"line_id": "i2-l9", "speaker": "Interviewer", "text": "That shows great leadership. How did the team respond to your direction?"},
+    {"line_id": "i2-l10", "speaker": "Candidate", "text": "The team was calm and focused. Clear communication made all the difference under pressure."},
+]
+
+INTERVIEW_MOTIVATION_SCRIPT = [
+    {"line_id": "i3-l1", "speaker": "Interviewer", "text": "Why do you want to work for our company specifically?"},
+    {"line_id": "i3-l2", "speaker": "Candidate", "text": "I have been following your company's journey for the past two years and I am genuinely inspired by your mission."},
+    {"line_id": "i3-l3", "speaker": "Interviewer", "text": "What specifically about our mission resonates with you?"},
+    {"line_id": "i3-l4", "speaker": "Candidate", "text": "Your commitment to making technology accessible to rural communities aligns deeply with my personal values."},
+    {"line_id": "i3-l5", "speaker": "Interviewer", "text": "That is wonderful. Have you had any experience working on similar social impact projects?"},
+    {"line_id": "i3-l6", "speaker": "Candidate", "text": "Yes, I volunteered with an NGO to build a digital literacy platform for underprivileged students."},
+    {"line_id": "i3-l7", "speaker": "Interviewer", "text": "How did that experience shape your professional goals?"},
+    {"line_id": "i3-l8", "speaker": "Candidate", "text": "It showed me that technology can genuinely transform lives. That is the kind of work I want to dedicate my career to."},
+    {"line_id": "i3-l9", "speaker": "Interviewer", "text": "And what role do you see yourself playing in our team?"},
+    {"line_id": "i3-l10", "speaker": "Candidate", "text": "I would love to contribute both technically and as a mentor, helping junior developers grow within your team."},
+]
+
+INTERVIEW_STRENGTHS_SCRIPT = [
+    {"line_id": "i4-l1", "speaker": "Interviewer", "text": "What would you consider to be your greatest professional strength?"},
+    {"line_id": "i4-l2", "speaker": "Candidate", "text": "My strongest skill is problem-solving under pressure. I stay calm and analytical even in stressful situations."},
+    {"line_id": "i4-l3", "speaker": "Interviewer", "text": "Can you give me a specific example of that?"},
+    {"line_id": "i4-l4", "speaker": "Candidate", "text": "During a critical product demo, our integration with a third-party API broke unexpectedly."},
+    {"line_id": "i4-l5", "speaker": "Candidate", "text": "I quickly built a mock API in under an hour so the demo could proceed without any issues."},
+    {"line_id": "i4-l6", "speaker": "Interviewer", "text": "That is very resourceful! What other strengths do you bring to the table?"},
+    {"line_id": "i4-l7", "speaker": "Candidate", "text": "I am also a strong communicator. I make it a point to keep all stakeholders informed throughout a project."},
+    {"line_id": "i4-l8", "speaker": "Interviewer", "text": "How do you ensure clear communication in a fast-moving environment?"},
+    {"line_id": "i4-l9", "speaker": "Candidate", "text": "I hold brief daily stand-ups and send concise written summaries at the end of each sprint."},
+    {"line_id": "i4-l10", "speaker": "Interviewer", "text": "That is a great habit. Those are exactly the qualities we look for in candidates."},
+]
+
+INTERVIEW_WEAKNESSES_SCRIPT = [
+    {"line_id": "i5-l1", "speaker": "Interviewer", "text": "Everyone has areas to improve. What would you say is your greatest weakness?"},
+    {"line_id": "i5-l2", "speaker": "Candidate", "text": "I used to struggle with delegating tasks. I often tried to handle everything myself."},
+    {"line_id": "i5-l3", "speaker": "Interviewer", "text": "That is quite common. How did that affect your work?"},
+    {"line_id": "i5-l4", "speaker": "Candidate", "text": "There were times I became a bottleneck, which slowed down the overall team's progress."},
+    {"line_id": "i5-l5", "speaker": "Interviewer", "text": "How have you worked to address this?"},
+    {"line_id": "i5-l6", "speaker": "Candidate", "text": "I actively worked on trusting my teammates more and clearly defining ownership for each task."},
+    {"line_id": "i5-l7", "speaker": "Candidate", "text": "I also took a course on team leadership to improve my delegation and management skills."},
+    {"line_id": "i5-l8", "speaker": "Interviewer", "text": "That shows strong self-awareness. Have you seen improvements since then?"},
+    {"line_id": "i5-l9", "speaker": "Candidate", "text": "Absolutely. My last project was delivered ahead of schedule because the team was more empowered and efficient."},
+    {"line_id": "i5-l10", "speaker": "Interviewer", "text": "That is a great example of turning a weakness into a strength. Well done."},
+]
+
+INTERVIEW_TECHNICAL_SCRIPT = [
+    {"line_id": "i6-l1", "speaker": "Interviewer", "text": "Let's talk about your technical background. How would you explain REST APIs to a non-technical stakeholder?"},
+    {"line_id": "i6-l2", "speaker": "Candidate", "text": "I would compare a REST API to a waiter in a restaurant. You place your order, the kitchen prepares it, and the waiter brings it back."},
+    {"line_id": "i6-l3", "speaker": "Interviewer", "text": "That is a great analogy! What about database design? Walk me through your approach."},
+    {"line_id": "i6-l4", "speaker": "Candidate", "text": "I start by identifying the entities and their relationships, then normalize the schema to eliminate redundancy."},
+    {"line_id": "i6-l5", "speaker": "Interviewer", "text": "How do you handle performance issues in large databases?"},
+    {"line_id": "i6-l6", "speaker": "Candidate", "text": "I use indexing on frequently queried columns and analyze slow query logs to optimize bottlenecks."},
+    {"line_id": "i6-l7", "speaker": "Interviewer", "text": "Good. Tell me about a technically challenging problem you solved recently."},
+    {"line_id": "i6-l8", "speaker": "Candidate", "text": "I redesigned a legacy monolith into microservices, which reduced deployment time by 60%."},
+    {"line_id": "i6-l9", "speaker": "Interviewer", "text": "Impressive. What was the biggest risk you encountered during that process?"},
+    {"line_id": "i6-l10", "speaker": "Candidate", "text": "Data consistency across services was the biggest risk. I solved it using an event-driven architecture with message queues."},
+]
+
+INTERVIEW_SALARY_SCRIPT = [
+    {"line_id": "i7-l1", "speaker": "Interviewer", "text": "We are very impressed with your profile. Let's talk about compensation. What are your salary expectations?"},
+    {"line_id": "i7-l2", "speaker": "Candidate", "text": "Based on my experience and market research, I am expecting a package in the range of 18 to 22 lakhs per annum."},
+    {"line_id": "i7-l3", "speaker": "Interviewer", "text": "That is somewhat above our initial budget for this role. Is there flexibility on your end?"},
+    {"line_id": "i7-l4", "speaker": "Candidate", "text": "I am open to discussing the full compensation package including benefits, bonuses, and growth opportunities."},
+    {"line_id": "i7-l5", "speaker": "Interviewer", "text": "We can offer 17 lakhs along with performance bonuses and an annual review cycle."},
+    {"line_id": "i7-l6", "speaker": "Candidate", "text": "Could you tell me more about the bonus structure? That would help me evaluate the total offer."},
+    {"line_id": "i7-l7", "speaker": "Interviewer", "text": "Typically, bonuses range from 10 to 20 percent based on performance and company targets."},
+    {"line_id": "i7-l8", "speaker": "Candidate", "text": "That is very helpful. Considering the bonus potential, I think we can make it work."},
+    {"line_id": "i7-l9", "speaker": "Interviewer", "text": "Excellent! We also offer flexible work hours and a generous learning and development budget."},
+    {"line_id": "i7-l10", "speaker": "Candidate", "text": "That sounds like a great package overall. I am excited about the opportunity to join the team."},
+]
+
+INTERVIEW_QUESTIONS_SCRIPT = [
+    {"line_id": "i8-l1", "speaker": "Interviewer", "text": "We are nearing the end of our interview. Do you have any questions for us?"},
+    {"line_id": "i8-l2", "speaker": "Candidate", "text": "Yes, I do! Could you describe what a typical day looks like for someone in this role?"},
+    {"line_id": "i8-l3", "speaker": "Interviewer", "text": "You would typically start with a team stand-up, then work on feature development or bug fixes for the day."},
+    {"line_id": "i8-l4", "speaker": "Candidate", "text": "That sounds great. How does the team handle knowledge sharing and continuous learning?"},
+    {"line_id": "i8-l5", "speaker": "Interviewer", "text": "We have weekly tech talks and a dedicated budget for online courses and conferences."},
+    {"line_id": "i8-l6", "speaker": "Candidate", "text": "I love that. What does success look like for someone in this position after six months?"},
+    {"line_id": "i8-l7", "speaker": "Interviewer", "text": "We would expect you to be independently delivering features and beginning to mentor junior team members."},
+    {"line_id": "i8-l8", "speaker": "Candidate", "text": "That aligns perfectly with my goals. One last question — what is the biggest challenge the team is currently facing?"},
+    {"line_id": "i8-l9", "speaker": "Interviewer", "text": "Scaling our infrastructure to handle rapid user growth is our primary focus right now."},
+    {"line_id": "i8-l10", "speaker": "Candidate", "text": "That is exactly the kind of challenge I enjoy solving. I look forward to contributing to it."},
+]
+
+INTERVIEW_DIFFICULT_SCRIPT = [
+    {"line_id": "i9-l1", "speaker": "Interviewer", "text": "Tell me about a time you disagreed with your manager. How did you handle it?"},
+    {"line_id": "i9-l2", "speaker": "Candidate", "text": "There was a time my manager wanted to release a feature without proper testing to meet a deadline."},
+    {"line_id": "i9-l3", "speaker": "Interviewer", "text": "That is a sensitive situation. What did you do?"},
+    {"line_id": "i9-l4", "speaker": "Candidate", "text": "I requested a private conversation and presented data showing the risk of releasing untested code to production."},
+    {"line_id": "i9-l5", "speaker": "Candidate", "text": "I proposed a compromise — release a limited beta version while the full feature continued testing."},
+    {"line_id": "i9-l6", "speaker": "Interviewer", "text": "How did your manager respond to that?"},
+    {"line_id": "i9-l7", "speaker": "Candidate", "text": "He appreciated the data-driven approach and agreed to the beta release plan."},
+    {"line_id": "i9-l8", "speaker": "Interviewer", "text": "What was the outcome?"},
+    {"line_id": "i9-l9", "speaker": "Candidate", "text": "The beta helped us identify three critical bugs that would have affected thousands of users."},
+    {"line_id": "i9-l10", "speaker": "Interviewer", "text": "That is a textbook example of constructive disagreement. Excellent communication skills."},
+]
+
+INTERVIEW_CLOSING_SCRIPT = [
+    {"line_id": "i10-l1", "speaker": "Interviewer", "text": "We have covered everything on our list today. Thank you for your time, Priya."},
+    {"line_id": "i10-l2", "speaker": "Candidate", "text": "Thank you so much! I really enjoyed our conversation and learning more about the role."},
+    {"line_id": "i10-l3", "speaker": "Interviewer", "text": "Is there anything you would like to add before we wrap up?"},
+    {"line_id": "i10-l4", "speaker": "Candidate", "text": "I just want to reiterate how excited I am about this opportunity. I believe I can make a strong contribution."},
+    {"line_id": "i10-l5", "speaker": "Interviewer", "text": "We appreciate your enthusiasm. We will be in touch within the next three business days."},
+    {"line_id": "i10-l6", "speaker": "Candidate", "text": "That is great to hear. Would it be appropriate for me to send a follow-up email after this?"},
+    {"line_id": "i10-l7", "speaker": "Interviewer", "text": "Absolutely. A brief thank-you email is always appreciated and shows professionalism."},
+    {"line_id": "i10-l8", "speaker": "Candidate", "text": "Perfect. I will send that over today. Is there anything else you need from me right now?"},
+    {"line_id": "i10-l9", "speaker": "Interviewer", "text": "No, we have everything. It was a pleasure meeting you today, Priya."},
+    {"line_id": "i10-l10", "speaker": "Candidate", "text": "The pleasure was entirely mine. Thank you for the wonderful experience. Have a great day!"},
 ]
 
 LESSONS = [
     _lesson("daily", 1, "Introducing Yourself", "Learn to greet and share basic info.", "Beginner", 8, script=DAILY_1_SCRIPT),
-    _lesson("daily", 2, "Ordering at a Cafe", "Common phrases at a coffee shop.", "Beginner", 10),
-    _lesson("daily", 3, "Making Small Talk", "Casual conversations with strangers.", "Intermediate", 12),
-    _lesson("daily", 4, "Shopping & Asking Prices", "Bargain, compare and pay confidently.", "Beginner", 9),
-    _lesson("daily", 5, "Giving & Following Directions", "Navigate a city like a local.", "Beginner", 10),
-    _lesson("daily", 6, "At the Restaurant", "Order, request and pay in style.", "Beginner", 11),
-    _lesson("daily", 7, "Talking About Weekends", "Share plans and past events smoothly.", "Intermediate", 12),
-    _lesson("daily", 8, "Doctor & Pharmacy Visit", "Explain symptoms and understand advice.", "Intermediate", 13),
-    _lesson("daily", 9, "Phone Conversations", "Sound natural and clear on calls.", "Intermediate", 12),
-    _lesson("daily", 10, "Expressing Opinions", "Agree, disagree and add nuance.", "Advanced", 14),
-    _lesson("daily", 11, "Making Complaints", "Express dissatisfaction politely and constructively.", "Intermediate", 11),
-    _lesson("daily", 12, "Asking for Help & Favors", "Request assistance naturally and courteously.", "Beginner", 10),
-    _lesson("daily", 13, "Congratulating & Celebrating", "Respond genuinely to good news and achievements.", "Intermediate", 10),
-    _lesson("daily", 14, "Dealing with Misunderstandings", "Clarify, rephrase and resolve communication gaps.", "Intermediate", 13),
-    _lesson("daily", 15, "Apologizing & Making Amends", "Express genuine apologies and repair relationships.", "Beginner", 11),
-    _lesson("daily", 16, "Job & Career Conversations", "Discuss work, ambitions and professional growth.", "Intermediate", 12),
-    _lesson("daily", 17, "Hobbies & Interests", "Talk passionately about what you love doing.", "Intermediate", 11),
-    _lesson("daily", 18, "Travel & Vacation Stories", "Share travel experiences and ask about trips.", "Beginner", 10),
-    _lesson("daily", 19, "Family & Relationships", "Discuss family, friends and personal connections.", "Intermediate", 12),
-    _lesson("daily", 20, "Weather & Casual Chitchat", "Master small talk and everyday conversation starters.", "Beginner", 9),
-    _lesson("business", 1, "Business Meetings", "Language for productive meetings.", "Intermediate", 15),
-    _lesson("business", 2, "Writing Professional Emails", "Structure and tone for emails.", "Intermediate", 10),
-    _lesson("business", 3, "Negotiating Deals", "Persuasive language for negotiations.", "Advanced", 18),
-    _lesson("business", 4, "Presenting with Confidence", "Deliver impactful presentations and pitches.", "Advanced", 16),
-    _lesson("business", 5, "Networking & Building Relationships", "Make meaningful professional connections.", "Intermediate", 14),
-    _lesson("business", 6, "Handling Difficult Conversations", "Address conflicts and feedback diplomatically.", "Advanced", 15),
-    _lesson("business", 7, "Corporate Culture & Etiquette", "Navigate workplace norms and professional behavior.", "Intermediate", 12),
-    _lesson("business", 8, "Remote Work Communication", "Excel in video calls and virtual collaboration.", "Intermediate", 13),
-    _lesson("business", 9, "Sales & Persuasion Techniques", "Influence and close deals with confidence.", "Advanced", 17),
-    _lesson("business", 10, "Leadership & Team Motivation", "Inspire and manage teams effectively.", "Advanced", 16),
-    _lesson("business", 11, "Project Management Communication", "Coordinate teams and manage timelines effectively.", "Intermediate", 14),
-    _lesson("business", 12, "Client Relations & Account Management", "Build and maintain strong client relationships.", "Intermediate", 13),
-    _lesson("business", 13, "Budget & Financial Discussions", "Discuss finances and ROI confidently.", "Advanced", 15),
-    _lesson("business", 14, "Cross-Cultural Business Communication", "Navigate differences in international business.", "Advanced", 16),
-    _lesson("business", 15, "Change Management & Organizational Updates", "Communicate changes and transitions smoothly.", "Intermediate", 14),
-    _lesson("business", 16, "Conflict Resolution in Workplace", "Mediate disputes and find win-win solutions.", "Advanced", 15),
-    _lesson("business", 17, "Innovation & Strategic Planning Discussions", "Present ideas and align teams on strategy.", "Advanced", 17),
-    _lesson("business", 18, "Employee Performance Reviews", "Conduct and receive feedback professionally.", "Intermediate", 13),
-    _lesson("business", 19, "Mentoring & Coaching Conversations", "Guide and develop team members effectively.", "Intermediate", 14),
-    _lesson("business", 20, "Crisis Communication & Problem-Solving", "Handle urgent situations with poise and clarity.", "Advanced", 16),
-    _lesson("interview", 1, "Tell Me About Yourself", "Craft a compelling elevator pitch.", "Intermediate", 10),
-    _lesson("interview", 2, "Behavioral Questions", "STAR method for tough questions.", "Advanced", 15),
-    _lesson("interview", 3, "Why Do You Want This Job?", "Articulate your motivation and fit.", "Intermediate", 12),
-    _lesson("interview", 4, "Discussing Your Strengths", "Highlight skills without sounding arrogant.", "Intermediate", 11),
-    _lesson("interview", 5, "Addressing Your Weaknesses", "Turn weaknesses into growth opportunities.", "Advanced", 14),
-    _lesson("interview", 6, "Technical Questions & Problem-Solving", "Explain technical concepts clearly.", "Advanced", 16),
-    _lesson("interview", 7, "Salary Negotiation Conversations", "Discuss compensation confidently.", "Advanced", 13),
-    _lesson("interview", 8, "Questions to Ask the Interviewer", "Show genuine interest and strategic thinking.", "Intermediate", 12),
-    _lesson("interview", 9, "Handling Difficult Interview Scenarios", "Respond tactfully to tricky situations.", "Advanced", 15),
-    _lesson("interview", 10, "Follow-Up & Closing Strong", "Leave a lasting positive impression.", "Intermediate", 10),
-    _lesson("interview", 11, "Video Interview Etiquette", "Master camera presence and virtual professionalism.", "Intermediate", 12),
-    _lesson("interview", 12, "Panel Interview Strategies", "Engage multiple interviewers effectively.", "Advanced", 14),
-    _lesson("interview", 13, "Case Study & Problem-Solving Interviews", "Approach case studies with structured thinking.", "Advanced", 16),
-    _lesson("interview", 14, "Group Interview Dynamics", "Stand out while collaborating with other candidates.", "Intermediate", 13),
-    _lesson("interview", 15, "Phone & Screening Call Tips", "Excel at initial phone screening rounds.", "Intermediate", 10),
-    _lesson("interview", 16, "Industry-Specific Interview Prep", "Prepare for specialized role conversations.", "Advanced", 15),
-    _lesson("interview", 17, "Startup vs. Corporate Interview Differences", "Adapt approach based on company culture.", "Intermediate", 13),
-    _lesson("interview", 18, "Talking About Your Achievements", "Quantify success and highlight impact.", "Intermediate", 12),
-    _lesson("interview", 19, "Cultural Fit & Team Chemistry Questions", "Show alignment with company values.", "Intermediate", 11),
-    _lesson("interview", 20, "Negotiating Offer & Next Steps", "Navigate final conversations confidently.", "Advanced", 14),
-    _lesson("travel", 1, "At the Airport", "Navigating airports confidently.", "Beginner", 8),
-    _lesson("travel", 2, "Booking a Hotel", "Reservations and check-in phrases.", "Beginner", 10),
-    _lesson("travel", 3, "Ordering at Restaurants", "Navigate menus and place orders smoothly.", "Beginner", 11),
-    _lesson("travel", 4, "Using Public Transportation", "Navigate buses, trains and taxis like a local.", "Beginner", 10),
-    _lesson("travel", 5, "Asking for Directions & Maps", "Find your way confidently in unfamiliar places.", "Beginner", 9),
-    _lesson("travel", 6, "Shopping & Markets Haggling", "Negotiate prices and shop at local markets.", "Intermediate", 12),
-    _lesson("travel", 7, "Emergency Situations & Seeking Help", "Handle medical, police and urgent situations.", "Intermediate", 13),
-    _lesson("travel", 8, "Cultural Etiquette & Customs", "Navigate cultural differences respectfully.", "Intermediate", 11),
-    _lesson("travel", 9, "Travel Planning & Itineraries", "Discuss plans and make travel reservations.", "Intermediate", 12),
-    _lesson("travel", 10, "Dealing with Travel Problems", "Handle delays, lost luggage and complaints.", "Intermediate", 14),
-    _lesson("travel", 11, "Accommodation Negotiations", "Discuss amenities, rates, and special requests.", "Intermediate", 11),
-    _lesson("travel", 12, "Food & Dietary Preferences", "Navigate dining options and dietary restrictions.", "Beginner", 10),
-    _lesson("travel", 13, "Money Exchange & Payment Methods", "Discuss currency and payment options confidently.", "Intermediate", 10),
-    _lesson("travel", 14, "Sightseeing & Tourist Attractions", "Ask for recommendations and discuss attractions.", "Beginner", 9),
-    _lesson("travel", 15, "Guided Tours & Experiences", "Communicate with tour guides and activity organizers.", "Intermediate", 12),
-    _lesson("travel", 16, "Travel Insurance & Documentation", "Discuss policies, visas, and travel documents.", "Intermediate", 11),
-    _lesson("travel", 17, "Meeting Locals & Making Friends", "Build genuine connections with local people.", "Intermediate", 13),
-    _lesson("travel", 18, "Adventure Sports & Activities", "Discuss thrilling experiences and safety concerns.", "Intermediate", 12),
-    _lesson("travel", 19, "Travel Scams & Safety Tips", "Recognize risks and protect yourself confidently.", "Intermediate", 13),
-    _lesson("travel", 20, "Travel Stories & Cultural Exchange", "Share experiences and learn about different cultures.", "Intermediate", 14),
+    _lesson("daily", 2, "Ordering at a Cafe", "Common phrases at a coffee shop.", "Beginner", 10, script=ORDERING_AT_CAFE_SCRIPT),
+    _lesson("daily", 3, "Making Small Talk", "Casual conversations with strangers.", "Intermediate", 12, script=CASUAL_CONVERSATION_SCRIPT),
+    _lesson("daily", 4, "Shopping & Asking Prices", "Bargain, compare and pay confidently.", "Beginner", 9, script=SHOPPING_CONVERSATION_SCRIPT),
+    _lesson("daily", 5, "Giving & Following Directions", "Navigate a city like a local.", "Beginner", 10, script=DIRECTIONS_SCRIPT),
+    _lesson("daily", 6, "At the Restaurant", "Order, request and pay in style.", "Beginner", 11, script=RESTAURANT_SCRIPT),
+    _lesson("daily", 7, "Talking About Weekends", "Share plans and past events smoothly.", "Intermediate", 12, script=WEEKENDS_SCRIPT),
+    _lesson("daily", 8, "Doctor & Pharmacy Visit", "Explain symptoms and understand advice.", "Intermediate", 13, script=DOCTOR_SCRIPT),
+    _lesson("daily", 9, "Phone Conversations", "Sound natural and clear on calls.", "Intermediate", 12, script=PHONE_SCRIPT),
+    _lesson("daily", 10, "Expressing Opinions", "Agree, disagree and add nuance.", "Advanced", 14, script=OPINIONS_SCRIPT),
+    _lesson("business", 1, "Business Meetings", "Language for productive meetings.", "Intermediate", 15, script=BUSINESS_MEETING_SCRIPT),
+    _lesson("business", 2, "Writing Professional Emails", "Structure and tone for emails.", "Intermediate", 10, script=PROFESSIONAL_EMAIL_SCRIPT),
+    _lesson("business", 3, "Negotiating Deals", "Persuasive language for negotiations.", "Advanced", 18, script=NEGOTIATION_SCRIPT),
+    _lesson("business", 4, "Presenting with Confidence", "Deliver impactful presentations and pitches.", "Advanced", 16, script=PRESENTATION_SCRIPT),
+    _lesson("business", 5, "Networking & Building Relationships", "Make meaningful professional connections.", "Intermediate", 14, script=NETWORKING_SCRIPT),
+    _lesson("business", 6, "Handling Difficult Conversations", "Address conflicts and feedback diplomatically.", "Advanced", 15, script=DIFFICULT_CONVERSATION_SCRIPT),
+    _lesson("business", 7, "Corporate Culture & Etiquette", "Navigate workplace norms and professional behavior.", "Intermediate", 12, script=CORPORATE_ETIQUETTE_SCRIPT),
+    _lesson("business", 8, "Remote Work Communication", "Excel in video calls and virtual collaboration.", "Intermediate", 13, script=REMOTE_WORK_SCRIPT),
+    _lesson("business", 9, "Sales & Persuasion Techniques", "Influence and close deals with confidence.", "Advanced", 17, script=SALES_SCRIPT),
+    _lesson("business", 10, "Leadership & Team Motivation", "Inspire and manage teams effectively.", "Advanced", 16, script=LEADERSHIP_SCRIPT),
+    _lesson("interview", 1, "Tell Me About Yourself", "Craft a compelling elevator pitch.", "Intermediate", 10, script=INTERVIEW_INTRO_SCRIPT),
+    _lesson("interview", 2, "Behavioral Questions", "STAR method for tough questions.", "Advanced", 15, script=INTERVIEW_BEHAVIORAL_SCRIPT),
+    _lesson("interview", 3, "Why Do You Want This Job?", "Articulate your motivation and fit.", "Intermediate", 12, script=INTERVIEW_MOTIVATION_SCRIPT),
+    _lesson("interview", 4, "Discussing Your Strengths", "Highlight skills without sounding arrogant.", "Intermediate", 11, script=INTERVIEW_STRENGTHS_SCRIPT),
+    _lesson("interview", 5, "Addressing Your Weaknesses", "Turn weaknesses into growth opportunities.", "Advanced", 14, script=INTERVIEW_WEAKNESSES_SCRIPT),
+    _lesson("interview", 6, "Technical Questions & Problem-Solving", "Explain technical concepts clearly.", "Advanced", 16, script=INTERVIEW_TECHNICAL_SCRIPT),
+    _lesson("interview", 7, "Salary Negotiation Conversations", "Discuss compensation confidently.", "Advanced", 13, script=INTERVIEW_SALARY_SCRIPT),
+    _lesson("interview", 8, "Questions to Ask the Interviewer", "Show genuine interest and strategic thinking.", "Intermediate", 12, script=INTERVIEW_QUESTIONS_SCRIPT),
+    _lesson("interview", 9, "Handling Difficult Interview Scenarios", "Respond tactfully to tricky situations.", "Advanced", 15, script=INTERVIEW_DIFFICULT_SCRIPT),
+    _lesson("interview", 10, "Follow-Up & Closing Strong", "Leave a lasting positive impression.", "Intermediate", 10, script=INTERVIEW_CLOSING_SCRIPT),
 ]
+
+TRAVEL_AIRPORT_SCRIPT = [
+
+    {"line_id": "t1-l1", "speaker": "Passenger", "text": "Excuse me, where do I check in for the flight to Dubai?"},
+    {"line_id": "t1-l2", "speaker": "Staff", "text": "Good morning! Please head to counter number 12. Do you have your passport and ticket ready?"},
+    {"line_id": "t1-l3", "speaker": "Passenger", "text": "Yes, I have both. I also have one checked bag and a carry-on."},
+    {"line_id": "t1-l4", "speaker": "Staff", "text": "Perfect. Please place your bag on the scale. It weighs 22 kilograms, which is within the limit."},
+    {"line_id": "t1-l5", "speaker": "Passenger", "text": "Great. Could I please get a window seat?"},
+    {"line_id": "t1-l6", "speaker": "Staff", "text": "Let me check availability. Yes, seat 14A is available. Would that work for you?"},
+    {"line_id": "t1-l7", "speaker": "Passenger", "text": "That is perfect, thank you! How early should I be at the boarding gate?"},
+    {"line_id": "t1-l8", "speaker": "Staff", "text": "Please be at gate B7 at least 45 minutes before departure."},
+    {"line_id": "t1-l9", "speaker": "Passenger", "text": "Understood. Is there anything else I need to know?"},
+    {"line_id": "t1-l10", "speaker": "Staff", "text": "You will need to pass through security first. Enjoy your flight!"},
+]
+
+TRAVEL_HOTEL_SCRIPT = [
+    {"line_id": "t2-l1", "speaker": "Receptionist", "text": "Good evening! Welcome to the Grand Palace Hotel. Do you have a reservation?"},
+    {"line_id": "t2-l2", "speaker": "Guest", "text": "Yes, I made a booking online. The name is Kavya Reddy."},
+    {"line_id": "t2-l3", "speaker": "Receptionist", "text": "Let me pull that up. Yes, I have a deluxe room booked for three nights. Is that correct?"},
+    {"line_id": "t2-l4", "speaker": "Guest", "text": "That is right. Could you tell me if breakfast is included?"},
+    {"line_id": "t2-l5", "speaker": "Receptionist", "text": "Yes, complimentary breakfast is served daily from 7 to 10 AM in the dining area."},
+    {"line_id": "t2-l6", "speaker": "Guest", "text": "Wonderful! Does the room have a good city view?"},
+    {"line_id": "t2-l7", "speaker": "Receptionist", "text": "Absolutely. Your room on the 8th floor has a beautiful view of the main square."},
+    {"line_id": "t2-l8", "speaker": "Guest", "text": "That sounds lovely. What time is the check-out?"},
+    {"line_id": "t2-l9", "speaker": "Receptionist", "text": "Check-out is at noon. If you need a late check-out, please let us know in advance."},
+    {"line_id": "t2-l10", "speaker": "Guest", "text": "I will keep that in mind. Thank you so much!"},
+]
+
+TRAVEL_RESTAURANT_SCRIPT = [
+    {"line_id": "t3-l1", "speaker": "Waiter", "text": "Good evening! Welcome. Do you have a reservation or would you like a table for two?"},
+    {"line_id": "t3-l2", "speaker": "Traveler", "text": "No reservation, just the two of us. A table by the window would be lovely if possible."},
+    {"line_id": "t3-l3", "speaker": "Waiter", "text": "Of course! Right this way. Here are your menus. Can I start you with some drinks?"},
+    {"line_id": "t3-l4", "speaker": "Traveler", "text": "Yes, two glasses of still water please. What is your dish of the day?"},
+    {"line_id": "t3-l5", "speaker": "Waiter", "text": "Today's special is grilled sea bass with lemon butter sauce. It is very popular."},
+    {"line_id": "t3-l6", "speaker": "Traveler", "text": "That sounds delicious! I will have that. Does it come with any sides?"},
+    {"line_id": "t3-l7", "speaker": "Waiter", "text": "It comes with roasted vegetables and garlic bread."},
+    {"line_id": "t3-l8", "speaker": "Traveler", "text": "Perfect. My companion is vegetarian. What would you recommend for them?"},
+    {"line_id": "t3-l9", "speaker": "Waiter", "text": "Our mushroom risotto is excellent and fully vegetarian. It is a guest favourite."},
+    {"line_id": "t3-l10", "speaker": "Traveler", "text": "Great, we will have that as well. Thank you for your help!"},
+]
+
+TRAVEL_TRANSPORT_SCRIPT = [
+    {"line_id": "t4-l1", "speaker": "Traveler", "text": "Excuse me, does this bus go to the city centre?"},
+    {"line_id": "t4-l2", "speaker": "Local", "text": "Yes, it does! Take bus number 42 and get off at Market Square."},
+    {"line_id": "t4-l3", "speaker": "Traveler", "text": "How long does the journey take from here?"},
+    {"line_id": "t4-l4", "speaker": "Local", "text": "About 20 minutes. The bus comes every 10 minutes."},
+    {"line_id": "t4-l5", "speaker": "Traveler", "text": "Do I need to buy a ticket before boarding or can I pay on the bus?"},
+    {"line_id": "t4-l6", "speaker": "Local", "text": "You can pay directly to the driver. Exact change is preferred."},
+    {"line_id": "t4-l7", "speaker": "Traveler", "text": "Is there a metro or subway I could take instead?"},
+    {"line_id": "t4-l8", "speaker": "Local", "text": "Yes, the nearest metro station is just a 5-minute walk. Take the red line to Central."},
+    {"line_id": "t4-l9", "speaker": "Traveler", "text": "Which option would you recommend for a first-time visitor?"},
+    {"line_id": "t4-l10", "speaker": "Local", "text": "The metro is faster and easier to navigate. You can also use your contactless card to pay."},
+]
+
+TRAVEL_DIRECTIONS_SCRIPT = [
+    {"line_id": "t5-l1", "speaker": "Traveler", "text": "Excuse me, I am a bit lost. Could you help me find the National Museum?"},
+    {"line_id": "t5-l2", "speaker": "Local", "text": "Of course! You are actually quite close. Head straight down this road for about 200 metres."},
+    {"line_id": "t5-l3", "speaker": "Traveler", "text": "And then?"},
+    {"line_id": "t5-l4", "speaker": "Local", "text": "Turn left at the traffic lights. You will see a large fountain. The museum is right behind it."},
+    {"line_id": "t5-l5", "speaker": "Traveler", "text": "Is there a landmark I can look out for so I know I am going the right way?"},
+    {"line_id": "t5-l6", "speaker": "Local", "text": "Yes! Look for the blue clock tower. Once you see that, the museum is just across the street."},
+    {"line_id": "t5-l7", "speaker": "Traveler", "text": "How long will it take to walk there?"},
+    {"line_id": "t5-l8", "speaker": "Local", "text": "About 10 minutes on foot. It is a pleasant walk."},
+    {"line_id": "t5-l9", "speaker": "Traveler", "text": "Thank you so much. Is it open on Sundays?"},
+    {"line_id": "t5-l10", "speaker": "Local", "text": "Yes, it is open from 10 AM to 6 PM on Sundays. Enjoy your visit!"},
+]
+
+TRAVEL_SHOPPING_SCRIPT = [
+    {"line_id": "t6-l1", "speaker": "Traveler", "text": "How much is this handmade scarf? It is beautiful."},
+    {"line_id": "t6-l2", "speaker": "Vendor", "text": "For you, special price! Only 800 rupees."},
+    {"line_id": "t6-l3", "speaker": "Traveler", "text": "That seems a bit high. I saw a similar one at another stall for 500 rupees."},
+    {"line_id": "t6-l4", "speaker": "Vendor", "text": "This one is pure wool, handwoven. Much better quality. I can do 700."},
+    {"line_id": "t6-l5", "speaker": "Traveler", "text": "What if I buy two? Can you give me a better deal?"},
+    {"line_id": "t6-l6", "speaker": "Vendor", "text": "For two scarves, I will do 1200 rupees. That is a very good price."},
+    {"line_id": "t6-l7", "speaker": "Traveler", "text": "Make it 1100 and I will take both right now."},
+    {"line_id": "t6-l8", "speaker": "Vendor", "text": "Okay, okay! 1100. Deal! You are a tough negotiator!"},
+    {"line_id": "t6-l9", "speaker": "Traveler", "text": "Thank you! Do you have a bag to pack them in?"},
+    {"line_id": "t6-l10", "speaker": "Vendor", "text": "Of course! I will wrap them nicely for you. Come back again!"},
+]
+
+TRAVEL_EMERGENCY_SCRIPT = [
+    {"line_id": "t7-l1", "speaker": "Traveler", "text": "Help! I think my friend has been hurt. We need a doctor immediately."},
+    {"line_id": "t7-l2", "speaker": "Bystander", "text": "Oh no! I will call an ambulance right now. What happened?"},
+    {"line_id": "t7-l3", "speaker": "Traveler", "text": "He slipped on the stairs and hurt his ankle badly. He cannot stand."},
+    {"line_id": "t7-l4", "speaker": "Bystander", "text": "Okay, do not move him. The ambulance should arrive in about 10 minutes."},
+    {"line_id": "t7-l5", "speaker": "Traveler", "text": "Is there a pharmacy nearby? I need some ice or a bandage."},
+    {"line_id": "t7-l6", "speaker": "Bystander", "text": "There is a pharmacy just two doors down. I can get something for you."},
+    {"line_id": "t7-l7", "speaker": "Traveler", "text": "We are tourists. Will the hospital accept our travel insurance?"},
+    {"line_id": "t7-l8", "speaker": "Bystander", "text": "Yes, most hospitals here accept international travel insurance. Keep your documents ready."},
+    {"line_id": "t7-l9", "speaker": "Traveler", "text": "Thank you so much for your help. We really appreciate it."},
+    {"line_id": "t7-l10", "speaker": "Bystander", "text": "Do not worry. The ambulance is on its way. Your friend is in good hands."},
+]
+
+TRAVEL_ETIQUETTE_SCRIPT = [
+    {"line_id": "t8-l1", "speaker": "Guide", "text": "Welcome to Japan! Before we visit the temple, let me share a few important customs."},
+    {"line_id": "t8-l2", "speaker": "Traveler", "text": "That is very helpful. Should I remove my shoes before entering?"},
+    {"line_id": "t8-l3", "speaker": "Guide", "text": "Yes, absolutely. Always remove shoes at the entrance and place them neatly in the provided area."},
+    {"line_id": "t8-l4", "speaker": "Traveler", "text": "Is photography allowed inside the temple?"},
+    {"line_id": "t8-l5", "speaker": "Guide", "text": "Photography is not permitted inside. Please respect the sacred space and keep your phone away."},
+    {"line_id": "t8-l6", "speaker": "Traveler", "text": "What about tipping? Is it expected here?"},
+    {"line_id": "t8-l7", "speaker": "Guide", "text": "In Japan, tipping is actually considered rude. Good service is simply a standard expectation."},
+    {"line_id": "t8-l8", "speaker": "Traveler", "text": "That is quite different from my home country! Are there other customs I should be aware of?"},
+    {"line_id": "t8-l9", "speaker": "Guide", "text": "Yes. Speak softly in public places, queue patiently, and always bow slightly when greeting someone."},
+    {"line_id": "t8-l10", "speaker": "Traveler", "text": "Thank you for these tips. I want to be respectful of the local culture during my visit."},
+]
+
+TRAVEL_PLANNING_SCRIPT = [
+    {"line_id": "t9-l1", "speaker": "Traveler", "text": "Hi! I would like to book a train from Paris to Amsterdam for next Friday."},
+    {"line_id": "t9-l2", "speaker": "Agent", "text": "Of course! The fastest option is the Thalys train, which takes about three and a half hours."},
+    {"line_id": "t9-l3", "speaker": "Traveler", "text": "That is perfect. Are there any morning departures available?"},
+    {"line_id": "t9-l4", "speaker": "Agent", "text": "Yes, there are departures at 8:15 AM and 10:30 AM. Which would you prefer?"},
+    {"line_id": "t9-l5", "speaker": "Traveler", "text": "The 8:15 departure sounds ideal. How much would a standard ticket cost?"},
+    {"line_id": "t9-l6", "speaker": "Agent", "text": "Standard class is 89 euros per person. First class is 135 euros with a complimentary meal."},
+    {"line_id": "t9-l7", "speaker": "Traveler", "text": "I will go with standard class. Can I also book a seat reservation?"},
+    {"line_id": "t9-l8", "speaker": "Agent", "text": "Yes, seat reservation is included. Would you prefer a window or an aisle seat?"},
+    {"line_id": "t9-l9", "speaker": "Traveler", "text": "A window seat please. I love watching the scenery."},
+    {"line_id": "t9-l10", "speaker": "Agent", "text": "Done! I have booked seat 12A. Your e-ticket will be sent to your email shortly."},
+]
+
+TRAVEL_PROBLEMS_SCRIPT = [
+    {"line_id": "t10-l1", "speaker": "Traveler", "text": "Excuse me, my flight has been delayed for three hours. Can you tell me what is happening?"},
+    {"line_id": "t10-l2", "speaker": "Staff", "text": "I am very sorry for the inconvenience. There is a technical issue with the aircraft."},
+    {"line_id": "t10-l3", "speaker": "Traveler", "text": "I have a connecting flight in two hours. Will I miss it?"},
+    {"line_id": "t10-l4", "speaker": "Staff", "text": "Let me check your booking. Unfortunately, you will miss that connection. I will rebook you."},
+    {"line_id": "t10-l5", "speaker": "Traveler", "text": "Also, my checked luggage did not arrive on the carousel. I cannot find my bag."},
+    {"line_id": "t10-l6", "speaker": "Staff", "text": "I apologize. Please fill out a lost luggage report at our service desk and we will trace it."},
+    {"line_id": "t10-l7", "speaker": "Traveler", "text": "How long will it take to locate the bag?"},
+    {"line_id": "t10-l8", "speaker": "Staff", "text": "Usually within 24 to 48 hours. We will have it delivered directly to your hotel."},
+    {"line_id": "t10-l9", "speaker": "Traveler", "text": "Are we entitled to any compensation for the delay?"},
+    {"line_id": "t10-l10", "speaker": "Staff", "text": "Yes, you are entitled to meal vouchers and an accommodation allowance. I will process that now."},
+]
+LESSONS += [
+    _lesson("travel", 1, "At the Airport", "Navigating airports confidently.", "Beginner", 8, script=TRAVEL_AIRPORT_SCRIPT),
+    _lesson("travel", 2, "Booking a Hotel", "Reservations and check-in phrases.", "Beginner", 10, script=TRAVEL_HOTEL_SCRIPT),
+    _lesson("travel", 3, "Ordering at Restaurants", "Navigate menus and place orders smoothly.", "Beginner", 11, script=TRAVEL_RESTAURANT_SCRIPT),
+    _lesson("travel", 4, "Using Public Transportation", "Navigate buses, trains and taxis like a local.", "Beginner", 10, script=TRAVEL_TRANSPORT_SCRIPT),
+    _lesson("travel", 5, "Asking for Directions & Maps", "Find your way confidently in unfamiliar places.", "Beginner", 9, script=TRAVEL_DIRECTIONS_SCRIPT),
+    _lesson("travel", 6, "Shopping & Markets Haggling", "Negotiate prices and shop at local markets.", "Intermediate", 12, script=TRAVEL_SHOPPING_SCRIPT),
+    _lesson("travel", 7, "Emergency Situations & Seeking Help", "Handle medical, police and urgent situations.", "Intermediate", 13, script=TRAVEL_EMERGENCY_SCRIPT),
+    _lesson("travel", 8, "Cultural Etiquette & Customs", "Navigate cultural differences respectfully.", "Intermediate", 11, script=TRAVEL_ETIQUETTE_SCRIPT),
+    _lesson("travel", 9, "Travel Planning & Itineraries", "Discuss plans and make travel reservations.", "Intermediate", 12, script=TRAVEL_PLANNING_SCRIPT),
+    _lesson("travel", 10, "Dealing with Travel Problems", "Handle delays, lost luggage and complaints.", "Intermediate", 14, script=TRAVEL_PROBLEMS_SCRIPT),
+]
+
 
 VOCAB_WORDS = [
     {"id": "w1", "word": "Serendipity", "phonetic": "/ˌser.ənˈdɪp.ə.ti/", "meaning": "Finding something good without looking for it.", "example": "Meeting you here is pure serendipity.", "level": "Advanced"},
@@ -472,7 +943,6 @@ ACHIEVEMENTS = [
 SEED_ROOMS = [
     {"room_id": "seed-1", "title": "Everyday Conversations", "topic": "Daily English", "host_name": "Ananya", "host_avatar": "https://i.pravatar.cc/150?img=47", "participant_count": 12, "is_private": False, "is_seed": True},
     {"room_id": "seed-2", "title": "Ace Your Job Interview", "topic": "Interview English", "host_name": "Rohan", "host_avatar": "https://i.pravatar.cc/150?img=12", "participant_count": 8, "is_private": False, "is_seed": True},
-    {"room_id": "seed-3", "title": "IELTS Speaking Bootcamp", "topic": "IELTS", "host_name": "Priya", "host_avatar": "https://i.pravatar.cc/150?img=32", "participant_count": 24, "is_private": False, "is_seed": True},
     {"room_id": "seed-4", "title": "Travel Talks", "topic": "Travel English", "host_name": "Marco", "host_avatar": "https://i.pravatar.cc/150?img=15", "participant_count": 5, "is_private": False, "is_seed": True},
     {"room_id": "seed-5", "title": "Confidence in Public Speaking", "topic": "Public Speaking", "host_name": "Zara", "host_avatar": "https://i.pravatar.cc/150?img=44", "participant_count": 17, "is_private": False, "is_seed": True},
 ]
@@ -718,19 +1188,24 @@ async def verify_otp(payload: PhoneVerifyOtp):
                 "referral_discount_active": False,
                 "created_at": datetime.now(timezone.utc),
             }
-            # Apply referral if provided
-            if payload.referral_code:
-                inviter = await db.users.find_one({"referral_code": payload.referral_code.strip().upper()}, {"_id": 0})
-                if inviter and inviter["user_id"] != user_id:
-                    new_user["referred_by"] = inviter["user_id"]
-                    new_user["referral_discount_active"] = True
-                    await db.users.update_one(
-                        {"user_id": inviter["user_id"]},
-                        {"$inc": {"referral_count": 1}, "$set": {"referral_discount_active": True}},
-                    )
             await db.users.insert_one(new_user)
             user = new_user
             user.pop("_id", None)
+
+    # Apply referral if provided and not already referred
+    if payload.referral_code and not user.get("referred_by"):
+        inviter = await db.users.find_one({"referral_code": payload.referral_code.strip().upper()}, {"_id": 0})
+        if inviter and inviter["user_id"] != user["user_id"]:
+            user["referred_by"] = inviter["user_id"]
+            user["referral_discount_active"] = True
+            await db.users.update_one(
+                {"user_id": user["user_id"]},
+                {"$set": {"referred_by": inviter["user_id"], "referral_discount_active": True}},
+            )
+            await db.users.update_one(
+                {"user_id": inviter["user_id"]},
+                {"$inc": {"referral_count": 1}, "$set": {"referral_discount_active": True}},
+            )
 
     # issue a token
     session_token = f"phone_{uuid.uuid4().hex}"
