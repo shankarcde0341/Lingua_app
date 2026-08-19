@@ -25,6 +25,7 @@ interface ContentItem {
 
 interface Lesson {
   id: string;
+  category_id?: string;
   title: string;
   description: string;
   level: string;
@@ -49,6 +50,11 @@ export default function LessonDetail() {
     })();
   }, [id]);
 
+  const handleBack = () => {
+    const catId = lesson?.category_id || (typeof id === "string" && id.includes("-") ? id.split("-")[0] : "daily");
+    router.replace({ pathname: "/lessons/[categoryId]", params: { categoryId: catId } });
+  };
+
   const complete = async () => {
     if (!lesson) return;
     setCompleting(true);
@@ -69,7 +75,7 @@ export default function LessonDetail() {
     <View style={styles.root} testID="lesson-detail-screen">
       <LinearGradient colors={["#EFF6FF", colors.bg]} style={StyleSheet.absoluteFill} />
       <SafeAreaView style={{ flex: 1 }} edges={["top", "bottom"]}>
-        <ScreenHeader title="Lesson" showBack onBack={() => router.back()} />
+        <ScreenHeader title="Lesson" showBack onBack={handleBack} />
         <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
           <View style={styles.tagRow}>
             <View style={styles.tag}><Text style={styles.tagText}>{lesson.level}</Text></View>
@@ -80,7 +86,7 @@ export default function LessonDetail() {
           <Text style={styles.desc}>{lesson.description}</Text>
 
           {lesson.script?.length > 0 ? (
-            <ScriptRolePlayer script={lesson.script} lessonId={lesson.id} />
+            <ScriptRolePlayer script={lesson.script} lessonId={lesson.id} onBack={handleBack} onComplete={complete} />
           ) : (
             <View style={{ marginTop: 24, gap: 12 }}>
               {lesson.content.map((c: ContentItem, i: number) => (

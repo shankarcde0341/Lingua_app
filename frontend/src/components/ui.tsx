@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import Svg, { Circle } from "react-native-svg";
+import { useRouter } from "expo-router";
 import { colors, gradients, radii, shadow, typography } from "@/src/theme";
 
 // Glass Card
@@ -81,10 +82,21 @@ const sec = StyleSheet.create({
 
 // Header with back
 export function ScreenHeader({ title, right, showBack, onBack, testID }: { title: string; right?: React.ReactNode; showBack?: boolean; onBack?: () => void; testID?: string }) {
+  const router = useRouter();
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace("/(tabs)");
+    }
+  };
+
   return (
     <View style={hdr.wrap} testID={testID}>
       {showBack ? (
-        <TouchableOpacity onPress={onBack} style={hdr.backBtn} testID="screen-back-btn">
+        <TouchableOpacity onPress={handleBack} style={hdr.backBtn} testID="screen-back-btn">
           <Ionicons name="chevron-back" size={22} color={colors.textPrimary} />
         </TouchableOpacity>
       ) : <View style={{ width: 40 }} />}

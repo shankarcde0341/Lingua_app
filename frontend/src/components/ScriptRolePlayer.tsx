@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AppState, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { createAudioPlayer, setAudioModeAsync } from "expo-audio";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { useRouter } from "expo-router";
 
 import { GradientButton } from "@/src/components/ui";
 import { colors, radii, shadow, spacing, typography } from "@/src/theme";
@@ -24,6 +25,7 @@ const DAILY_AUDIO_ASSETS: Record<string, Record<string, number>> = {
     "d1-l7": require("../../assets/audio/daily_english/intro/alex_L4.mp3"),
     "d1-l8": require("../../assets/audio/daily_english/intro/priya_L4.mp3"),
     "d1-l9": require("../../assets/audio/daily_english/intro/alex_L5.mp3"),
+    "d1-l10": require("../../assets/audio/daily_english/intro/priya_L5.mp3"),
   },
   "daily-2": {
     "d2-l1": require("../../assets/audio/daily_english/ordering_at_cafe/Barista_L1.mp3"),
@@ -84,16 +86,16 @@ const DAILY_AUDIO_ASSETS: Record<string, Record<string, number>> = {
     "d6-l9": require("../../assets/audio/daily_english/at_the_resturant/Waiter_L5.mp3"),
   },
   "daily-7": {
-    "d7-l1": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L1.mp3"),
-    "d7-l2": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L1.mp3"),
-    "d7-l3": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L2.mp3"),
-    "d7-l4": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L2.mp3"),
-    "d7-l5": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L3.mp3"),
-    "d7-l6": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L3.mp3"),
-    "d7-l7": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L4.mp3"),
-    "d7-l8": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L4.mp3"),
-    "d7-l9": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L5.mp3"),
-    "d7-l10": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L5.mp3"),
+    "d7-l1": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L1.mp3"),
+    "d7-l2": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L1.mp3"),
+    "d7-l3": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L2.mp3"),
+    "d7-l4": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L2.mp3"),
+    "d7-l5": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L3.mp3"),
+    "d7-l6": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L3.mp3"),
+    "d7-l7": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L4.mp3"),
+    "d7-l8": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L4.mp3"),
+    "d7-l9": require("../../assets/audio/daily_english/talking_about_weekends/Pritam_L5.mp3"),
+    "d7-l10": require("../../assets/audio/daily_english/talking_about_weekends/Priya_L5.mp3"),
   },
   "daily-8": {
     "d8-l1": require("../../assets/audio/daily_english/doctor_visit/Doctor_L1.mp3"),
@@ -142,9 +144,12 @@ const getAudioSource = (lessonId: string, line: ScriptLine) => {
 type ScriptRolePlayerProps = {
   script: ScriptLine[];
   lessonId: string;
+  onBack?: () => void;
+  onComplete?: () => void;
 };
 
-export function ScriptRolePlayer({ script, lessonId }: ScriptRolePlayerProps) {
+export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: ScriptRolePlayerProps) {
+  const router = useRouter();
   const [mode, setMode] = useState<"idle" | "listening" | "role-select" | "practicing" | "complete">("idle");
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
@@ -154,6 +159,14 @@ export function ScriptRolePlayer({ script, lessonId }: ScriptRolePlayerProps) {
 
   const playerRef = useRef<any>(null);
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const consecutiveFailuresRef = useRef<number>(0);
+  const scrollViewRef = useRef<ScrollView | null>(null);
+  const lineOffsetsRef = useRef<{ [key: number]: number }>({});
+  const modeRef = useRef(mode);
+
+  useEffect(() => {
+    modeRef.current = mode;
+  }, [mode]);
 
   const uniqueRoles = useMemo(() => Array.from(new Set(script.map((line) => line.speaker))), [script]);
   const currentLine = script[currentLineIndex];
@@ -162,9 +175,19 @@ export function ScriptRolePlayer({ script, lessonId }: ScriptRolePlayerProps) {
   const cleanupPlayer = useCallback(() => {
     if (playerRef.current) {
       try {
+        playerRef.current.pause();
+      } catch {
+        // ignore pause failure
+      }
+      try {
         playerRef.current.remove();
       } catch {
         // ignore cleanup failures
+      }
+      try {
+        playerRef.current.release();
+      } catch {
+        // ignore release failure
       }
       playerRef.current = null;
     }
@@ -196,12 +219,20 @@ export function ScriptRolePlayer({ script, lessonId }: ScriptRolePlayerProps) {
     cleanupCountdown();
     setCurrentLineIndex((index) => {
       if (index >= script.length - 1) {
-        setMode("complete");
+        if (modeRef.current === "practicing") {
+          setMode("complete");
+          if (onComplete) {
+            onComplete();
+          }
+        } else {
+          setMode("idle");
+          setCurrentLineIndex(0);
+        }
         return index;
       }
       return index + 1;
     });
-  }, [cleanupCountdown, cleanupPlayer, script.length]);
+  }, [cleanupCountdown, cleanupPlayer, onComplete, script.length]);
 
   const stopPractice = useCallback(() => {
     cleanupPlayer();
@@ -210,6 +241,7 @@ export function ScriptRolePlayer({ script, lessonId }: ScriptRolePlayerProps) {
     setSelectedRole(null);
     setCurrentLineIndex(0);
     setError(null);
+    consecutiveFailuresRef.current = 0;
   }, [cleanupCountdown, cleanupPlayer]);
 
   const maybePlayLine = useCallback(async () => {
@@ -246,13 +278,23 @@ export function ScriptRolePlayer({ script, lessonId }: ScriptRolePlayerProps) {
           console.error("Audio status error", status.error, "line_id=", currentLine.line_id);
         }
         if (status.didJustFinish) {
+          consecutiveFailuresRef.current = 0;
           goToNextLine();
         }
       });
       player.play();
-    } catch (playError) {
+      consecutiveFailuresRef.current = 0;
+    } catch (playError: any) {
       console.error("Audio playback failed:", playError, "line_id=", currentLine?.line_id);
-      goToNextLine();
+      consecutiveFailuresRef.current += 1;
+      if (consecutiveFailuresRef.current >= 3) {
+        setError(`Audio playback error: ${playError?.message || "Failed to initialize player"}`);
+        cleanupPlayer();
+        cleanupCountdown();
+        setIsPlaying(false);
+      } else {
+        goToNextLine();
+      }
     }
   }, [cleanupCountdown, cleanupPlayer, currentLine, goToNextLine, lessonId, setupAudioMode]);
 
@@ -287,6 +329,15 @@ export function ScriptRolePlayer({ script, lessonId }: ScriptRolePlayerProps) {
       }
     }
   }, [currentLineIndex, isUserTurn, mode, maybePlayLine, startCountdown]);
+
+  useEffect(() => {
+    if (mode === "listening" || mode === "practicing") {
+      const y = lineOffsetsRef.current[currentLineIndex];
+      if (typeof y === "number" && scrollViewRef.current) {
+        scrollViewRef.current.scrollTo({ y: Math.max(0, y - 20), animated: true });
+      }
+    }
+  }, [currentLineIndex, mode]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextState) => {
@@ -342,6 +393,12 @@ export function ScriptRolePlayer({ script, lessonId }: ScriptRolePlayerProps) {
     setSelectedRole(null);
     setCurrentLineIndex(0);
     setError(null);
+    if (onBack) {
+      onBack();
+    } else {
+      const catId = typeof lessonId === "string" && lessonId.includes("-") ? lessonId.split("-")[0] : "daily";
+      router.replace({ pathname: "/lessons/[categoryId]", params: { categoryId: catId } });
+    }
   };
 
   const roleSelectionVisible = mode === "role-select";
@@ -390,14 +447,26 @@ export function ScriptRolePlayer({ script, lessonId }: ScriptRolePlayerProps) {
         </View>
       ) : null}
 
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.scriptScroll} contentContainerStyle={{ paddingBottom: 6 }}>
+      <ScrollView
+        ref={scrollViewRef}
+        nestedScrollEnabled={true}
+        showsVerticalScrollIndicator={true}
+        style={styles.scriptScroll}
+        contentContainerStyle={{ paddingBottom: 6 }}
+      >
         {script.map((line, index) => {
           const active = index === currentLineIndex && (mode === "listening" || mode === "practicing");
           const isUserLine = selectedRole !== null && line.speaker === selectedRole;
           const lineBorderColor = active ? (isUserLine ? colors.gold : colors.primaryLight) : colors.divider;
 
           return (
-            <View key={line.line_id} style={[styles.lineCard, { borderColor: lineBorderColor }, active && styles.activeLineCard]}>
+            <View
+              key={line.line_id}
+              onLayout={(e) => {
+                lineOffsetsRef.current[index] = e.nativeEvent.layout.y;
+              }}
+              style={[styles.lineCard, { borderColor: lineBorderColor }, active && styles.activeLineCard]}
+            >
               <View style={styles.lineHeader}>
                 <Text style={styles.lineSpeaker}>{line.speaker}</Text>
                 <Text style={styles.lineLabel}>{`Line ${index + 1}`}</Text>
