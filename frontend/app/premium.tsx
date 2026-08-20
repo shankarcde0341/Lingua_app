@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
 
-import { api } from "@/src/api/client";
+import { api, getBackendUrl } from "@/src/api/client";
 import { useAuth } from "@/src/context/AuthContext";
 import { colors, gradients, radii, shadow, typography } from "@/src/theme";
 import { ScreenHeader } from "@/src/components/ui";
@@ -66,9 +66,14 @@ export default function Premium() {
     (async () => { try { await api.subscriptionPlans(); } catch { /* ignore */ } })();
   }, []);
 
+  /**
+   * Resolves the origin URL for subscription checkout redirection callbacks.
+   * Returns window.location.origin on Web platform, or the dynamic backend URL on Native platforms.
+   * @returns {string} Origin base URL string.
+   */
   const originUrl = () => {
     if (Platform.OS === "web" && typeof window !== "undefined") return window.location.origin;
-    return process.env.EXPO_PUBLIC_BACKEND_URL || "";
+    return getBackendUrl();
   };
 
   const subscribe = async () => {

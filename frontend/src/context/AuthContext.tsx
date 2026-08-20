@@ -1,6 +1,13 @@
+/**
+ * @file AuthContext.tsx
+ * @description React Context module providing global authentication state, session initialisation (bootstrap),
+ * sign-in/sign-out procedures, user profile caching, and refresh mechanisms across the app.
+ */
+
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { api, getToken, setToken, clearToken } from "@/src/api/client";
 
+/** User profile model shape returned by the backend */
 type User = {
   user_id: string;
   email: string;
@@ -26,6 +33,7 @@ type User = {
   referral_discount_active: boolean;
 };
 
+/** Context value contract exposed by useAuth() hook */
 type AuthState = {
   user: User | null;
   loading: boolean;
@@ -38,10 +46,23 @@ type AuthState = {
 
 const AuthCtx = createContext<AuthState | null>(null);
 
+/**
+ * AuthProvider Component
+ * Encloses app components and provides authentication state management and user bootstrap on mount.
+ * 
+ * @param {object} props
+ * @param {React.ReactNode} props.children - Child components requiring auth context access.
+ */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  /**
+   * Initializes (bootstraps) user authentication session on app start.
+   * Checks for stored token and verifies it with backend `/auth/me`.
+   * Preserves session token during transient network failures ("Network request failed")
+   * to avoid accidentally logging out the user when offline or when backend is starting up.
+   */
   const bootstrap = useCallback(async () => {
     try {
       const token = await getToken();
@@ -51,8 +72,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log("[Auth] bootstrap — /me returned user:", me?.user_id);
       setUser(me);
     } catch (e: any) {
-      console.warn("[Auth] bootstrap failed, clearing token:", e?.message || e);
-      await clearToken();
+      const errMsg = e?.message || String(e);
+      console.warn("[Auth] bootstrap failed:", errMsg);
+      // Only clear token if failure is an explicit auth failure (401/403), not a temporary network error
+      const isNetworkError = errMsg.includes("Network request failed") || errMsg.includes("Failed to fetch");
+      if (!isNetworkError) {
+        console.warn("[Auth] Clearing invalid session token");
+        await clearToken();
+      }
       setUser(null);
     } finally {
       setLoading(false);
@@ -61,6 +88,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => { bootstrap(); }, [bootstrap]);
 
+  /**
+   * Signs in user using web OAuth session ID by exchanging it for a session token.
+   * @param {string} session_id - The OAuth web session ID.
+   */
   const signInWithSessionId = useCallback(async (session_id: string) => {
     console.log("[Auth] signInWithSessionId — exchanging session_id");
     const res = await api.createSession(session_id);
@@ -72,23 +103,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(res.user);
   }, []);
 
+  /**
+   * Signs in user using phone OTP session token and pre-verified user object.
+   * @param {string} session_token - The verified session token string.
+   * @param {User} freshUser - The authenticated user profile.
+   */
   const signInWithPhoneToken = useCallback(async (session_token: string, freshUser: User) => {
     console.log("[Auth] signInWithPhoneToken — token saved");
     await setToken(session_token);
     setUser(freshUser);
   }, []);
 
+  /**
+   * Refreshes current user profile state from backend `/auth/me`.
+   */
   const refresh = useCallback(async () => {
     try {
       const me = await api.me();
       setUser(me);
-    } catch { /* ignore */ }
+    } catch { /* ignore transient errors during manual refresh */ }
   }, []);
 
+  /**
+   * Directly updates in-memory user object state.
+   * @param {User} u - Updated user object.
+   */
   const updateUser = useCallback((u: User) => setUser(u), []);
 
+  /**
+   * Signs out the current user session on server and clears local stored token.
+   */
   const signOut = useCallback(async () => {
-    try { await api.logout(); } catch { /* ignore */ }
+    try { await api.logout(); } catch { /* ignore server logout failure on network disconnect */ }
     await clearToken();
     setUser(null);
   }, []);
@@ -100,6 +146,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * Custom React hook to access authentication context state and actions.
+ * @returns {AuthState} Authentication state and methods.
+ * @throws {Error} If called outside of an AuthProvider.
+ */
 export function useAuth(): AuthState {
   const ctx = useContext(AuthCtx);
   if (!ctx) throw new Error("useAuth must be used inside AuthProvider");

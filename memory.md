@@ -324,3 +324,9 @@ All routes are prefixed `/api`. Auth requires `Authorization: Bearer <session_to
   - **This memory.md updated** with full current project state, all lesson scripts, rules compliance table, and expanded API reference.
 
 - **2026-08-13**: Repo analysis performed — updated Tech Stack to match `frontend/package.json` (Expo 54, React 19, React Native 0.81.5). No other memory changes required.
+
+- **2026-08-19**: Updated audio mapping for `BUSINESS_MEETING_SCRIPT` (`business-1`) in `ScriptRolePlayer.tsx` to reference all 10 audio files (`Manager_L1.mp3` through `Ravi_L3.mp3`) in `frontend/assets/audio/business_english/business_meeting`. Verified TypeScript & Python checks with 0 errors.
+
+- **2026-08-19**: Updated audio mapping for `PROFESSIONAL_EMAIL_SCRIPT` (`business-2`) in `ScriptRolePlayer.tsx` to reference all 12 audio files (`Anita_L1.mp3` through `Vikram_L6.mp3`) in `frontend/assets/audio/business_english/Email_writing`. Verified TypeScript & Python checks with 0 errors.
+
+

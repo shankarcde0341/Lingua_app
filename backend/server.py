@@ -425,112 +425,122 @@ PROFESSIONAL_EMAIL_SCRIPT = [
     {"line_id": "b2-l8", "speaker": "Vikram", "text": "Yes, add 'We sincerely apologize for any inconvenience caused.'"},
     {"line_id": "b2-l9", "speaker": "Anita", "text": "How should I close the email?"},
     {"line_id": "b2-l10", "speaker": "Vikram", "text": "End with 'Please do not hesitate to reach out if you have any questions. Best regards, Anita.'"},
+    {"line_id": "b2-l11", "speaker": "Anita", "text": "Thank you so much Vikram!"},
+    {"line_id": "b2-l12", "speaker": "Vikram", "text": "You're welcome! I'm sure the client will understand."},
 ]
 
+# Business English Lesson 3: Negotiating Deals script with audio URLs mapped to frontend assets
 NEGOTIATION_SCRIPT = [
-    {"line_id": "b3-l1", "speaker": "Buyer", "text": "Thank you for meeting with us today. We are interested in your software package."},
-    {"line_id": "b3-l2", "speaker": "Seller", "text": "We appreciate your interest. Our standard package is priced at 5 lakh rupees per year."},
-    {"line_id": "b3-l3", "speaker": "Buyer", "text": "That is a bit above our budget. Is there any room for negotiation?"},
-    {"line_id": "b3-l4", "speaker": "Seller", "text": "We can discuss flexible options. What budget range are you working with?"},
-    {"line_id": "b3-l5", "speaker": "Buyer", "text": "We were hoping to keep it around 3.5 lakh rupees."},
-    {"line_id": "b3-l6", "speaker": "Seller", "text": "For that price, we could offer the basic tier with fewer features. Would that work?"},
-    {"line_id": "b3-l7", "speaker": "Buyer", "text": "We really need the analytics module included. Can you meet us at 4 lakh?"},
-    {"line_id": "b3-l8", "speaker": "Seller", "text": "If you commit to a two-year contract, we can offer the full package at 4 lakh per year."},
-    {"line_id": "b3-l9", "speaker": "Buyer", "text": "That sounds like a fair deal. Let me discuss this with my team and get back to you."},
-    {"line_id": "b3-l10", "speaker": "Seller", "text": "Absolutely. Take your time. We look forward to a great partnership."},
+    {"line_id": "b3-l1", "speaker": "Buyer", "text": "Thank you for meeting with us today. We are interested in your software package.", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L1.mp3"},
+    {"line_id": "b3-l2", "speaker": "Seller", "text": "We appreciate your interest. Our standard package is priced at 5 lakh rupees per year.", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L1.mp3"},
+    {"line_id": "b3-l3", "speaker": "Buyer", "text": "That is a bit above our budget. Is there any room for negotiation?", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L2.mp3"},
+    {"line_id": "b3-l4", "speaker": "Seller", "text": "We can discuss flexible options. What budget range are you working with?", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L2.mp3"},
+    {"line_id": "b3-l5", "speaker": "Buyer", "text": "We were hoping to keep it around 3.5 lakh rupees.", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L3.mp3"},
+    {"line_id": "b3-l6", "speaker": "Seller", "text": "For that price, we could offer the basic tier with fewer features. Would that work?", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L3.mp3"},
+    {"line_id": "b3-l7", "speaker": "Buyer", "text": "We really need the analytics module included. Can you meet us at 4 lakh?", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L4.mp3"},
+    {"line_id": "b3-l8", "speaker": "Seller", "text": "If you commit to a two-year contract, we can offer the full package at 4 lakh per year.", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L4.mp3"},
+    {"line_id": "b3-l9", "speaker": "Buyer", "text": "That sounds like a fair deal. Let me discuss this with my team and get back to you.", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L5.mp3"},
+    {"line_id": "b3-l10", "speaker": "Seller", "text": "Absolutely. Take your time. We look forward to a great partnership.", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L5.mp3"},
 ]
 
+# Business English Lesson 4: Presenting with Confidence script with audio URLs mapped to frontend assets
 PRESENTATION_SCRIPT = [
-    {"line_id": "b4-l1", "speaker": "Presenter", "text": "Good afternoon, everyone. Today I will be presenting our marketing strategy for Q3."},
-    {"line_id": "b4-l2", "speaker": "Presenter", "text": "Let me start by sharing the key highlights from last quarter's performance."},
-    {"line_id": "b4-l3", "speaker": "Presenter", "text": "As you can see on this slide, our social media engagement increased by 40%."},
-    {"line_id": "b4-l4", "speaker": "Audience", "text": "That is quite impressive. What do you attribute the growth to?"},
-    {"line_id": "b4-l5", "speaker": "Presenter", "text": "We focused on video content and influencer collaborations, which really resonated with our audience."},
-    {"line_id": "b4-l6", "speaker": "Presenter", "text": "Moving forward, our strategy includes three main pillars. Let me walk you through each one."},
-    {"line_id": "b4-l7", "speaker": "Audience", "text": "Could you elaborate on the budget allocation for digital advertising?"},
-    {"line_id": "b4-l8", "speaker": "Presenter", "text": "Of course. We plan to allocate 60% of the budget to digital channels and 40% to offline events."},
-    {"line_id": "b4-l9", "speaker": "Audience", "text": "Thank you. This looks like a solid plan."},
-    {"line_id": "b4-l10", "speaker": "Presenter", "text": "Thank you for your feedback. I am happy to answer any more questions after the session."},
+    {"line_id": "b4-l1", "speaker": "Presenter", "text": "Good afternoon, everyone. Today I will be presenting our marketing strategy for Q3.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L1.mp3"},
+    {"line_id": "b4-l2", "speaker": "Presenter", "text": "Let me start by sharing the key highlights from last quarter's performance.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L2.mp3"},
+    {"line_id": "b4-l3", "speaker": "Presenter", "text": "As you can see on this slide, our social media engagement increased by 40%.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L3.mp3"},
+    {"line_id": "b4-l4", "speaker": "Audience", "text": "That is quite impressive. What do you attribute the growth to?", "audio_url": "/assets/audio/business_english/presentation/Audience_L1.mp3"},
+    {"line_id": "b4-l5", "speaker": "Presenter", "text": "We focused on video content and influencer collaborations, which really resonated with our audience.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L4.mp3"},
+    {"line_id": "b4-l6", "speaker": "Presenter", "text": "Moving forward, our strategy includes three main pillars. Let me walk you through each one.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L5.mp3"},
+    {"line_id": "b4-l7", "speaker": "Audience", "text": "Could you elaborate on the budget allocation for digital advertising?", "audio_url": "/assets/audio/business_english/presentation/Audience_L2.mp3"},
+    {"line_id": "b4-l8", "speaker": "Presenter", "text": "Of course. We plan to allocate 60% of the budget to digital channels and 40% to offline events.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L6.mp3"},
+    {"line_id": "b4-l9", "speaker": "Audience", "text": "Thank you. This looks like a solid plan.", "audio_url": "/assets/audio/business_english/presentation/Audience_L3.mp3"},
+    {"line_id": "b4-l10", "speaker": "Presenter", "text": "Thank you for your feedback. I am happy to answer any more questions after the session.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L7.mp3"},
 ]
 
+# Business English Lesson 5: Networking & Building Relationships script with audio URLs mapped to frontend assets
 NETWORKING_SCRIPT = [
-    {"line_id": "b5-l1", "speaker": "Meera", "text": "Hi! I don't think we have met before. I am Meera from the marketing team."},
-    {"line_id": "b5-l2", "speaker": "Arjun", "text": "Hello Meera! I am Arjun. I work in the product development department."},
-    {"line_id": "b5-l3", "speaker": "Meera", "text": "Nice to meet you, Arjun! How long have you been with the company?"},
-    {"line_id": "b5-l4", "speaker": "Arjun", "text": "About three years now. I joined right after the company expanded to Bangalore."},
-    {"line_id": "b5-l5", "speaker": "Meera", "text": "That's wonderful! I just joined two months ago. I am still getting to know everyone."},
-    {"line_id": "b5-l6", "speaker": "Arjun", "text": "Welcome aboard! If you ever need help navigating things, feel free to reach out."},
-    {"line_id": "b5-l7", "speaker": "Meera", "text": "That is very kind of you. Actually, I would love to learn more about how your team works."},
-    {"line_id": "b5-l8", "speaker": "Arjun", "text": "Sure, let's grab coffee sometime this week and I will tell you all about it."},
-    {"line_id": "b5-l9", "speaker": "Meera", "text": "That sounds great! How about Wednesday afternoon?"},
-    {"line_id": "b5-l10", "speaker": "Arjun", "text": "Wednesday works perfectly. See you then, Meera!"},
+    {"line_id": "b5-l1", "speaker": "Meera", "text": "Hi! I don't think we have met before. I am Meera from the marketing team.", "audio_url": "/assets/audio/business_english/networking/Meera_L1.mp3"},
+    {"line_id": "b5-l2", "speaker": "Arjun", "text": "Hello Meera! I am Arjun. I work in the product development department.", "audio_url": "/assets/audio/business_english/networking/Arjun_L1.mp3"},
+    {"line_id": "b5-l3", "speaker": "Meera", "text": "Nice to meet you, Arjun! How long have you been with the company?", "audio_url": "/assets/audio/business_english/networking/Meera_L2.mp3"},
+    {"line_id": "b5-l4", "speaker": "Arjun", "text": "About three years now. I joined right after the company expanded to Bangalore.", "audio_url": "/assets/audio/business_english/networking/Arjun_L2.mp3"},
+    {"line_id": "b5-l5", "speaker": "Meera", "text": "That's wonderful! I just joined two months ago. I am still getting to know everyone.", "audio_url": "/assets/audio/business_english/networking/Meera_L3.mp3"},
+    {"line_id": "b5-l6", "speaker": "Arjun", "text": "Welcome aboard! If you ever need help navigating things, feel free to reach out.", "audio_url": "/assets/audio/business_english/networking/Arjun_L3.mp3"},
+    {"line_id": "b5-l7", "speaker": "Meera", "text": "That is very kind of you. Actually, I would love to learn more about how your team works.", "audio_url": "/assets/audio/business_english/networking/Meera_L4.mp3"},
+    {"line_id": "b5-l8", "speaker": "Arjun", "text": "Sure, let's grab coffee sometime this week and I will tell you all about it.", "audio_url": "/assets/audio/business_english/networking/Arjun_L4.mp3"},
+    {"line_id": "b5-l9", "speaker": "Meera", "text": "That sounds great! How about Wednesday afternoon?", "audio_url": "/assets/audio/business_english/networking/Meera_L5.mp3"},
+    {"line_id": "b5-l10", "speaker": "Arjun", "text": "Wednesday works perfectly. See you then, Meera!", "audio_url": "/assets/audio/business_english/networking/Arjun_L5.mp3"},
 ]
 
+# Business English Lesson 6: Handling Difficult Conversations script with audio URLs mapped to frontend assets
 DIFFICULT_CONVERSATION_SCRIPT = [
-    {"line_id": "b6-l1", "speaker": "Manager", "text": "Rahul, do you have a moment? I would like to discuss your recent project deliverables."},
-    {"line_id": "b6-l2", "speaker": "Rahul", "text": "Of course. Is there something specific you would like to talk about?"},
-    {"line_id": "b6-l3", "speaker": "Manager", "text": "I noticed the last two reports were submitted after the deadline. Can you help me understand what happened?"},
-    {"line_id": "b6-l4", "speaker": "Rahul", "text": "I apologize for that. I have been managing multiple tasks and it has been difficult to prioritize."},
-    {"line_id": "b6-l5", "speaker": "Manager", "text": "I understand. Workload management can be challenging. Have you considered delegating some tasks?"},
-    {"line_id": "b6-l6", "speaker": "Rahul", "text": "I have thought about it, but I was not sure who to assign them to."},
-    {"line_id": "b6-l7", "speaker": "Manager", "text": "Let's work together on a plan. I can help you identify team members who can support you."},
-    {"line_id": "b6-l8", "speaker": "Rahul", "text": "That would be really helpful. I want to make sure I meet all deadlines going forward."},
-    {"line_id": "b6-l9", "speaker": "Manager", "text": "I appreciate your honesty, Rahul. Let's schedule a follow-up meeting next week to review progress."},
-    {"line_id": "b6-l10", "speaker": "Rahul", "text": "Thank you for understanding. I will prepare a revised timeline by then."},
+    {"line_id": "b6-l1", "speaker": "Manager", "text": "Rahul, do you have a moment? I would like to discuss your recent project deliverables.", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L1.mp3"},
+    {"line_id": "b6-l2", "speaker": "Rahul", "text": "Of course. Is there something specific you would like to talk about?", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L1.mp3"},
+    {"line_id": "b6-l3", "speaker": "Manager", "text": "I noticed the last two reports were submitted after the deadline. Can you help me understand what happened?", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L2.mp3"},
+    {"line_id": "b6-l4", "speaker": "Rahul", "text": "I apologize for that. I have been managing multiple tasks and it has been difficult to prioritize.", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L2.mp3"},
+    {"line_id": "b6-l5", "speaker": "Manager", "text": "I understand. Workload management can be challenging. Have you considered delegating some tasks?", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L3.mp3"},
+    {"line_id": "b6-l6", "speaker": "Rahul", "text": "I have thought about it, but I was not sure who to assign them to.", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L3.mp3"},
+    {"line_id": "b6-l7", "speaker": "Manager", "text": "Let's work together on a plan. I can help you identify team members who can support you.", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L4.mp3"},
+    {"line_id": "b6-l8", "speaker": "Rahul", "text": "That would be really helpful. I want to make sure I meet all deadlines going forward.", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L4.mp3"},
+    {"line_id": "b6-l9", "speaker": "Manager", "text": "I appreciate your honesty, Rahul. Let's schedule a follow-up meeting next week to review progress.", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L5.mp3"},
+    {"line_id": "b6-l10", "speaker": "Rahul", "text": "Thank you for understanding. I will prepare a revised timeline by then.", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L5.mp3"},
 ]
 
+# Business English Lesson 7: Corporate Culture & Etiquette script with audio URLs mapped to frontend assets
 CORPORATE_ETIQUETTE_SCRIPT = [
-    {"line_id": "b7-l1", "speaker": "Nisha", "text": "Karan, I have a question. What is the dress code for the client visit tomorrow?"},
-    {"line_id": "b7-l2", "speaker": "Karan", "text": "It is business formal. A suit or formal shirt with trousers would be appropriate."},
-    {"line_id": "b7-l3", "speaker": "Nisha", "text": "Got it. Should I prepare anything specific for the meeting?"},
-    {"line_id": "b7-l4", "speaker": "Karan", "text": "Yes, bring printed copies of the proposal and your business cards."},
-    {"line_id": "b7-l5", "speaker": "Nisha", "text": "What about greeting the clients? Is there a specific protocol?"},
-    {"line_id": "b7-l6", "speaker": "Karan", "text": "A firm handshake and a warm smile work best. Address them by their last name unless they say otherwise."},
-    {"line_id": "b7-l7", "speaker": "Nisha", "text": "Should I start with small talk or get straight to business?"},
-    {"line_id": "b7-l8", "speaker": "Karan", "text": "Start with a few minutes of small talk. Ask about their journey or comment on something positive."},
-    {"line_id": "b7-l9", "speaker": "Nisha", "text": "That makes sense. Any other tips?"},
-    {"line_id": "b7-l10", "speaker": "Karan", "text": "Always let the senior person speak first, and avoid checking your phone during the meeting."},
+    {"line_id": "b7-l1", "speaker": "Nisha", "text": "Karan, I have a question. What is the dress code for the client visit tomorrow?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L1.mp3"},
+    {"line_id": "b7-l2", "speaker": "Karan", "text": "It is business formal. A suit or formal shirt with trousers would be appropriate.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L1.mp3"},
+    {"line_id": "b7-l3", "speaker": "Nisha", "text": "Got it. Should I prepare anything specific for the meeting?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L2.mp3"},
+    {"line_id": "b7-l4", "speaker": "Karan", "text": "Yes, bring printed copies of the proposal and your business cards.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L2.mp3"},
+    {"line_id": "b7-l5", "speaker": "Nisha", "text": "What about greeting the clients? Is there a specific protocol?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L3.mp3"},
+    {"line_id": "b7-l6", "speaker": "Karan", "text": "A firm handshake and a warm smile work best. Address them by their last name unless they say otherwise.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L3.mp3"},
+    {"line_id": "b7-l7", "speaker": "Nisha", "text": "Should I start with small talk or get straight to business?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L4.mp3"},
+    {"line_id": "b7-l8", "speaker": "Karan", "text": "Start with a few minutes of small talk. Ask about their journey or comment on something positive.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L4.mp3"},
+    {"line_id": "b7-l9", "speaker": "Nisha", "text": "That makes sense. Any other tips?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L5.mp3"},
+    {"line_id": "b7-l10", "speaker": "Karan", "text": "Always let the senior person speak first, and avoid checking your phone during the meeting.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L5.mp3"},
 ]
 
+# Business English Lesson 8: Remote Work Communication script with audio URLs mapped to frontend assets
 REMOTE_WORK_SCRIPT = [
-    {"line_id": "b8-l1", "speaker": "Team Lead", "text": "Good morning, team! Can everyone hear me clearly on the video call?"},
-    {"line_id": "b8-l2", "speaker": "Divya", "text": "Yes, loud and clear! Good morning."},
-    {"line_id": "b8-l3", "speaker": "Sameer", "text": "I can hear you, but my camera seems to be having issues. Let me fix it."},
-    {"line_id": "b8-l4", "speaker": "Team Lead", "text": "No problem, Sameer. Let's start with a quick status update from everyone."},
-    {"line_id": "b8-l5", "speaker": "Divya", "text": "I completed the design mockups yesterday. I will share the link in the chat."},
-    {"line_id": "b8-l6", "speaker": "Team Lead", "text": "Great work, Divya! Sameer, how is the backend development progressing?"},
-    {"line_id": "b8-l7", "speaker": "Sameer", "text": "The API is almost done. I need one more day to finish testing."},
-    {"line_id": "b8-l8", "speaker": "Team Lead", "text": "Perfect. Let's aim to integrate everything by Thursday. Any blockers from anyone?"},
-    {"line_id": "b8-l9", "speaker": "Divya", "text": "I need access to the staging server. Could you grant me permissions?"},
-    {"line_id": "b8-l10", "speaker": "Team Lead", "text": "I will set that up right after this call. Anything else? Great, let's wrap up then."},
+    {"line_id": "b8-l1", "speaker": "Team Lead", "text": "Good morning, team! Can everyone hear me clearly on the video call?", "audio_url": "/assets/audio/business_english/Remote_work/TL_L1.mp3"},
+    {"line_id": "b8-l2", "speaker": "Divya", "text": "Yes, loud and clear! Good morning.", "audio_url": "/assets/audio/business_english/Remote_work/Divya_L1.mp3"},
+    {"line_id": "b8-l3", "speaker": "Sameer", "text": "I can hear you, but my camera seems to be having issues. Let me fix it.", "audio_url": "/assets/audio/business_english/Remote_work/Sameer_L1.mp3"},
+    {"line_id": "b8-l4", "speaker": "Team Lead", "text": "No problem, Sameer. Let's start with a quick status update from everyone.", "audio_url": "/assets/audio/business_english/Remote_work/TL_L2.mp3"},
+    {"line_id": "b8-l5", "speaker": "Divya", "text": "I completed the design mockups yesterday. I will share the link in the chat.", "audio_url": "/assets/audio/business_english/Remote_work/Divya_L2.mp3"},
+    {"line_id": "b8-l6", "speaker": "Team Lead", "text": "Great work, Divya! Sameer, how is the backend development progressing?", "audio_url": "/assets/audio/business_english/Remote_work/TL_L3.mp3"},
+    {"line_id": "b8-l7", "speaker": "Sameer", "text": "The API is almost done. I need one more day to finish testing.", "audio_url": "/assets/audio/business_english/Remote_work/Sameer_L2.mp3"},
+    {"line_id": "b8-l8", "speaker": "Team Lead", "text": "Perfect. Let's aim to integrate everything by Thursday. Any blockers from anyone?", "audio_url": "/assets/audio/business_english/Remote_work/TL_L4.mp3"},
+    {"line_id": "b8-l9", "speaker": "Divya", "text": "I need access to the staging server. Could you grant me permissions?", "audio_url": "/assets/audio/business_english/Remote_work/Divya_L3.mp3"},
+    {"line_id": "b8-l10", "speaker": "Team Lead", "text": "I will set that up right after this call. Anything else? Great, let's wrap up then.", "audio_url": "/assets/audio/business_english/Remote_work/TL_L5.mp3"},
 ]
 
+# Business English Lesson 9: Sales & Persuasion Techniques script with audio URLs mapped to frontend assets
 SALES_SCRIPT = [
-    {"line_id": "b9-l1", "speaker": "Sales Rep", "text": "Good afternoon! Thank you for taking the time to speak with me today."},
-    {"line_id": "b9-l2", "speaker": "Client", "text": "Of course. I am curious to hear about your company's services."},
-    {"line_id": "b9-l3", "speaker": "Sales Rep", "text": "Before I begin, may I ask what challenges your team is currently facing?"},
-    {"line_id": "b9-l4", "speaker": "Client", "text": "Our biggest challenge is managing customer data efficiently. We need a better CRM solution."},
-    {"line_id": "b9-l5", "speaker": "Sales Rep", "text": "That is exactly what we specialize in. Our CRM platform automates data management and boosts productivity."},
-    {"line_id": "b9-l6", "speaker": "Client", "text": "How is your solution different from others in the market?"},
-    {"line_id": "b9-l7", "speaker": "Sales Rep", "text": "We offer AI-powered analytics and 24/7 customer support, which most competitors do not include."},
-    {"line_id": "b9-l8", "speaker": "Client", "text": "That sounds promising. Do you offer a free trial period?"},
-    {"line_id": "b9-l9", "speaker": "Sales Rep", "text": "Yes, we offer a 30-day free trial with full access to all features. No commitment required."},
-    {"line_id": "b9-l10", "speaker": "Client", "text": "Excellent! Let's set up a demo for my team next week."},
+    {"line_id": "b9-l1", "speaker": "Sales Rep", "text": "Good afternoon! Thank you for taking the time to speak with me today.", "audio_url": "/assets/audio/business_english/Sales/Salesman_L1.mp3"},
+    {"line_id": "b9-l2", "speaker": "Client", "text": "Of course. I am curious to hear about your company's services.", "audio_url": "/assets/audio/business_english/Sales/Client_L1.mp3"},
+    {"line_id": "b9-l3", "speaker": "Sales Rep", "text": "Before I begin, may I ask what challenges your team is currently facing?", "audio_url": "/assets/audio/business_english/Sales/Salesman_L2.mp3"},
+    {"line_id": "b9-l4", "speaker": "Client", "text": "Our biggest challenge is managing customer data efficiently. We need a better CRM solution.", "audio_url": "/assets/audio/business_english/Sales/Client_L2.mp3"},
+    {"line_id": "b9-l5", "speaker": "Sales Rep", "text": "That is exactly what we specialize in. Our CRM platform automates data management and boosts productivity.", "audio_url": "/assets/audio/business_english/Sales/Salesman_L3.mp3"},
+    {"line_id": "b9-l6", "speaker": "Client", "text": "How is your solution different from others in the market?", "audio_url": "/assets/audio/business_english/Sales/Client_L3.mp3"},
+    {"line_id": "b9-l7", "speaker": "Sales Rep", "text": "We offer AI-powered analytics and 24/7 customer support, which most competitors do not include.", "audio_url": "/assets/audio/business_english/Sales/Salesman_L4.mp3"},
+    {"line_id": "b9-l8", "speaker": "Client", "text": "That sounds promising. Do you offer a free trial period?", "audio_url": "/assets/audio/business_english/Sales/Client_L4.mp3"},
+    {"line_id": "b9-l9", "speaker": "Sales Rep", "text": "Yes, we offer a 30-day free trial with full access to all features. No commitment required.", "audio_url": "/assets/audio/business_english/Sales/Salesman_L5.mp3"},
+    {"line_id": "b9-l10", "speaker": "Client", "text": "Excellent! Let's set up a demo for my team next week.", "audio_url": "/assets/audio/business_english/Sales/Client_L5.mp3"},
 ]
 
+# Business English Lesson 10: Leadership & Team Motivation script with audio URLs mapped to frontend assets
 LEADERSHIP_SCRIPT = [
-    {"line_id": "b10-l1", "speaker": "Leader", "text": "Team, I want to take a moment to acknowledge the hard work everyone has put in this month."},
-    {"line_id": "b10-l2", "speaker": "Pooja", "text": "Thank you! It has been a challenging month, but very rewarding."},
-    {"line_id": "b10-l3", "speaker": "Leader", "text": "I know the deadline pressure was tough. How is everyone feeling about the workload?"},
-    {"line_id": "b10-l4", "speaker": "Suresh", "text": "Honestly, it was intense, but having clear goals really helped us stay focused."},
-    {"line_id": "b10-l5", "speaker": "Leader", "text": "That is great to hear. I believe in setting clear expectations so everyone knows their role."},
-    {"line_id": "b10-l6", "speaker": "Pooja", "text": "I also appreciate that you were available whenever we needed guidance."},
-    {"line_id": "b10-l7", "speaker": "Leader", "text": "Open communication is key. My door is always open for ideas, feedback, or concerns."},
-    {"line_id": "b10-l8", "speaker": "Suresh", "text": "What are our priorities for the next month?"},
-    {"line_id": "b10-l9", "speaker": "Leader", "text": "We will focus on improving customer satisfaction scores and launching the new feature update."},
-    {"line_id": "b10-l10", "speaker": "Pooja", "text": "Sounds exciting! We are ready for the challenge."},
+    {"line_id": "b10-l1", "speaker": "Leader", "text": "Team, I want to take a moment to acknowledge the hard work everyone has put in this month.", "audio_url": "/assets/audio/business_english/Leadership/Leader_L1.mp3"},
+    {"line_id": "b10-l2", "speaker": "Pooja", "text": "Thank you! It has been a challenging month, but very rewarding.", "audio_url": "/assets/audio/business_english/Leadership/Pooja_L1.mp3"},
+    {"line_id": "b10-l3", "speaker": "Leader", "text": "I know the deadline pressure was tough. How is everyone feeling about the workload?", "audio_url": "/assets/audio/business_english/Leadership/Leader_L2.mp3"},
+    {"line_id": "b10-l4", "speaker": "Suresh", "text": "Honestly, it was intense, but having clear goals really helped us stay focused.", "audio_url": "/assets/audio/business_english/Leadership/Suresh_L1.mp3"},
+    {"line_id": "b10-l5", "speaker": "Leader", "text": "That is great to hear. I believe in setting clear expectations so everyone knows their role.", "audio_url": "/assets/audio/business_english/Leadership/Leader_L3.mp3"},
+    {"line_id": "b10-l6", "speaker": "Pooja", "text": "I also appreciate that you were available whenever we needed guidance.", "audio_url": "/assets/audio/business_english/Leadership/Pooja_L2.mp3"},
+    {"line_id": "b10-l7", "speaker": "Leader", "text": "Open communication is key. My door is always open for ideas, feedback, or concerns.", "audio_url": "/assets/audio/business_english/Leadership/Leader_L4.mp3"},
+    {"line_id": "b10-l8", "speaker": "Suresh", "text": "What are our priorities for the next month?", "audio_url": "/assets/audio/business_english/Leadership/Suresh_L2.mp3"},
+    {"line_id": "b10-l9", "speaker": "Leader", "text": "We will focus on improving customer satisfaction scores and launching the new feature update.", "audio_url": "/assets/audio/business_english/Leadership/Leader_L5.mp3"},
+    {"line_id": "b10-l10", "speaker": "Pooja", "text": "Sounds exciting! We are ready for the challenge.", "audio_url": "/assets/audio/business_english/Leadership/Pooja_L3.mp3"},
 ]
-
+## Start of Interview Lessons Scripts
 INTERVIEW_INTRO_SCRIPT = [
     {"line_id": "i1-l1", "speaker": "Interviewer", "text": "Good morning! Please have a seat. Can you start by telling me a little about yourself?"},
     {"line_id": "i1-l2", "speaker": "Candidate", "text": "Good morning! Of course. My name is Aarav Sharma. I am a software engineer with five years of experience."},
@@ -660,6 +670,8 @@ INTERVIEW_CLOSING_SCRIPT = [
     {"line_id": "i10-l9", "speaker": "Interviewer", "text": "No, we have everything. It was a pleasure meeting you today, Priya."},
     {"line_id": "i10-l10", "speaker": "Candidate", "text": "The pleasure was entirely mine. Thank you for the wonderful experience. Have a great day!"},
 ]
+
+## End of Interview Lessons Scripts
 
 LESSONS = [
     _lesson("daily", 1, "Introducing Yourself", "Learn to greet and share basic info.", "Beginner", 8, script=DAILY_1_SCRIPT),
