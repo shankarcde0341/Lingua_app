@@ -142,7 +142,17 @@ class ZegoTokenRequest(BaseModel):
     room_id: str
 
 # ---------- Auth helpers ----------
+
 async def get_current_user(authorization: Optional[str] = Header(None)) -> Dict[str, Any]:
+    """
+    Authentication Helper Dependency: get_current_user
+    
+    This function reads the 'Authorization: Bearer <token>' header from incoming HTTP requests,
+    looks up the session token in the MongoDB `user_sessions` collection, checks if it is expired,
+    and returns the logged-in user's database document.
+    
+    Raises HTTP 401 if the token is missing, invalid, or expired.
+    """
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Missing bearer token")
     token = authorization.split(" ", 1)[1].strip()
@@ -160,6 +170,12 @@ async def get_current_user(authorization: Optional[str] = Header(None)) -> Dict[
     return user
 
 def _user_to_out(u: Dict[str, Any]) -> UserOut:
+    """
+    Helper Function: _user_to_out
+    
+    Converts a raw user dictionary loaded from MongoDB into a formatted Pydantic `UserOut` model.
+    Fills in default fallback values for missing fields to avoid frontend null errors.
+    """
     return UserOut(
         user_id=u["user_id"],
         email=u["email"],
@@ -187,6 +203,12 @@ def _user_to_out(u: Dict[str, Any]) -> UserOut:
     )
 
 def _gen_referral_code(name: str) -> str:
+    """
+    Helper Function: _gen_referral_code
+    
+    Generates a 8-character referral code string formatted like 'NAME-ABCD',
+    using the user's name prefix and random letters/digits.
+    """
     import random
     import string
     prefix = "".join(c for c in (name or "USER").upper() if c.isalpha())[:4] or "USER"
@@ -194,6 +216,12 @@ def _gen_referral_code(name: str) -> str:
     return f"{prefix}-{suffix}"
 
 async def _unique_referral_code(name: str) -> str:
+    """
+    Helper Function: _unique_referral_code
+    
+    Repeatedly generates a referral code and checks MongoDB `users` to ensure it is unique.
+    Returns the unique referral code string.
+    """
     for _ in range(6):
         code = _gen_referral_code(name)
         exists = await db.users.find_one({"referral_code": code}, {"_id": 1})
@@ -210,6 +238,12 @@ LESSON_CATEGORIES = [
 ]
 
 def _lesson(cat, i, title, desc, level, minutes, script=None):
+    """
+    Helper Constructor Function: _lesson
+    
+    Builds a structured lesson dictionary item including category ID, title, level,
+    estimated completion duration, calculated XP reward, and attached dialogue script.
+    """
     return {
         "id": f"{cat}-{i}",
         "category_id": cat,
@@ -431,114 +465,107 @@ PROFESSIONAL_EMAIL_SCRIPT = [
 
 # Business English Lesson 3: Negotiating Deals script with audio URLs mapped to frontend assets
 NEGOTIATION_SCRIPT = [
-    {"line_id": "b3-l1", "speaker": "Buyer", "text": "Thank you for meeting with us today. We are interested in your software package.", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L1.mp3"},
-    {"line_id": "b3-l2", "speaker": "Seller", "text": "We appreciate your interest. Our standard package is priced at 5 lakh rupees per year.", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L1.mp3"},
-    {"line_id": "b3-l3", "speaker": "Buyer", "text": "That is a bit above our budget. Is there any room for negotiation?", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L2.mp3"},
-    {"line_id": "b3-l4", "speaker": "Seller", "text": "We can discuss flexible options. What budget range are you working with?", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L2.mp3"},
-    {"line_id": "b3-l5", "speaker": "Buyer", "text": "We were hoping to keep it around 3.5 lakh rupees.", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L3.mp3"},
-    {"line_id": "b3-l6", "speaker": "Seller", "text": "For that price, we could offer the basic tier with fewer features. Would that work?", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L3.mp3"},
-    {"line_id": "b3-l7", "speaker": "Buyer", "text": "We really need the analytics module included. Can you meet us at 4 lakh?", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L4.mp3"},
-    {"line_id": "b3-l8", "speaker": "Seller", "text": "If you commit to a two-year contract, we can offer the full package at 4 lakh per year.", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L4.mp3"},
-    {"line_id": "b3-l9", "speaker": "Buyer", "text": "That sounds like a fair deal. Let me discuss this with my team and get back to you.", "audio_url": "/assets/audio/business_english/negotiation_deals/Buyer_L5.mp3"},
-    {"line_id": "b3-l10", "speaker": "Seller", "text": "Absolutely. Take your time. We look forward to a great partnership.", "audio_url": "/assets/audio/business_english/negotiation_deals/Seller_L5.mp3"},
+    {"line_id": "b3-l1", "speaker": "Buyer", "text": "Thank you for meeting with us today. We are interested in your software package."},
+    {"line_id": "b3-l2", "speaker": "Seller", "text": "We appreciate your interest. Our standard package is priced at 5 lakh rupees per year."},
+    {"line_id": "b3-l3", "speaker": "Buyer", "text": "That is a bit above our budget. Is there any room for negotiation?"},
+    {"line_id": "b3-l4", "speaker": "Seller", "text": "We can discuss flexible options. What budget range are you working with?"},
+    {"line_id": "b3-l5", "speaker": "Buyer", "text": "We were hoping to keep it around 3.5 lakh rupees."},
+    {"line_id": "b3-l6", "speaker": "Seller", "text": "For that price, we could offer the basic tier with fewer features. Would that work?"},
+    {"line_id": "b3-l7", "speaker": "Buyer", "text": "We really need the analytics module included. Can you meet us at 4 lakh?"},
+    {"line_id": "b3-l8", "speaker": "Seller", "text": "If you commit to a two-year contract, we can offer the full package at 4 lakh per year."},
+    {"line_id": "b3-l9", "speaker": "Buyer", "text": "That sounds like a fair deal. Let me discuss this with my team and get back to you."},
+    {"line_id": "b3-l10", "speaker": "Seller", "text": "Absolutely. Take your time. We look forward to a great partnership."},
 ]
 
-# Business English Lesson 4: Presenting with Confidence script with audio URLs mapped to frontend assets
 PRESENTATION_SCRIPT = [
-    {"line_id": "b4-l1", "speaker": "Presenter", "text": "Good afternoon, everyone. Today I will be presenting our marketing strategy for Q3.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L1.mp3"},
-    {"line_id": "b4-l2", "speaker": "Presenter", "text": "Let me start by sharing the key highlights from last quarter's performance.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L2.mp3"},
-    {"line_id": "b4-l3", "speaker": "Presenter", "text": "As you can see on this slide, our social media engagement increased by 40%.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L3.mp3"},
-    {"line_id": "b4-l4", "speaker": "Audience", "text": "That is quite impressive. What do you attribute the growth to?", "audio_url": "/assets/audio/business_english/presentation/Audience_L1.mp3"},
-    {"line_id": "b4-l5", "speaker": "Presenter", "text": "We focused on video content and influencer collaborations, which really resonated with our audience.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L4.mp3"},
-    {"line_id": "b4-l6", "speaker": "Presenter", "text": "Moving forward, our strategy includes three main pillars. Let me walk you through each one.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L5.mp3"},
-    {"line_id": "b4-l7", "speaker": "Audience", "text": "Could you elaborate on the budget allocation for digital advertising?", "audio_url": "/assets/audio/business_english/presentation/Audience_L2.mp3"},
-    {"line_id": "b4-l8", "speaker": "Presenter", "text": "Of course. We plan to allocate 60% of the budget to digital channels and 40% to offline events.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L6.mp3"},
-    {"line_id": "b4-l9", "speaker": "Audience", "text": "Thank you. This looks like a solid plan.", "audio_url": "/assets/audio/business_english/presentation/Audience_L3.mp3"},
-    {"line_id": "b4-l10", "speaker": "Presenter", "text": "Thank you for your feedback. I am happy to answer any more questions after the session.", "audio_url": "/assets/audio/business_english/presentation/Presentor_L7.mp3"},
+    {"line_id": "b4-l1", "speaker": "Presenter", "text": "Good afternoon, everyone. Today I will be presenting our marketing strategy for Q3."},
+    {"line_id": "b4-l2", "speaker": "Presenter", "text": "Let me start by sharing the key highlights from last quarter's performance."},
+    {"line_id": "b4-l3", "speaker": "Presenter", "text": "As you can see on this slide, our social media engagement increased by 40%."},
+    {"line_id": "b4-l4", "speaker": "Audience", "text": "That is quite impressive. What do you attribute the growth to?"},
+    {"line_id": "b4-l5", "speaker": "Presenter", "text": "We focused on video content and influencer collaborations, which really resonated with our audience."},
+    {"line_id": "b4-l6", "speaker": "Presenter", "text": "Moving forward, our strategy includes three main pillars. Let me walk you through each one."},
+    {"line_id": "b4-l7", "speaker": "Audience", "text": "Could you elaborate on the budget allocation for digital advertising?"},
+    {"line_id": "b4-l8", "speaker": "Presenter", "text": "Of course. We plan to allocate 60% of the budget to digital channels and 40% to offline events."},
+    {"line_id": "b4-l9", "speaker": "Audience", "text": "Thank you. This looks like a solid plan."},
+    {"line_id": "b4-l10", "speaker": "Presenter", "text": "Thank you for your feedback. I am happy to answer any more questions after the session."},
 ]
 
-# Business English Lesson 5: Networking & Building Relationships script with audio URLs mapped to frontend assets
 NETWORKING_SCRIPT = [
-    {"line_id": "b5-l1", "speaker": "Meera", "text": "Hi! I don't think we have met before. I am Meera from the marketing team.", "audio_url": "/assets/audio/business_english/networking/Meera_L1.mp3"},
-    {"line_id": "b5-l2", "speaker": "Arjun", "text": "Hello Meera! I am Arjun. I work in the product development department.", "audio_url": "/assets/audio/business_english/networking/Arjun_L1.mp3"},
-    {"line_id": "b5-l3", "speaker": "Meera", "text": "Nice to meet you, Arjun! How long have you been with the company?", "audio_url": "/assets/audio/business_english/networking/Meera_L2.mp3"},
-    {"line_id": "b5-l4", "speaker": "Arjun", "text": "About three years now. I joined right after the company expanded to Bangalore.", "audio_url": "/assets/audio/business_english/networking/Arjun_L2.mp3"},
-    {"line_id": "b5-l5", "speaker": "Meera", "text": "That's wonderful! I just joined two months ago. I am still getting to know everyone.", "audio_url": "/assets/audio/business_english/networking/Meera_L3.mp3"},
-    {"line_id": "b5-l6", "speaker": "Arjun", "text": "Welcome aboard! If you ever need help navigating things, feel free to reach out.", "audio_url": "/assets/audio/business_english/networking/Arjun_L3.mp3"},
-    {"line_id": "b5-l7", "speaker": "Meera", "text": "That is very kind of you. Actually, I would love to learn more about how your team works.", "audio_url": "/assets/audio/business_english/networking/Meera_L4.mp3"},
-    {"line_id": "b5-l8", "speaker": "Arjun", "text": "Sure, let's grab coffee sometime this week and I will tell you all about it.", "audio_url": "/assets/audio/business_english/networking/Arjun_L4.mp3"},
-    {"line_id": "b5-l9", "speaker": "Meera", "text": "That sounds great! How about Wednesday afternoon?", "audio_url": "/assets/audio/business_english/networking/Meera_L5.mp3"},
-    {"line_id": "b5-l10", "speaker": "Arjun", "text": "Wednesday works perfectly. See you then, Meera!", "audio_url": "/assets/audio/business_english/networking/Arjun_L5.mp3"},
+    {"line_id": "b5-l1", "speaker": "Meera", "text": "Hi! I don't think we have met before. I am Meera from the marketing team."},
+    {"line_id": "b5-l2", "speaker": "Arjun", "text": "Hello Meera! I am Arjun. I work in the product development department."},
+    {"line_id": "b5-l3", "speaker": "Meera", "text": "Nice to meet you, Arjun! How long have you been with the company?"},
+    {"line_id": "b5-l4", "speaker": "Arjun", "text": "About three years now. I joined right after the company expanded to Bangalore."},
+    {"line_id": "b5-l5", "speaker": "Meera", "text": "That's wonderful! I just joined two months ago. I am still getting to know everyone."},
+    {"line_id": "b5-l6", "speaker": "Arjun", "text": "Welcome aboard! If you ever need help navigating things, feel free to reach out."},
+    {"line_id": "b5-l7", "speaker": "Meera", "text": "That is very kind of you. Actually, I would love to learn more about how your team works."},
+    {"line_id": "b5-l8", "speaker": "Arjun", "text": "Sure, let's grab coffee sometime this week and I will tell you all about it."},
+    {"line_id": "b5-l9", "speaker": "Meera", "text": "That sounds great! How about Wednesday afternoon?"},
+    {"line_id": "b5-l10", "speaker": "Arjun", "text": "Wednesday works perfectly. See you then, Meera!"},
 ]
 
-# Business English Lesson 6: Handling Difficult Conversations script with audio URLs mapped to frontend assets
 DIFFICULT_CONVERSATION_SCRIPT = [
-    {"line_id": "b6-l1", "speaker": "Manager", "text": "Rahul, do you have a moment? I would like to discuss your recent project deliverables.", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L1.mp3"},
-    {"line_id": "b6-l2", "speaker": "Rahul", "text": "Of course. Is there something specific you would like to talk about?", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L1.mp3"},
-    {"line_id": "b6-l3", "speaker": "Manager", "text": "I noticed the last two reports were submitted after the deadline. Can you help me understand what happened?", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L2.mp3"},
-    {"line_id": "b6-l4", "speaker": "Rahul", "text": "I apologize for that. I have been managing multiple tasks and it has been difficult to prioritize.", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L2.mp3"},
-    {"line_id": "b6-l5", "speaker": "Manager", "text": "I understand. Workload management can be challenging. Have you considered delegating some tasks?", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L3.mp3"},
-    {"line_id": "b6-l6", "speaker": "Rahul", "text": "I have thought about it, but I was not sure who to assign them to.", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L3.mp3"},
-    {"line_id": "b6-l7", "speaker": "Manager", "text": "Let's work together on a plan. I can help you identify team members who can support you.", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L4.mp3"},
-    {"line_id": "b6-l8", "speaker": "Rahul", "text": "That would be really helpful. I want to make sure I meet all deadlines going forward.", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L4.mp3"},
-    {"line_id": "b6-l9", "speaker": "Manager", "text": "I appreciate your honesty, Rahul. Let's schedule a follow-up meeting next week to review progress.", "audio_url": "/assets/audio/business_english/conflict_conversation/Manager_L5.mp3"},
-    {"line_id": "b6-l10", "speaker": "Rahul", "text": "Thank you for understanding. I will prepare a revised timeline by then.", "audio_url": "/assets/audio/business_english/conflict_conversation/Rahul_L5.mp3"},
+    {"line_id": "b6-l1", "speaker": "Manager", "text": "Rahul, do you have a moment? I would like to discuss your recent project deliverables."},
+    {"line_id": "b6-l2", "speaker": "Rahul", "text": "Of course. Is there something specific you would like to talk about?"},
+    {"line_id": "b6-l3", "speaker": "Manager", "text": "I noticed the last two reports were submitted after the deadline. Can you help me understand what happened?"},
+    {"line_id": "b6-l4", "speaker": "Rahul", "text": "I apologize for that. I have been managing multiple tasks and it has been difficult to prioritize."},
+    {"line_id": "b6-l5", "speaker": "Manager", "text": "I understand. Workload management can be challenging. Have you considered delegating some tasks?"},
+    {"line_id": "b6-l6", "speaker": "Rahul", "text": "I have thought about it, but I was not sure who to assign them to."},
+    {"line_id": "b6-l7", "speaker": "Manager", "text": "Let's work together on a plan. I can help you identify team members who can support you."},
+    {"line_id": "b6-l8", "speaker": "Rahul", "text": "That would be really helpful. I want to make sure I meet all deadlines going forward."},
+    {"line_id": "b6-l9", "speaker": "Manager", "text": "I appreciate your honesty, Rahul. Let's schedule a follow-up meeting next week to review progress."},
+    {"line_id": "b6-l10", "speaker": "Rahul", "text": "Thank you for understanding. I will prepare a revised timeline by then."},
 ]
 
-# Business English Lesson 7: Corporate Culture & Etiquette script with audio URLs mapped to frontend assets
 CORPORATE_ETIQUETTE_SCRIPT = [
-    {"line_id": "b7-l1", "speaker": "Nisha", "text": "Karan, I have a question. What is the dress code for the client visit tomorrow?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L1.mp3"},
-    {"line_id": "b7-l2", "speaker": "Karan", "text": "It is business formal. A suit or formal shirt with trousers would be appropriate.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L1.mp3"},
-    {"line_id": "b7-l3", "speaker": "Nisha", "text": "Got it. Should I prepare anything specific for the meeting?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L2.mp3"},
-    {"line_id": "b7-l4", "speaker": "Karan", "text": "Yes, bring printed copies of the proposal and your business cards.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L2.mp3"},
-    {"line_id": "b7-l5", "speaker": "Nisha", "text": "What about greeting the clients? Is there a specific protocol?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L3.mp3"},
-    {"line_id": "b7-l6", "speaker": "Karan", "text": "A firm handshake and a warm smile work best. Address them by their last name unless they say otherwise.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L3.mp3"},
-    {"line_id": "b7-l7", "speaker": "Nisha", "text": "Should I start with small talk or get straight to business?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L4.mp3"},
-    {"line_id": "b7-l8", "speaker": "Karan", "text": "Start with a few minutes of small talk. Ask about their journey or comment on something positive.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L4.mp3"},
-    {"line_id": "b7-l9", "speaker": "Nisha", "text": "That makes sense. Any other tips?", "audio_url": "/assets/audio/business_english/corporate_culture/Nisha_L5.mp3"},
-    {"line_id": "b7-l10", "speaker": "Karan", "text": "Always let the senior person speak first, and avoid checking your phone during the meeting.", "audio_url": "/assets/audio/business_english/corporate_culture/Karan_L5.mp3"},
+    
+    {"line_id": "b7-l1", "speaker": "Nisha", "text": "Karan, I have a question. What is the dress code for the client visit tomorrow?"},
+    {"line_id": "b7-l2", "speaker": "Karan", "text": "It is business formal. A suit or formal shirt with trousers would be appropriate."},
+    {"line_id": "b7-l3", "speaker": "Nisha", "text": "Got it. Should I prepare anything specific for the meeting?"},
+    {"line_id": "b7-l4", "speaker": "Karan", "text": "Yes, bring printed copies of the proposal and your business cards."},
+    {"line_id": "b7-l5", "speaker": "Nisha", "text": "What about greeting the clients? Is there a specific protocol?"},
+    {"line_id": "b7-l6", "speaker": "Karan", "text": "A firm handshake and a warm smile work best. Address them by their last name unless they say otherwise."},
+    {"line_id": "b7-l7", "speaker": "Nisha", "text": "Should I start with small talk or get straight to business?"},
+    {"line_id": "b7-l8", "speaker": "Karan", "text": "Start with a few minutes of small talk. Ask about their journey or comment on something positive."},
+
 ]
 
-# Business English Lesson 8: Remote Work Communication script with audio URLs mapped to frontend assets
 REMOTE_WORK_SCRIPT = [
-    {"line_id": "b8-l1", "speaker": "Team Lead", "text": "Good morning, team! Can everyone hear me clearly on the video call?", "audio_url": "/assets/audio/business_english/Remote_work/TL_L1.mp3"},
-    {"line_id": "b8-l2", "speaker": "Divya", "text": "Yes, loud and clear! Good morning.", "audio_url": "/assets/audio/business_english/Remote_work/Divya_L1.mp3"},
-    {"line_id": "b8-l3", "speaker": "Sameer", "text": "I can hear you, but my camera seems to be having issues. Let me fix it.", "audio_url": "/assets/audio/business_english/Remote_work/Sameer_L1.mp3"},
-    {"line_id": "b8-l4", "speaker": "Team Lead", "text": "No problem, Sameer. Let's start with a quick status update from everyone.", "audio_url": "/assets/audio/business_english/Remote_work/TL_L2.mp3"},
-    {"line_id": "b8-l5", "speaker": "Divya", "text": "I completed the design mockups yesterday. I will share the link in the chat.", "audio_url": "/assets/audio/business_english/Remote_work/Divya_L2.mp3"},
-    {"line_id": "b8-l6", "speaker": "Team Lead", "text": "Great work, Divya! Sameer, how is the backend development progressing?", "audio_url": "/assets/audio/business_english/Remote_work/TL_L3.mp3"},
-    {"line_id": "b8-l7", "speaker": "Sameer", "text": "The API is almost done. I need one more day to finish testing.", "audio_url": "/assets/audio/business_english/Remote_work/Sameer_L2.mp3"},
-    {"line_id": "b8-l8", "speaker": "Team Lead", "text": "Perfect. Let's aim to integrate everything by Thursday. Any blockers from anyone?", "audio_url": "/assets/audio/business_english/Remote_work/TL_L4.mp3"},
-    {"line_id": "b8-l9", "speaker": "Divya", "text": "I need access to the staging server. Could you grant me permissions?", "audio_url": "/assets/audio/business_english/Remote_work/Divya_L3.mp3"},
-    {"line_id": "b8-l10", "speaker": "Team Lead", "text": "I will set that up right after this call. Anything else? Great, let's wrap up then.", "audio_url": "/assets/audio/business_english/Remote_work/TL_L5.mp3"},
+    {"line_id": "b8-l1", "speaker": "Team Lead", "text": "Good morning, team! Can everyone hear me clearly on the video call?"},
+    {"line_id": "b8-l2", "speaker": "Divya", "text": "Yes, loud and clear! Good morning."},
+    {"line_id": "b8-l3", "speaker": "Sameer", "text": "I can hear you, but my camera seems to be having issues. Let me fix it."},
+    {"line_id": "b8-l4", "speaker": "Team Lead", "text": "No problem, Sameer. Let's start with a quick status update from everyone."},
+    {"line_id": "b8-l5", "speaker": "Divya", "text": "I completed the design mockups yesterday. I will share the link in the chat."},
+    {"line_id": "b8-l6", "speaker": "Team Lead", "text": "Great work, Divya! Sameer, how is the backend development progressing?"},
+    {"line_id": "b8-l7", "speaker": "Sameer", "text": "The API is almost done. I need one more day to finish testing."},
+    {"line_id": "b8-l8", "speaker": "Team Lead", "text": "Perfect. Let's aim to integrate everything by Thursday. Any blockers from anyone?"},
+    {"line_id": "b8-l9", "speaker": "Divya", "text": "I need access to the staging server. Could you grant me permissions?"},
+    {"line_id": "b8-l10", "speaker": "Team Lead", "text": "I will set that up right after this call. Anything else? Great, let's wrap up then."},
 ]
 
-# Business English Lesson 9: Sales & Persuasion Techniques script with audio URLs mapped to frontend assets
 SALES_SCRIPT = [
-    {"line_id": "b9-l1", "speaker": "Sales Rep", "text": "Good afternoon! Thank you for taking the time to speak with me today.", "audio_url": "/assets/audio/business_english/Sales/Salesman_L1.mp3"},
-    {"line_id": "b9-l2", "speaker": "Client", "text": "Of course. I am curious to hear about your company's services.", "audio_url": "/assets/audio/business_english/Sales/Client_L1.mp3"},
-    {"line_id": "b9-l3", "speaker": "Sales Rep", "text": "Before I begin, may I ask what challenges your team is currently facing?", "audio_url": "/assets/audio/business_english/Sales/Salesman_L2.mp3"},
-    {"line_id": "b9-l4", "speaker": "Client", "text": "Our biggest challenge is managing customer data efficiently. We need a better CRM solution.", "audio_url": "/assets/audio/business_english/Sales/Client_L2.mp3"},
-    {"line_id": "b9-l5", "speaker": "Sales Rep", "text": "That is exactly what we specialize in. Our CRM platform automates data management and boosts productivity.", "audio_url": "/assets/audio/business_english/Sales/Salesman_L3.mp3"},
-    {"line_id": "b9-l6", "speaker": "Client", "text": "How is your solution different from others in the market?", "audio_url": "/assets/audio/business_english/Sales/Client_L3.mp3"},
-    {"line_id": "b9-l7", "speaker": "Sales Rep", "text": "We offer AI-powered analytics and 24/7 customer support, which most competitors do not include.", "audio_url": "/assets/audio/business_english/Sales/Salesman_L4.mp3"},
-    {"line_id": "b9-l8", "speaker": "Client", "text": "That sounds promising. Do you offer a free trial period?", "audio_url": "/assets/audio/business_english/Sales/Client_L4.mp3"},
-    {"line_id": "b9-l9", "speaker": "Sales Rep", "text": "Yes, we offer a 30-day free trial with full access to all features. No commitment required.", "audio_url": "/assets/audio/business_english/Sales/Salesman_L5.mp3"},
-    {"line_id": "b9-l10", "speaker": "Client", "text": "Excellent! Let's set up a demo for my team next week.", "audio_url": "/assets/audio/business_english/Sales/Client_L5.mp3"},
+    {"line_id": "b9-l1", "speaker": "Sales Rep", "text": "Good afternoon! Thank you for taking the time to speak with me today."},
+    {"line_id": "b9-l2", "speaker": "Client", "text": "Of course. I am curious to hear about your company's services."},
+    {"line_id": "b9-l3", "speaker": "Sales Rep", "text": "Before I begin, may I ask what challenges your team is currently facing?"},
+    {"line_id": "b9-l4", "speaker": "Client", "text": "Our biggest challenge is managing customer data efficiently. We need a better CRM solution."},
+    {"line_id": "b9-l5", "speaker": "Sales Rep", "text": "That is exactly what we specialize in. Our CRM platform automates data management and boosts productivity."},
+    {"line_id": "b9-l6", "speaker": "Client", "text": "How is your solution different from others in the market?"},
+    {"line_id": "b9-l7", "speaker": "Sales Rep", "text": "We offer AI-powered analytics and 24/7 customer support, which most competitors do not include."},
+    {"line_id": "b9-l8", "speaker": "Client", "text": "That sounds promising. Do you offer a free trial period?"},
+    {"line_id": "b9-l9", "speaker": "Sales Rep", "text": "Yes, we offer a 30-day free trial with full access to all features. No commitment required."},
+    {"line_id": "b9-l10", "speaker": "Client", "text": "Excellent! Let's set up a demo for my team next week."},
 ]
 
-# Business English Lesson 10: Leadership & Team Motivation script with audio URLs mapped to frontend assets
 LEADERSHIP_SCRIPT = [
-    {"line_id": "b10-l1", "speaker": "Leader", "text": "Team, I want to take a moment to acknowledge the hard work everyone has put in this month.", "audio_url": "/assets/audio/business_english/Leadership/Leader_L1.mp3"},
-    {"line_id": "b10-l2", "speaker": "Pooja", "text": "Thank you! It has been a challenging month, but very rewarding.", "audio_url": "/assets/audio/business_english/Leadership/Pooja_L1.mp3"},
-    {"line_id": "b10-l3", "speaker": "Leader", "text": "I know the deadline pressure was tough. How is everyone feeling about the workload?", "audio_url": "/assets/audio/business_english/Leadership/Leader_L2.mp3"},
-    {"line_id": "b10-l4", "speaker": "Suresh", "text": "Honestly, it was intense, but having clear goals really helped us stay focused.", "audio_url": "/assets/audio/business_english/Leadership/Suresh_L1.mp3"},
-    {"line_id": "b10-l5", "speaker": "Leader", "text": "That is great to hear. I believe in setting clear expectations so everyone knows their role.", "audio_url": "/assets/audio/business_english/Leadership/Leader_L3.mp3"},
-    {"line_id": "b10-l6", "speaker": "Pooja", "text": "I also appreciate that you were available whenever we needed guidance.", "audio_url": "/assets/audio/business_english/Leadership/Pooja_L2.mp3"},
-    {"line_id": "b10-l7", "speaker": "Leader", "text": "Open communication is key. My door is always open for ideas, feedback, or concerns.", "audio_url": "/assets/audio/business_english/Leadership/Leader_L4.mp3"},
-    {"line_id": "b10-l8", "speaker": "Suresh", "text": "What are our priorities for the next month?", "audio_url": "/assets/audio/business_english/Leadership/Suresh_L2.mp3"},
-    {"line_id": "b10-l9", "speaker": "Leader", "text": "We will focus on improving customer satisfaction scores and launching the new feature update.", "audio_url": "/assets/audio/business_english/Leadership/Leader_L5.mp3"},
-    {"line_id": "b10-l10", "speaker": "Pooja", "text": "Sounds exciting! We are ready for the challenge.", "audio_url": "/assets/audio/business_english/Leadership/Pooja_L3.mp3"},
+    {"line_id": "b10-l1", "speaker": "Leader", "text": "Team, I want to take a moment to acknowledge the hard work everyone has put in this month."},
+    {"line_id": "b10-l2", "speaker": "Pooja", "text": "Thank you! It has been a challenging month, but very rewarding."},
+    {"line_id": "b10-l3", "speaker": "Leader", "text": "I know the deadline pressure was tough. How is everyone feeling about the workload?"},
+    {"line_id": "b10-l4", "speaker": "Suresh", "text": "Honestly, it was intense, but having clear goals really helped us stay focused."},
+    {"line_id": "b10-l5", "speaker": "Leader", "text": "That is great to hear. I believe in setting clear expectations so everyone knows their role."},
+    {"line_id": "b10-l6", "speaker": "Pooja", "text": "I also appreciate that you were available whenever we needed guidance."},
+    {"line_id": "b10-l7", "speaker": "Leader", "text": "Open communication is key. My door is always open for ideas, feedback, or concerns."},
+    {"line_id": "b10-l8", "speaker": "Suresh", "text": "What are our priorities for the next month?"},
+    {"line_id": "b10-l9", "speaker": "Leader", "text": "We will focus on improving customer satisfaction scores and launching the new feature update."},
+    {"line_id": "b10-l10", "speaker": "Pooja", "text": "Sounds exciting! We are ready for the challenge."},
 ]
 ## Start of Interview Lessons Scripts
 INTERVIEW_INTRO_SCRIPT = [
@@ -706,8 +733,8 @@ LESSONS = [
     _lesson("interview", 10, "Follow-Up & Closing Strong", "Leave a lasting positive impression.", "Intermediate", 10, script=INTERVIEW_CLOSING_SCRIPT),
 ]
 
+## Start of Travel Lessons Scripts
 TRAVEL_AIRPORT_SCRIPT = [
-
     {"line_id": "t1-l1", "speaker": "Passenger", "text": "Excuse me, where do I check in for the flight to Dubai?"},
     {"line_id": "t1-l2", "speaker": "Staff", "text": "Good morning! Please head to counter number 12. Do you have your passport and ticket ready?"},
     {"line_id": "t1-l3", "speaker": "Passenger", "text": "Yes, I have both. I also have one checked bag and a carry-on."},
@@ -836,6 +863,9 @@ TRAVEL_PROBLEMS_SCRIPT = [
     {"line_id": "t10-l9", "speaker": "Traveler", "text": "Are we entitled to any compensation for the delay?"},
     {"line_id": "t10-l10", "speaker": "Staff", "text": "Yes, you are entitled to meal vouchers and an accommodation allowance. I will process that now."},
 ]
+
+## End of Travel Lessons Scripts
+
 LESSONS += [
     _lesson("travel", 1, "At the Airport", "Navigating airports confidently.", "Beginner", 8, script=TRAVEL_AIRPORT_SCRIPT),
     _lesson("travel", 2, "Booking a Hotel", "Reservations and check-in phrases.", "Beginner", 10, script=TRAVEL_HOTEL_SCRIPT),
@@ -989,6 +1019,14 @@ STRIPE_PLANS = {
 # ---------- Startup ----------
 @app.on_event("startup")
 async def startup():
+    """
+    Startup Event Handler: startup
+    
+    Runs automatically when the FastAPI server starts up:
+    1. Configures MongoDB indexes for fast lookups on email, user_id, phone, session_token.
+    2. Removes legacy indexes to avoid duplicate null errors.
+    3. Seeds initial live practice room records into the `rooms` collection.
+    """
     await db.users.create_index("email", unique=True)
     await db.users.create_index("user_id", unique=True)
     # Drop legacy sparse indexes if present — they treated `null` as a value and
@@ -1019,6 +1057,14 @@ async def startup():
 # ---------- Auth ----------
 @api.post("/auth/session")
 async def create_session(payload: SessionCreate):
+    """
+    API Endpoint: POST /api/auth/session
+    
+    Exchanges an Emergent Google OAuth session ID for a logged-in user profile.
+    - Creates a new user in MongoDB if logging in for the first time.
+    - Generates a 7-day session token and saves it in `user_sessions`.
+    - Returns the session token and user profile data.
+    """
     session_id = payload.session_id
     async with httpx.AsyncClient(timeout=15) as hc:
         r = await hc.get(EMERGENT_AUTH_URL, headers={"X-Session-ID": session_id})
@@ -1087,10 +1133,20 @@ async def create_session(payload: SessionCreate):
 
 @api.get("/auth/me", response_model=UserOut)
 async def me(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/auth/me
+    
+    Returns the profile data of the currently authenticated user.
+    """
     return _user_to_out(user)
 
 @api.post("/auth/logout")
 async def logout(authorization: Optional[str] = Header(None)):
+    """
+    API Endpoint: POST /api/auth/logout
+    
+    Deletes the current user's session token from `user_sessions` to log them out.
+    """
     if authorization and authorization.startswith("Bearer "):
         token = authorization.split(" ", 1)[1].strip()
         await db.user_sessions.delete_one({"session_token": token})
@@ -1105,9 +1161,20 @@ async def logout(authorization: Optional[str] = Header(None)):
 OTP_MODE = os.environ.get("OTP_MODE", "mock")
 
 def _normalize_phone(p: str) -> str:
+    """
+    Helper Function: _normalize_phone
+    
+    Sanitizes raw phone input string to a standardized format starting with '+' followed by digits.
+    """
     return "+" + "".join(c for c in p if c.isdigit())
 
 async def _send_otp(phone: str, code: str) -> None:
+    """
+    Helper Function: _send_otp
+    
+    Dispatches a generated OTP code to a phone number.
+    In MOCK mode, logs the code to server output for testing without sending real SMS.
+    """
     if OTP_MODE == "mock":
         logger.info(f"[MOCK OTP] phone={phone} code={code}")
         return
@@ -1116,6 +1183,12 @@ async def _send_otp(phone: str, code: str) -> None:
 
 @api.post("/auth/phone/send-otp")
 async def send_otp(payload: PhoneSendOtp):
+    """
+    API Endpoint: POST /api/auth/phone/send-otp
+    
+    Generates a 6-digit OTP code for the requested phone number, saves it in `phone_otps`
+    with a 10-minute expiry time, and triggers OTP delivery.
+    """
     import random
     phone = _normalize_phone(payload.phone)
     if len(phone) < 8:
@@ -1143,6 +1216,13 @@ async def send_otp(payload: PhoneSendOtp):
 
 @api.post("/auth/phone/verify-otp")
 async def verify_otp(payload: PhoneVerifyOtp):
+    """
+    API Endpoint: POST /api/auth/phone/verify-otp
+    
+    Verifies the user-entered 6-digit OTP code against the database record.
+    If valid, logs in the existing user or creates a new phone-registered user account,
+    applies optional referral codes, and returns a new session token.
+    """
     phone = _normalize_phone(payload.phone)
     code = (payload.code or "").strip()
     if not (len(code) == 6 and code.isdigit()):
@@ -1239,7 +1319,11 @@ async def verify_otp(payload: PhoneVerifyOtp):
 
 @api.post("/auth/phone/link", response_model=UserOut)
 async def link_phone(payload: LinkPhone, user=Depends(get_current_user)):
-    """Link a phone number to the currently-signed-in user (e.g., after Google login)."""
+    """
+    API Endpoint: POST /api/auth/phone/link
+    
+    Links a verified phone number to an existing signed-in user account (e.g. after Google OAuth login).
+    """
     phone = _normalize_phone(payload.phone)
     code = (payload.code or "").strip()
     if not (len(code) == 6 and code.isdigit()):
@@ -1263,6 +1347,11 @@ async def link_phone(payload: LinkPhone, user=Depends(get_current_user)):
 # ---------- Referral ----------
 @api.get("/referral")
 async def get_referral(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/referral
+    
+    Returns the current user's referral code, shareable invitation text, and referral stats.
+    """
     code = user.get("referral_code")
     if not code:
         code = await _unique_referral_code(user.get("name", "USER"))
@@ -1276,6 +1365,11 @@ async def get_referral(user=Depends(get_current_user)):
 
 @api.post("/referral/apply", response_model=UserOut)
 async def apply_referral(payload: ApplyReferral, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/referral/apply
+    
+    Applies another user's referral code to activate a 20% discount on Premium subscriptions.
+    """
     if user.get("referred_by"):
         raise HTTPException(400, "You've already used a referral code")
     code = payload.referral_code.strip().upper()
@@ -1293,6 +1387,11 @@ async def apply_referral(payload: ApplyReferral, user=Depends(get_current_user))
 # ---------- Profile & progression ----------
 @api.put("/profile", response_model=UserOut)
 async def update_profile(payload: UpdateProfile, user=Depends(get_current_user)):
+    """
+    API Endpoint: PUT /api/profile
+    
+    Updates user settings such as display name, English proficiency level, or daily practice target minutes.
+    """
     updates = {k: v for k, v in payload.model_dump(exclude_none=True).items()}
     if updates:
         await db.users.update_one({"user_id": user["user_id"]}, {"$set": updates})
@@ -1300,9 +1399,21 @@ async def update_profile(payload: UpdateProfile, user=Depends(get_current_user))
     return _user_to_out(fresh)
 
 def _today_iso() -> str:
+    """
+    Helper Function: _today_iso
+    
+    Returns today's date formatted as a UTC ISO string (YYYY-MM-DD).
+    """
     return datetime.now(timezone.utc).date().isoformat()
 
 async def _apply_xp(user: Dict[str, Any], amount: int, minutes: int = 0) -> Dict[str, Any]:
+    """
+    Helper Function: _apply_xp
+    
+    Increments user XP, updates daily study minutes, updates daily login streak count,
+    and automatically unlocks milestone achievements (e.g. 500 XP, 7-day streak).
+    Returns the updated user document from MongoDB.
+    """
     today = _today_iso()
     last = user.get("last_active_date")
     new_streak = user.get("streak", 0)
@@ -1350,12 +1461,23 @@ async def _apply_xp(user: Dict[str, Any], amount: int, minutes: int = 0) -> Dict
 
 @api.post("/xp", response_model=UserOut)
 async def add_xp(payload: XPEvent, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/xp
+    
+    Awards XP points and practice minutes to the authenticated user's account.
+    """
     fresh = await _apply_xp(user, payload.amount, payload.minutes or 0)
     return _user_to_out(fresh)
 
 # ---------- Home ----------
 @api.get("/home")
 async def home(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/home
+    
+    Provides main dashboard screen data including user greeting, daily motivational quote,
+    study goal minutes progress, streak count, recommended lesson, and Word of the Day.
+    """
     # Reset daily if new day
     today = _today_iso()
     if user.get("last_active_date") != today:
@@ -1382,15 +1504,30 @@ async def home(user=Depends(get_current_user)):
 # ---------- Lessons ----------
 @api.get("/lessons/categories")
 async def lesson_categories():
+    """
+    API Endpoint: GET /api/lessons/categories
+    
+    Returns the list of available learning categories (Daily English, Business English, etc.).
+    """
     return {"categories": LESSON_CATEGORIES}
 
 @api.get("/lessons")
 async def lessons(category_id: Optional[str] = None):
+    """
+    API Endpoint: GET /api/lessons
+    
+    Returns all lessons available in the app, optionally filtered by `category_id`.
+    """
     items = [lsn for lsn in LESSONS if (category_id is None or lsn["category_id"] == category_id)]
     return {"lessons": items}
 
 @api.get("/lessons/{lesson_id}")
 async def lesson_detail(lesson_id: str):
+    """
+    API Endpoint: GET /api/lessons/{lesson_id}
+    
+    Returns detailed information and full conversation script for a specific lesson ID.
+    """
     lsn = next((x for x in LESSONS if x["id"] == lesson_id), None)
     if not lsn:
         raise HTTPException(404, "Lesson not found")
@@ -1398,6 +1535,12 @@ async def lesson_detail(lesson_id: str):
 
 @api.post("/lessons/complete")
 async def complete_lesson(payload: LessonProgressUpdate, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/lessons/complete
+    
+    Marks a lesson completed for the current user, updates MongoDB `lesson_progress`,
+    and awards the lesson's XP and duration minutes to the user profile.
+    """
     lsn = next((x for x in LESSONS if x["id"] == payload.lesson_id), None)
     if not lsn:
         raise HTTPException(404, "Lesson not found")
@@ -1416,20 +1559,40 @@ async def complete_lesson(payload: LessonProgressUpdate, user=Depends(get_curren
 
 @api.get("/lessons/progress/all")
 async def all_progress(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/lessons/progress/all
+    
+    Returns a list of all lesson IDs completed by the current user.
+    """
     rows = await db.lesson_progress.find({"user_id": user["user_id"]}, {"_id": 0}).to_list(1000)
     return {"completed_ids": [r["lesson_id"] for r in rows]}
 
 # ---------- Vocabulary ----------
 @api.get("/vocab")
 async def vocab_list():
+    """
+    API Endpoint: GET /api/vocab
+    
+    Returns the complete list of 50 English vocabulary learning items.
+    """
     return {"words": VOCAB_WORDS}
 
 @api.get("/vocab/word-of-the-day")
 async def word_of_the_day():
+    """
+    API Endpoint: GET /api/vocab/word-of-the-day
+    
+    Returns today's highlighted vocabulary word item.
+    """
     return VOCAB_WORDS[datetime.now(timezone.utc).day % len(VOCAB_WORDS)]
 
 @api.post("/vocab/save", response_model=UserOut)
 async def save_word(payload: VocabAction, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/vocab/save
+    
+    Bookmarks a vocabulary word into the current user's saved words list in MongoDB.
+    """
     saved = list(user.get("saved_words", []))
     if payload.word_id not in saved:
         saved.append(payload.word_id)
@@ -1443,6 +1606,11 @@ async def save_word(payload: VocabAction, user=Depends(get_current_user)):
 
 @api.post("/vocab/unsave", response_model=UserOut)
 async def unsave_word(payload: VocabAction, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/vocab/unsave
+    
+    Removes a bookmarked vocabulary word from the user's saved words list.
+    """
     saved = [w for w in user.get("saved_words", []) if w != payload.word_id]
     await db.users.update_one({"user_id": user["user_id"]}, {"$set": {"saved_words": saved}})
     fresh = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0})
@@ -1451,6 +1619,11 @@ async def unsave_word(payload: VocabAction, user=Depends(get_current_user)):
 # ---------- Challenges & Quiz ----------
 @api.get("/challenges")
 async def challenges(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/challenges
+    
+    Returns today's daily challenges list along with the user's completion status.
+    """
     today = _today_iso()
     row = await db.daily_challenges.find_one({"user_id": user["user_id"], "date": today}, {"_id": 0})
     completed = row.get("completed", []) if row else []
@@ -1458,6 +1631,11 @@ async def challenges(user=Depends(get_current_user)):
 
 @api.post("/challenges/{challenge_id}/complete")
 async def complete_challenge(challenge_id: str, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/challenges/{challenge_id}/complete
+    
+    Marks a daily challenge completed and awards challenge XP reward.
+    """
     ch = next((c for c in DAILY_CHALLENGES if c["id"] == challenge_id), None)
     if not ch:
         raise HTTPException(404, "Challenge not found")
@@ -1472,11 +1650,22 @@ async def complete_challenge(challenge_id: str, user=Depends(get_current_user)):
 
 @api.get("/quiz")
 async def get_quiz():
+    """
+    API Endpoint: GET /api/quiz
+    
+    Returns the list of interactive practice quiz questions.
+    """
     return {"questions": QUIZ_QUESTIONS}
 
 # ---------- Speaking Test ----------
 @api.post("/speaking-test", response_model=UserOut)
 async def submit_speaking_test(payload: SpeakingTestResult, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/speaking-test
+    
+    Submits speaking evaluation test scores (fluency, pronunciation, grammar, vocabulary).
+    If overall score >= 80%, generates a certificate of completion and awards bonus XP.
+    """
     doc = {
         "user_id": user["user_id"],
         "level": payload.level,
@@ -1505,6 +1694,11 @@ async def submit_speaking_test(payload: SpeakingTestResult, user=Depends(get_cur
 
 @api.get("/speaking-test/history")
 async def test_history(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/speaking-test/history
+    
+    Returns a history of the user's past speaking evaluation test results.
+    """
     rows = await db.speaking_tests.find({"user_id": user["user_id"]}, {"_id": 0}).sort("created_at", -1).to_list(50)
     for r in rows:
         r["created_at"] = r["created_at"].isoformat() if isinstance(r.get("created_at"), datetime) else r.get("created_at")
@@ -1513,6 +1707,11 @@ async def test_history(user=Depends(get_current_user)):
 # ---------- Speak with Real People (mocked) ----------
 @api.post("/match")
 async def find_match(gender: str = "any", user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/match
+    
+    Finds a speaking practice partner matching user gender preference and returns a call room ID.
+    """
     import random
     pool = PARTNER_POOL
     if gender in ("male", "female"):
@@ -1525,6 +1724,11 @@ async def find_match(gender: str = "any", user=Depends(get_current_user)):
 
 @api.post("/calls")
 async def log_call(payload: CallLogCreate, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/calls
+    
+    Logs completed 1-on-1 practice call duration and awards study XP.
+    """
     doc = {
         "call_id": f"call_{uuid.uuid4().hex[:10]}",
         "user_id": user["user_id"],
@@ -1538,9 +1742,12 @@ async def log_call(payload: CallLogCreate, user=Depends(get_current_user)):
     minutes = max(1, payload.duration_seconds // 60)
     await _apply_xp(user, minutes * 10, minutes)
     return {"ok": True}
-
-@api.get("/calls")
 async def call_history(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/calls
+    
+    Returns the user's past 1-on-1 speaking practice call records sorted by latest date.
+    """
     rows = await db.calls.find({"user_id": user["user_id"]}, {"_id": 0}).sort("created_at", -1).to_list(50)
     for r in rows:
         r["created_at"] = r["created_at"].isoformat() if isinstance(r.get("created_at"), datetime) else r.get("created_at")
@@ -1548,6 +1755,11 @@ async def call_history(user=Depends(get_current_user)):
 
 @api.post("/friends/request")
 async def send_friend_request(payload: FriendRequestCreate, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/friends/request
+    
+    Sends a friend connection request to another practice learner.
+    """
     doc = {
         "request_id": f"fr_{uuid.uuid4().hex[:10]}",
         "user_id": user["user_id"],
@@ -1561,6 +1773,11 @@ async def send_friend_request(payload: FriendRequestCreate, user=Depends(get_cur
 
 @api.get("/friends/requests")
 async def list_friend_requests(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/friends/requests
+    
+    Returns the list of friend requests sent or received by the current user.
+    """
     rows = await db.friend_requests.find({"user_id": user["user_id"]}, {"_id": 0}).sort("created_at", -1).to_list(50)
     for r in rows:
         r["created_at"] = r["created_at"].isoformat() if isinstance(r.get("created_at"), datetime) else r.get("created_at")
@@ -1568,6 +1785,11 @@ async def list_friend_requests(user=Depends(get_current_user)):
 
 @api.post("/reports")
 async def submit_report(payload: ReportCreate, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/reports
+    
+    Submits a moderation report regarding inappropriate behavior by another user.
+    """
     await db.reports.insert_one({
         "report_id": f"rep_{uuid.uuid4().hex[:10]}",
         "user_id": user["user_id"],
@@ -1579,6 +1801,11 @@ async def submit_report(payload: ReportCreate, user=Depends(get_current_user)):
 
 @api.post("/block")
 async def block_user(payload: ReportCreate, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/block
+    
+    Adds a user to the current user's blocked users list in MongoDB.
+    """
     blocked = list(user.get("blocked", []))
     if payload.target_name not in blocked:
         blocked.append(payload.target_name)
@@ -1590,6 +1817,12 @@ async def block_user(payload: ReportCreate, user=Depends(get_current_user)):
 # Payload:  expire_time_i64_be | iv_len_i16_be | iv | ct_len_i16_be | ct
 # Cipher:   AES/CBC/PKCS7  (key = ZEGO_SERVER_SECRET utf-8, must be exactly 32 chars)
 def _generate_zego_token04(app_id: int, user_id: str, secret: str, effective_time_seconds: int, payload: str = "") -> str:
+    """
+    Helper Function: _generate_zego_token04
+    
+    Generates a secure ZEGOCLOUD Token04 string using AES-256-CBC encryption.
+    Allows frontend clients to authenticate with ZEGOCLOUD live audio servers.
+    """
     import base64
     import json as _json
     import os as _os
@@ -1637,6 +1870,11 @@ def _generate_zego_token04(app_id: int, user_id: str, secret: str, effective_tim
 
 @api.post("/zego/token")
 async def zego_token(payload: ZegoTokenRequest, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/zego/token
+    
+    Generates and returns an authentication token for joining a ZEGOCLOUD voice room.
+    """
     if not ZEGO_APP_ID or not ZEGO_SERVER_SECRET:
         raise HTTPException(status_code=503, detail="ZEGOCLOUD is not configured on the server")
     try:
@@ -1646,7 +1884,7 @@ async def zego_token(payload: ZegoTokenRequest, user=Depends(get_current_user)):
 
     room_id = (payload.room_id or "").strip()
     if not room_id:
-        raise HTTPException(status_code=400, detail="room_id required")
+        raise HTTPException(400, detail="room_id required")
 
     effective_time = 3600  # 1 hour
     try:
@@ -1671,11 +1909,21 @@ async def zego_token(payload: ZegoTokenRequest, user=Depends(get_current_user)):
 # ---------- Live Rooms ----------
 @api.get("/rooms")
 async def list_rooms():
+    """
+    API Endpoint: GET /api/rooms
+    
+    Returns the list of active live group conversation practice rooms.
+    """
     rows = await db.rooms.find({}, {"_id": 0}).to_list(100)
     return {"rooms": rows}
 
 @api.post("/rooms")
 async def create_room(payload: RoomCreate, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/rooms
+    
+    Creates a new public or private live audio practice room hosted by the user.
+    """
     room = {
         "room_id": f"room_{uuid.uuid4().hex[:10]}",
         "title": payload.title,
@@ -1695,6 +1943,11 @@ async def create_room(payload: RoomCreate, user=Depends(get_current_user)):
 
 @api.post("/rooms/join")
 async def join_room(payload: RoomJoin, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/rooms/join
+    
+    Increments participant count when a user enters a live audio room.
+    """
     room = await db.rooms.find_one({"room_id": payload.room_id}, {"_id": 0})
     if not room:
         raise HTTPException(404, "Room not found")
@@ -1704,6 +1957,11 @@ async def join_room(payload: RoomJoin, user=Depends(get_current_user)):
 # ---------- Leaderboard ----------
 @api.get("/leaderboard")
 async def leaderboard(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/leaderboard
+    
+    Returns top learners ranked by total XP earned, including the current user's position.
+    """
     rows = await db.users.find({}, {"_id": 0, "name": 1, "picture": 1, "xp": 1, "user_id": 1, "streak": 1}).sort("xp", -1).to_list(20)
     # Also include a few seed entries if less than 5 real users
     seed = [
@@ -1720,6 +1978,11 @@ async def leaderboard(user=Depends(get_current_user)):
 # ---------- Achievements ----------
 @api.get("/achievements")
 async def achievements(user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/achievements
+    
+    Returns all app achievements along with boolean flags showing which ones the user has unlocked.
+    """
     unlocked = set(user.get("achievements", []))
     items = [{**a, "unlocked": a["id"] in unlocked} for a in ACHIEVEMENTS]
     return {"achievements": items}
@@ -1727,10 +1990,21 @@ async def achievements(user=Depends(get_current_user)):
 # ---------- Stripe Subscription ----------
 @api.get("/subscription/plans")
 async def subscription_plans():
+    """
+    API Endpoint: GET /api/subscription/plans
+    
+    Returns available Stripe Premium subscription plans (weekly, monthly, quarterly, yearly).
+    """
     return {"plans": STRIPE_PLANS}
 
 @api.post("/subscription/checkout")
 async def create_checkout(payload: CheckoutRequest, request: Request, user=Depends(get_current_user)):
+    """
+    API Endpoint: POST /api/subscription/checkout
+    
+    Creates a Stripe Checkout Session for subscribing to Premium, applying referral discounts if active.
+    Returns the Stripe checkout URL.
+    """
     plan = STRIPE_PLANS.get(payload.plan)
     if not plan:
         raise HTTPException(400, "Invalid plan")
@@ -1781,6 +2055,11 @@ async def create_checkout(payload: CheckoutRequest, request: Request, user=Depen
 
 @api.get("/subscription/status/{session_id}")
 async def poll_checkout(session_id: str, user=Depends(get_current_user)):
+    """
+    API Endpoint: GET /api/subscription/status/{session_id}
+    
+    Polls the payment status of a Stripe checkout session and upgrades user to Premium upon payment completion.
+    """
     payment = await db.payments.find_one({"session_id": session_id}, {"_id": 0})
     if not payment:
         raise HTTPException(404, "Session not found")
@@ -1828,6 +2107,11 @@ async def poll_checkout(session_id: str, user=Depends(get_current_user)):
 
 @api.post("/webhook/stripe")
 async def stripe_webhook(request: Request):
+    """
+    API Endpoint: POST /api/webhook/stripe
+    
+    Asynchronous webhook listener called by Stripe to process completed subscription payments.
+    """
     payload = await request.body()
     signature = request.headers.get("Stripe-Signature")
     stripe = StripeCheckout(api_key=STRIPE_API_KEY)
@@ -1860,6 +2144,11 @@ async def stripe_webhook(request: Request):
 # ---------- Health ----------
 @api.get("/")
 async def root():
+    """
+    API Endpoint: GET /api/
+    
+    Basic health check endpoint returning server status message.
+    """
     return {"message": "Lingua Franca API online"}
 
 app.include_router(api)
@@ -1874,4 +2163,9 @@ app.add_middleware(
 
 @app.on_event("shutdown")
 async def shutdown():
+    """
+    Shutdown Event Handler: shutdown
+    
+    Gracefully closes the Motor MongoDB client connection when the server stops.
+    """
     client.close()

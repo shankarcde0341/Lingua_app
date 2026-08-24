@@ -329,4 +329,15 @@ All routes are prefixed `/api`. Auth requires `Authorization: Bearer <session_to
 
 - **2026-08-19**: Updated audio mapping for `PROFESSIONAL_EMAIL_SCRIPT` (`business-2`) in `ScriptRolePlayer.tsx` to reference all 12 audio files (`Anita_L1.mp3` through `Vikram_L6.mp3`) in `frontend/assets/audio/business_english/Email_writing`. Verified TypeScript & Python checks with 0 errors.
 
+- **2026-08-20**: Completed Business English audio mapping & backend script architecture standardization:
+  - **Full Audio Asset Mapping (`ScriptRolePlayer.tsx`)**: Configured static require mappings in `DAILY_AUDIO_ASSETS` for all 10 Business English lessons (`business-1` through `business-10`), covering `business_meeting`, `Email_writing`, `negotiation_deals`, `presentation`, `networking`, `conflict_conversation`, `corporate_culture`, `Remote_work`, `Sales`, and `Leadership`.
+  - **Backend Script Clean-Up (`backend/server.py`)**: Removed inline `audio_url` fields across all 8 Business English script definitions (`NEGOTIATION_SCRIPT`, `PRESENTATION_SCRIPT`, `NETWORKING_SCRIPT`, `DIFFICULT_CONVERSATION_SCRIPT`, `CORPORATE_ETIQUETTE_SCRIPT`, `REMOTE_WORK_SCRIPT`, `SALES_SCRIPT`, and `LEADERSHIP_SCRIPT`) to enforce clean separation of backend script text and frontend Expo local audio asset loading.
+  - **Audio Asset Synchronization**: Created speaker audio file aliases in `frontend/assets/audio/business_english/corporate_culture` (`Nisha_L1.mp3` .. `Nisha_L5.mp3`) and `frontend/assets/audio/business_english/Remote_work` (`Divya_L1.mp3` .. `Divya_L3.mp3`) to align disk filenames with script speaker names.
+  - **Verification**: Verified clean Python compilation (`py_compile`) and TypeScript type-checking (`tsc --noEmit`) with 0 errors.
+
+- **2026-08-20**: Comprehensive Codebase Documentation & Comments:
+  - **Backend (`backend/server.py`)**: Added clear, beginner-friendly docstrings and explanatory comments to every function (auth dependencies, phone OTP handlers, referral management, XP/streak progression, lesson/vocab/challenge routes, speaking tests, live room & call handlers, ZEGO Token04 generation, and Stripe subscription/webhook handlers).
+  - **Frontend (`frontend/src/components/ScriptRolePlayer.tsx`)**: Added comprehensive JSDoc and beginner-friendly comments for all player functions (audio source resolution, player lifecycle cleanup, turn countdown timers, audio mode initialization, script auto-advancement, and mode event handlers).
+  - **Verification**: Re-verified clean Python compilation (`py_compile`) and TypeScript type check (`tsc --noEmit`) with 0 errors.
+
 

@@ -257,8 +257,52 @@ const DAILY_AUDIO_ASSETS: Record<string, Record<string, number>> = {
     "b10-l9": require("../../assets/audio/business_english/Leadership/Leader_L5.mp3"),
     "b10-l10": require("../../assets/audio/business_english/Leadership/Pooja_L3.mp3"),
   },
+  "interview-1": {
+    "i1-l1": require("../../assets/audio/interview_english/Intro/Interviewer_L1.mp3"),
+    "i1-l2": require("../../assets/audio/interview_english/Intro/Candidate_L1.mp3"),
+    "i1-l3": require("../../assets/audio/interview_english/Intro/Candidate_L2.mp3"),
+    "i1-l4": require("../../assets/audio/interview_english/Intro/Interviewer_L2.mp3"),
+    "i1-l5": require("../../assets/audio/interview_english/Intro/Candidate_L3.mp3"),
+    "i1-l6": require("../../assets/audio/interview_english/Intro/Interviewer_L3.mp3"),
+    "i1-l7": require("../../assets/audio/interview_english/Intro/Candidate_L4.mp3"),
+    "i1-l8": require("../../assets/audio/interview_english/Intro/Candidate_L5.mp3"),
+    "i1-l9": require("../../assets/audio/interview_english/Intro/Interviewer_L4.mp3"),
+    "i1-l10": require("../../assets/audio/interview_english/Intro/Candidate_L6.mp3"),
+  },
+  "interview-2": {
+    "i2-l1": require("../../assets/audio/interview_english/Behavioural/Interviewer_L1.mp3"),
+    "i2-l2": require("../../assets/audio/interview_english/Behavioural/Candidate_L1.mp3"),
+    "i2-l3": require("../../assets/audio/interview_english/Behavioural/Interviewer_L2.mp3"),
+    "i2-l4": require("../../assets/audio/interview_english/Behavioural/Candidate_L2.mp3"),
+    "i2-l5": require("../../assets/audio/interview_english/Behavioural/Candidate_L3.mp3"),
+    "i2-l6": require("../../assets/audio/interview_english/Behavioural/Interviewer_L3.mp3"),
+    "i2-l7": require("../../assets/audio/interview_english/Behavioural/Candidate_L4.mp3"),
+    "i2-l8": require("../../assets/audio/interview_english/Behavioural/Candidate_L5.mp3"),
+    "i2-l9": require("../../assets/audio/interview_english/Behavioural/Interviewer_L4.mp3"),
+    "i2-l10": require("../../assets/audio/interview_english/Behavioural/Candidate_L6.mp3"),
+  },
+  "interview-3": {
+    "i3-l1": require("../../assets/audio/interview_english/Motivation/Interviewer_L1.mp3"),
+    "i3-l2": require("../../assets/audio/interview_english/Motivation/Candidate_L1.mp3"),
+    "i3-l3": require("../../assets/audio/interview_english/Motivation/Interviewer_L2.mp3"),
+    "i3-l4": require("../../assets/audio/interview_english/Motivation/Candidate_L2.mp3"),
+    "i3-l5": require("../../assets/audio/interview_english/Motivation/Interviewer_L3.mp3"),
+    "i3-l6": require("../../assets/audio/interview_english/Motivation/Candidate_L3.mp3"),
+    "i3-l7": require("../../assets/audio/interview_english/Motivation/Interviewer_L4.mp3"),
+    "i3-l8": require("../../assets/audio/interview_english/Motivation/Candidate_L4.mp3"),
+    "i3-l9": require("../../assets/audio/interview_english/Motivation/Interviewer_L4.mp3"),
+    "i3-l10": require("../../assets/audio/interview_english/Motivation/Candidate_L5.mp3"),
+  },
 };
 
+/**
+ * Helper Function: getAudioSource
+ * 
+ * Returns the audio file source for a specific line in a lesson.
+ * 1. Checks if the line has a bundled local audio file in DAILY_AUDIO_ASSETS.
+ * 2. If not found in static assets, falls back to line.audio_url.
+ * 3. Returns null if no audio is available.
+ */
 const getAudioSource = (lessonId: string, line: ScriptLine) => {
   return DAILY_AUDIO_ASSETS[lessonId]?.[line.line_id] ?? line.audio_url ?? null;
 };
@@ -270,6 +314,13 @@ type ScriptRolePlayerProps = {
   onComplete?: () => void;
 };
 
+/**
+ * Component: ScriptRolePlayer
+ * 
+ * An interactive conversation practice player component that allows users to:
+ * - "Listen Mode": Auto-play the entire conversation script from start to finish.
+ * - "Practice Mode": Pick a character role and roleplay turn-by-turn with timed responses.
+ */
 export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: ScriptRolePlayerProps) {
   const router = useRouter();
   const [mode, setMode] = useState<"idle" | "listening" | "role-select" | "practicing" | "complete">("idle");
@@ -294,6 +345,10 @@ export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: Scrip
   const currentLine = script[currentLineIndex];
   const isUserTurn = selectedRole !== null && currentLine?.speaker === selectedRole;
 
+  /**
+   * Helper Function: cleanupPlayer
+   * Safely stops, removes listeners, and releases memory for the Expo Audio player object.
+   */
   const cleanupPlayer = useCallback(() => {
     if (playerRef.current) {
       try {
@@ -316,6 +371,10 @@ export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: Scrip
     setIsPlaying(false);
   }, []);
 
+  /**
+   * Helper Function: cleanupCountdown
+   * Stops the active turn timer interval and resets the progress bar state to zero.
+   */
   const cleanupCountdown = useCallback(() => {
     if (countdownRef.current) {
       clearInterval(countdownRef.current);
@@ -324,6 +383,10 @@ export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: Scrip
     setCountdownProgress(0);
   }, []);
 
+  /**
+   * Helper Function: setupAudioMode
+   * Configures Expo audio system settings so audio plays properly even if the phone is in silent mode.
+   */
   const setupAudioMode = useCallback(async () => {
     try {
       await setAudioModeAsync({
@@ -336,6 +399,11 @@ export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: Scrip
     }
   }, []);
 
+  /**
+   * Helper Function: goToNextLine
+   * Advances the conversation to the next script line.
+   * If the last line is reached, it either marks the lesson complete or resets to idle.
+   */
   const goToNextLine = useCallback(() => {
     cleanupPlayer();
     cleanupCountdown();
@@ -356,6 +424,10 @@ export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: Scrip
     });
   }, [cleanupCountdown, cleanupPlayer, onComplete, script.length]);
 
+  /**
+   * Event Handler: stopPractice
+   * Immediately stops audio playback, clears timers, and resets the player UI to idle state.
+   */
   const stopPractice = useCallback(() => {
     cleanupPlayer();
     cleanupCountdown();
@@ -366,6 +438,11 @@ export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: Scrip
     consecutiveFailuresRef.current = 0;
   }, [cleanupCountdown, cleanupPlayer]);
 
+  /**
+   * Helper Function: maybePlayLine
+   * Plays the audio file for the current script line using Expo Audio player.
+   * Handles error retries and automatically moves to the next line when finished.
+   */
   const maybePlayLine = useCallback(async () => {
     try {
       cleanupPlayer();
@@ -420,6 +497,11 @@ export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: Scrip
     }
   }, [cleanupCountdown, cleanupPlayer, currentLine, goToNextLine, lessonId, setupAudioMode]);
 
+  /**
+   * Helper Function: startCountdown
+   * Starts a 4-second timer when it is the user's turn to speak.
+   * Updates the progress bar and automatically advances to the next line when time expires.
+   */
   const startCountdown = useCallback(() => {
     cleanupCountdown();
     setCountdownProgress(0);
@@ -476,29 +558,49 @@ export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: Scrip
     };
   }, [cleanupCountdown, cleanupPlayer]);
 
+  /**
+   * Event Handler: handleListenPress
+   * Starts "Listen Mode" from line 0, playing all character lines sequentially.
+   */
   const handleListenPress = () => {
     setSelectedRole(null);
     setCurrentLineIndex(0);
     setMode("listening");
   };
 
+  /**
+   * Event Handler: handlePracticePress
+   * Opens the role selection menu so the user can choose which character to practice.
+   */
   const handlePracticePress = () => {
     setCurrentLineIndex(0);
     setSelectedRole(null);
     setMode("role-select");
   };
 
+  /**
+   * Event Handler: handleRoleSelect
+   * Sets the user's chosen character role and starts interactive practice from line 0.
+   */
   const handleRoleSelect = (role: string) => {
     setSelectedRole(role);
     setCurrentLineIndex(0);
     setMode("practicing");
   };
 
+  /**
+   * Event Handler: handleContinue
+   * Manually advances to the next turn when the user finishes speaking during practice.
+   */
   const handleContinue = () => {
     cleanupCountdown();
     goToNextLine();
   };
 
+  /**
+   * Event Handler: handleRestart
+   * Resets the script player to the role selection screen so the user can practice again.
+   */
   const handleRestart = () => {
     cleanupPlayer();
     cleanupCountdown();
@@ -508,6 +610,10 @@ export function ScriptRolePlayer({ script, lessonId, onBack, onComplete }: Scrip
     setError(null);
   };
 
+  /**
+   * Event Handler: handleBackToLesson
+   * Exits the script player UI and navigates back to the parent lesson page or category list.
+   */
   const handleBackToLesson = () => {
     cleanupPlayer();
     cleanupCountdown();
