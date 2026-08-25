@@ -340,4 +340,40 @@ All routes are prefixed `/api`. Auth requires `Authorization: Bearer <session_to
   - **Frontend (`frontend/src/components/ScriptRolePlayer.tsx`)**: Added comprehensive JSDoc and beginner-friendly comments for all player functions (audio source resolution, player lifecycle cleanup, turn countdown timers, audio mode initialization, script auto-advancement, and mode event handlers).
   - **Verification**: Re-verified clean Python compilation (`py_compile`) and TypeScript type check (`tsc --noEmit`) with 0 errors.
 
+- **2026-08-24**: Updated Audio Mapping for `INTERVIEW_WEAKNESSES_SCRIPT` (`interview-5`):
+  - Added static require mappings for `interview-5` (`i5-l1` through `i5-l10`) in `DAILY_AUDIO_ASSETS` within `frontend/src/components/ScriptRolePlayer.tsx`.
+  - Mapped lines to audio files in `frontend/assets/audio/interview_english/Weakness` (`Interviewer_L1.mp3` through `Interviewer_L5.mp3` and `Candidate_L1.mp3` through `Candidate_L5.mp3`).
+  - Verified TypeScript compilation (`npx tsc --noEmit`) and Python compilation (`py_compile`) with 0 errors.
+
+- **2026-08-24**: Updated Audio Mapping for `INTERVIEW_TECHNICAL_SCRIPT` (`interview-6`):
+  - Added static require mappings for `interview-6` (`i6-l1` through `i6-l10`) in `DAILY_AUDIO_ASSETS` within `frontend/src/components/ScriptRolePlayer.tsx`.
+  - Mapped lines to audio files in `frontend/assets/audio/interview_english/Technical` (`Interviewer_L1.mp3` through `Interviewer_L5.mp3` and `Candidate_L1.mp3` through `Candidate_L5.mp3`).
+  - Verified TypeScript compilation (`npx tsc --noEmit`) and Python compilation (`py_compile`) with 0 errors.
+
+- **2026-08-24**: Updated Audio Mapping for `INTERVIEW_SALARY_SCRIPT` (`interview-7`):
+  - Added static require mappings for `interview-7` (`i7-l1` through `i7-l10`) in `DAILY_AUDIO_ASSETS` within `frontend/src/components/ScriptRolePlayer.tsx`.
+  - Mapped lines to audio files in `frontend/assets/audio/interview_english/Salary` (`Interviewer_L1.mp3` through `Interviewer_L5.mp3` and `Candidate_L1.mp3` through `Candidate_L5.mp3`).
+  - Verified TypeScript compilation (`npx tsc --noEmit`) and Python compilation (`py_compile`) with 0 errors.
+
+- **2026-08-24**: Updated Audio Mapping for `INTERVIEW_QUESTIONS_SCRIPT` (`interview-8`):
+  - Added static require mappings for `interview-8` (`i8-l1` through `i8-l10`) in `DAILY_AUDIO_ASSETS` within `frontend/src/components/ScriptRolePlayer.tsx`.
+  - Mapped lines to audio files in `frontend/assets/audio/interview_english/Question` (`Interviewer_L1.mp3` through `Interviewer_L5.mp3` and `Candidate_L1.mp3` through `Candidate_L5.mp3`).
+  - Verified TypeScript compilation (`npx tsc --noEmit`) and Python compilation (`py_compile`) with 0 errors.
+
+- **2026-08-24**: Updated Audio Mapping for `INTERVIEW_DIFFICULT_SCRIPT` (`interview-9`):
+  - Created Candidate audio file aliases (`Candidate_L1.mp3` .. `Candidate_L5.mp3`) in `frontend/assets/audio/interview_english/Difficulties`.
+  - Added static require mappings for `interview-9` (`i9-l1` through `i9-l10`) in `DAILY_AUDIO_ASSETS` within `frontend/src/components/ScriptRolePlayer.tsx`.
+  - Verified TypeScript compilation (`npx tsc --noEmit`) and Python compilation (`py_compile`) with 0 errors.
+
+- **2026-08-24**: Updated Audio Mapping for `INTERVIEW_CLOSING_SCRIPT` (`interview-10`):
+  - Added static require mappings for `interview-10` (`i10-l1` through `i10-l10`) in `DAILY_AUDIO_ASSETS` within `frontend/src/components/ScriptRolePlayer.tsx`.
+  - Mapped lines to audio files in `frontend/assets/audio/interview_english/Closing` (`Interviewer_L1.mp3` through `Interviewer_L5.mp3` and `Candidate_L1.mp3` through `Candidate_L5.mp3`).
+  - Verified TypeScript compilation (`npx tsc --noEmit`) and Python compilation (`py_compile`) with 0 errors.
+
+
+
+
+
+
+
 
